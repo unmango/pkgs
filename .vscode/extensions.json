@@ -1,7 +1,7 @@
 {
-    "recommendations": [
-        "mkhl.direnv",
-        "editorconfig.editorconfig",
-        "jnoortheen.nix-ide"
-    ]
+  "recommendations": [
+    "mkhl.direnv",
+    "editorconfig.editorconfig",
+    "jnoortheen.nix-ide"
+  ]
 }
