@@ -27,6 +27,17 @@
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
         terraform-plugin-codegen-openapi = callPackage ./terraform-plugin-codegen-openapi { };
         terraform-provider-pfsense = callPackage ./terraform-provider-pfsense { };
+
+        hercules-ci-agent = pkgs.hercules-ci-agent.overrideAttrs (old: {
+          passthru = (old.passthru or { }) // {
+            image = callPackage ./images/hercules-ci-agent { };
+          };
+        });
+        github-runner = pkgs.github-runner.overrideAttrs (old: {
+          passthru = (old.passthru or { }) // {
+            image = callPackage ./images/github-runner { };
+          };
+        });
       };
 
       overlayAttrs = {
@@ -43,21 +54,9 @@
           terraform-plugin-codegen-framework
           terraform-plugin-codegen-openapi
           terraform-provider-pfsense
+          hercules-ci-agent
+          github-runner
           ;
-      }
-      // {
-        # Extend nixpkgs packages with container images in passthru.
-        # In overlay context easyOverlay sets pkgs = prev, so no circularity.
-        hercules-ci-agent = pkgs.hercules-ci-agent.overrideAttrs (old: {
-          passthru = (old.passthru or { }) // {
-            image = callPackage ./images/hercules-ci-agent { };
-          };
-        });
-        github-runner = pkgs.github-runner.overrideAttrs (old: {
-          passthru = (old.passthru or { }) // {
-            image = callPackage ./images/github-runner { };
-          };
-        });
       };
     };
 }
