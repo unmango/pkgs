@@ -23,3 +23,6 @@ check lint:
 
 format fmt:
 	nix fmt
+
+generate gen:
+	bash scripts/gen-packages-table.sh

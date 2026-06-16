@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p bash git gawk
+# shellcheck shell=bash
 set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
