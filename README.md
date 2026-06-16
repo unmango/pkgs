@@ -6,11 +6,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![packages](https://img.shields.io/badge/packages-14-blue)](#packages)
 
+<p align="center">
+
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
+
+</p>
 
 Mini-nixpkgs of dubious quality.
 
-See [GOALS.md](GOALS.md) for purpose, non-goals, and upstream policy.
+See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 
 ## Packages
 
