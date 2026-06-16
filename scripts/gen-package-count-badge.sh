@@ -1,5 +1,4 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i bash -p bash git gawk
+#!/usr/bin/env bash
 # shellcheck shell=bash
 set -euo pipefail
 
