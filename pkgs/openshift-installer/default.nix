@@ -2,6 +2,7 @@
   buildGoApplication,
   fetchFromGitHub,
   lib,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -31,6 +32,7 @@ buildGoApplication {
   # TODO
   doCheck = false;
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -28,6 +29,7 @@ buildGoApplication {
       --add-flags "-config $out/share/${pname}/conf.yaml"
   '';
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

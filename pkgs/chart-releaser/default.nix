@@ -8,6 +8,7 @@
   kubernetes-helm,
   lib,
   makeWrapper,
+  mkUpdateDeps,
   nix-update-script,
   yamale,
   yamllint,
@@ -64,6 +65,7 @@ buildGoApplication {
     }
   '';
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

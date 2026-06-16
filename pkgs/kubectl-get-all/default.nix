@@ -2,6 +2,7 @@
   buildGoApplication,
   fetchFromGitHub,
   lib,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -25,6 +26,7 @@ buildGoApplication {
     "-X github.com/stackitcloud/kubectl-get-all/internal/version.Version=${version}"
   ];
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

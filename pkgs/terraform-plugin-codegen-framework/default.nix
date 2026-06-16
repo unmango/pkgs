@@ -2,6 +2,7 @@
   buildGoApplication,
   fetchFromGitHub,
   lib,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -20,6 +21,7 @@ buildGoApplication {
   modules = ./gomod2nix.toml;
   subPackages = [ "cmd/tfplugingen-framework" ];
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

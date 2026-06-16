@@ -2,6 +2,7 @@
   buildGoApplication,
   fetchFromGitHub,
   lib,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -28,6 +29,7 @@ buildGoApplication {
     "-extldflags -static"
   ];
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

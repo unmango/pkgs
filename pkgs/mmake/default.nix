@@ -4,6 +4,7 @@
   gnumake,
   lib,
   makeWrapper,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -31,6 +32,7 @@ buildGoApplication {
     wrapProgram $out/bin/mmake --prefix PATH : ${lib.makeBinPath [ gnumake ]}
   '';
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

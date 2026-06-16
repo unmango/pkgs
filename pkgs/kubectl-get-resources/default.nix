@@ -2,6 +2,7 @@
   buildGoApplication,
   fetchFromGitHub,
   lib,
+  mkUpdateDeps,
   nix-update-script,
 }:
 let
@@ -19,6 +20,7 @@ buildGoApplication {
 
   modules = ./gomod2nix.toml;
 
+  passthru.update-deps = mkUpdateDeps src;
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
