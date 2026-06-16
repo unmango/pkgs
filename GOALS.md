@@ -8,7 +8,7 @@ Collection of Nix derivations not available in, or not yet accepted by, nixpkgs.
 
 - NixOS modules
 - Home Manager modules
-- Library functions (see [UnstoppableMango/nix](https://github.com/UnstoppableMango/nix))
+- Public library functions — `lib/` exists but is internal to this flake (see [UnstoppableMango/nix](https://github.com/UnstoppableMango/nix) for shared lib)
 
 ## Structure
 
@@ -37,4 +37,4 @@ Migrated from [UnstoppableMango/nix](https://github.com/UnstoppableMango/nix/tre
 - .NET / Aspire tooling (`aspire-cli`)
 - Helm tooling (`chart-releaser`)
 - Misc CLI tools (`mmake`, `awxkit`, `smarter-device-manager`)
-- Proprietary / non-redistributable (`omnissa-horizon-client`)
+- Container images (`github-runner`, `hercules-ci-agent`) — exposed via `passthru.image` on the corresponding nixpkgs packages in `overlays.default`
