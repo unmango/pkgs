@@ -3,3 +3,5 @@
 .direnv/
 bin/
 .claude/
+.vscode/*
+!.vscode/extensions.json
