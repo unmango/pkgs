@@ -27,3 +27,4 @@ format fmt:
 generate gen:
 	${CURDIR}/scripts/gen-packages-table.sh
 	${CURDIR}/scripts/gen-package-count-badge.sh
+	nix fmt
