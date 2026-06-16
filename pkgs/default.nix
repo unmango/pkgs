@@ -40,6 +40,8 @@
         });
       };
 
+      legacyPackages.packagesTable = import ../lib/packages.nix config.packages;
+
       overlayAttrs = {
         inherit (config.packages)
           aspire-cli

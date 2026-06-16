@@ -10,22 +10,24 @@ See [GOALS.md](GOALS.md) for purpose, non-goals, and upstream policy.
 
 ## Packages
 
+<!-- PACKAGES:START -->
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | `aspire-cli` | A CLI tool for managing Aspire projects |
 | `awxkit` | Official command line interface for Ansible AWX |
 | `chart-releaser` | Hosting Helm Charts via GitHub Pages and Releases |
-| `kube-vip` | Virtual IP for Kubernetes clusters |
+| `github-runner` | Self-hosted runner for GitHub Actions |
+| `hercules-ci-agent` | Runs Continuous Integration tasks on your machines |
+| `kube-vip` | Kube-VIP: Virtual IP for Kubernetes clusters |
 | `kubectl-get-all` | Like `kubectl get all`, but get really all resources |
-| `kubectl-get-resources` | Get Kubernetes resources in CSV or YAML with filtering |
-| `kubectl-slice` | Split multi-YAML files into individual files |
+| `kubectl-get-resources` | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags. |
+| `kubectl-slice` | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files. |
 | `mmake` | Modern Make |
-| `openshift-installer` | Install an OpenShift cluster |
-| `terraform-plugin-codegen-framework` | Terraform Plugin Framework code generation |
-| `terraform-plugin-codegen-openapi` | OpenAPI to Terraform provider code generation |
-| `terraform-provider-pfsense` | Terraform provider for pfSense |
-| `hercules-ci-agent` (+ `.passthru.image`) | Hercules CI agent with container image |
-| `github-runner` (+ `.passthru.image`) | GitHub Actions runner with container image |
+| `openshift-installer` | Install an OpenShift Cluster |
+| `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation |
+| `terraform-plugin-codegen-openapi` | OpenAPI to Terraform Provider Code Generation Specification |
+| `terraform-provider-pfsense` | Used to configure pfSense firewall/router devices with Terraform |
+<!-- PACKAGES:END -->
 
 ## Usage
 
