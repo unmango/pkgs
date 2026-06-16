@@ -4,12 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-<!-- PACKAGE_COUNT:START -->
-
 [![packages](https://img.shields.io/badge/packages-14-blue)](#packages)
-
-<!-- PACKAGE_COUNT:END -->
 
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 

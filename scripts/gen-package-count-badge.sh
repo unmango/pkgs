@@ -12,7 +12,6 @@ count=$(echo "$table" | grep -c '| `')
 badge="[![packages](https://img.shields.io/badge/packages-${count}-blue)](#packages)"
 
 badge="$badge" awk '
-  /<!-- PACKAGE_COUNT:START -->/ { print; print ENVIRON["badge"]; skip=1; next }
-  /<!-- PACKAGE_COUNT:END -->/ { skip=0 }
-  !skip
+  /\[!\[packages\]\(https:\/\/img\.shields\.io\/badge\/packages-/ { print ENVIRON["badge"]; next }
+  { print }
 ' "$README" >"$README.tmp" && mv "$README.tmp" "$README"
