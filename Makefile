@@ -26,3 +26,4 @@ format fmt:
 
 generate gen:
 	bash scripts/gen-packages-table.sh
+	bash scripts/gen-package-count-badge.sh
