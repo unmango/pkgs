@@ -1,5 +1,5 @@
 build:
-	nix build \
+	nix build --no-link \
 		.#aspire-cli \
 		.#awxkit \
 		.#chart-releaser \

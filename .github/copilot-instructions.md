@@ -52,12 +52,12 @@ in
 }
 ```
 
-| Language | Builder | Extra files |
-|----------|---------|-------------|
-| Go | `buildGoApplication` (gomod2nix) | `gomod2nix.toml` |
-| .NET | `buildDotnetModule` | `deps.json` |
-| Python | `python3Packages.buildPythonApplication` | — |
-| Container image | `nix2container.buildImage` | `manifest.json` (for pulled base images) |
+| Language        | Builder                                  | Extra files                              |
+| --------------- | ---------------------------------------- | ---------------------------------------- |
+| Go              | `buildGoApplication` (gomod2nix)         | `gomod2nix.toml`                         |
+| .NET            | `buildDotnetModule`                      | `deps.json`                              |
+| Python          | `python3Packages.buildPythonApplication` | —                                        |
+| Container image | `nix2container.buildImage`               | `manifest.json` (for pulled base images) |
 
 Go packages pass `modules = ./gomod2nix.toml;` and typically inject version info via `ldflags`.
 

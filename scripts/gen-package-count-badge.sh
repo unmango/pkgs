@@ -15,4 +15,4 @@ badge="$badge" awk '
   /<!-- PACKAGE_COUNT:START -->/ { print; print ENVIRON["badge"]; skip=1; next }
   /<!-- PACKAGE_COUNT:END -->/ { skip=0 }
   !skip
-' "$README" > "$README.tmp" && mv "$README.tmp" "$README"
+' "$README" >"$README.tmp" && mv "$README.tmp" "$README"

@@ -31,12 +31,12 @@ After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell 
 
 ## Package patterns
 
-| Language | Builder | Extra files |
-|----------|---------|-------------|
-| Go | `buildGoApplication` (gomod2nix) | `gomod2nix.toml` per package |
-| .NET | `buildDotnetModule` | `deps.json` per package |
-| Python | `python3Packages.buildPythonApplication` | — |
-| Container image | `nix2container.buildImage` | `manifest.json` for pulled base images |
+| Language        | Builder                                  | Extra files                            |
+| --------------- | ---------------------------------------- | -------------------------------------- |
+| Go              | `buildGoApplication` (gomod2nix)         | `gomod2nix.toml` per package           |
+| .NET            | `buildDotnetModule`                      | `deps.json` per package                |
+| Python          | `python3Packages.buildPythonApplication` | —                                      |
+| Container image | `nix2container.buildImage`               | `manifest.json` for pulled base images |
 
 ## Adding a package
 

@@ -13,4 +13,4 @@ table="$table" awk '
   /<!-- PACKAGES:START -->/ { print; print ENVIRON["table"]; skip=1; next }
   /<!-- PACKAGES:END -->/ { skip=0 }
   !skip
-' "$README" > "$README.tmp" && mv "$README.tmp" "$README"
+' "$README" >"$README.tmp" && mv "$README.tmp" "$README"
