@@ -8,9 +8,10 @@
       ...
     }:
     let
-      buildGoApplication = inputs'.gomod2nix.legacyPackages.buildGoApplication;
-      nix2container = inputs'.nix2container.packages.nix2container;
-      inherit ((import ../lib/go { inherit pkgs; })) mkUpdateDeps;
+      inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication;
+      inherit (inputs'.nix2container.packages) nix2container;
+      inherit (pkgs.callPackage ../lib/go) mkUpdateDeps;
+
       callPackage = lib.callPackageWith (
         { inherit buildGoApplication nix2container mkUpdateDeps; } // pkgs
       );
@@ -25,6 +26,8 @@
         kubectl-get-resources = callPackage ./kubectl-get-resources { };
         kubectl-slice = callPackage ./kubectl-slice { };
         mmake = callPackage ./mmake { };
+        pbrt = callPackage ./pbrt { };
+        ocaml-protoc = callPackage ./ocaml-protoc { inherit (config.packages) pbrt; };
         openshift-installer = callPackage ./openshift-installer { };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
@@ -50,17 +53,19 @@
           aspire-cli
           awxkit
           chart-releaser
+          github-runner
+          hercules-ci-agent
           kube-vip
           kubectl-get-all
           kubectl-get-resources
           kubectl-slice
           mmake
+          ocaml-protoc
           openshift-installer
+          pbrt
           terraform-plugin-codegen-framework
           terraform-plugin-codegen-openapi
           terraform-provider-pfsense
-          hercules-ci-agent
-          github-runner
           ;
       };
     };
