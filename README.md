@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-16-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-17-blue)](#packages)
 
 <p align="center">
 
@@ -33,6 +33,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.     |
 | `mmake`                              | Modern Make                                                                                                     |
 | `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                            |
+| `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                    |
 | `openshift-installer`                | Install an OpenShift Cluster                                                                                    |
 | `pbrt`                               | Runtime library for Protobuf tooling                                                                            |
 | `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                      |

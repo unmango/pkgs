@@ -28,6 +28,7 @@
         mmake = callPackage ./mmake { };
         pbrt = callPackage ./pbrt { };
         ocaml-protoc = callPackage ./ocaml-protoc { inherit (config.packages) pbrt; };
+        ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
         openshift-installer = callPackage ./openshift-installer { };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
@@ -61,6 +62,7 @@
           kubectl-slice
           mmake
           ocaml-protoc
+          ocaml-protoc-plugin
           openshift-installer
           pbrt
           terraform-plugin-codegen-framework
