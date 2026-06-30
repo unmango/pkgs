@@ -10,7 +10,7 @@
     let
       inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication;
       inherit (inputs'.nix2container.packages) nix2container;
-      inherit (pkgs.callPackage ../lib/go) mkUpdateDeps;
+      inherit (pkgs.callPackage ../lib/go { }) mkUpdateDeps;
 
       callPackage = lib.callPackageWith (
         { inherit buildGoApplication nix2container mkUpdateDeps; } // pkgs

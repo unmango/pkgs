@@ -10,8 +10,8 @@ let
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "installer";
-    rev = "release-${version}";
-    hash = "sha256-2jWuUPuIirN5HUBVnoNy5hZoYt29P/qUF3NX2okxGgI=";
+    rev = "v${version}";
+    hash = "sha256-a6jTIaRzUjSfvCiKlr2d0nvm9cvDK8713McFwts9ZfE=";
   };
 in
 buildGoApplication {
