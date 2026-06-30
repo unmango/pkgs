@@ -19,26 +19,28 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 ## Packages
 
 <!-- PACKAGES:START -->
-| Name | Description |
-| ---- | ----------- |
-| `aspire-cli` | A CLI tool for managing Aspire projects |
-| `awxkit` | Official command line interface for Ansible AWX |
-| `chart-releaser` | Hosting Helm Charts via GitHub Pages and Releases |
-| `github-runner` | Self-hosted runner for GitHub Actions |
-| `hercules-ci-agent` | Runs Continuous Integration tasks on your machines |
-| `kube-vip` | Kube-VIP: Virtual IP for Kubernetes clusters |
-| `kubectl-get-all` | Like `kubectl get all`, but get really all resources |
-| `kubectl-get-resources` | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags. |
-| `kubectl-slice` | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files. |
-| `mmake` | Modern Make |
-| `oc-mirror` | Lifecycle manager for internet-disconnected OpenShift environments |
-| `ocaml-protoc` | Pure OCaml compiler for .proto files |
-| `ocaml-protoc-plugin` | Maps google protobuf compiler to Ocaml types |
-| `openshift-installer` | Install an OpenShift Cluster |
-| `pbrt` | Runtime library for Protobuf tooling |
-| `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation |
-| `terraform-plugin-codegen-openapi` | OpenAPI to Terraform Provider Code Generation Specification |
-| `terraform-provider-pfsense` | Used to configure pfSense firewall/router devices with Terraform |
+
+| Name                                 | Description                                                                                                     |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                         |
+| `awxkit`                             | Official command line interface for Ansible AWX                                                                 |
+| `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                               |
+| `github-runner`                      | Self-hosted runner for GitHub Actions                                                                           |
+| `hercules-ci-agent`                  | Runs Continuous Integration tasks on your machines                                                              |
+| `kube-vip`                           | Kube-VIP: Virtual IP for Kubernetes clusters                                                                    |
+| `kubectl-get-all`                    | Like `kubectl get all`, but get really all resources                                                            |
+| `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags. |
+| `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.     |
+| `mmake`                              | Modern Make                                                                                                     |
+| `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                              |
+| `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                            |
+| `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                    |
+| `openshift-installer`                | Install an OpenShift Cluster                                                                                    |
+| `pbrt`                               | Runtime library for Protobuf tooling                                                                            |
+| `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                      |
+| `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                     |
+| `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                |
+
 <!-- PACKAGES:END -->
 
 ## Usage
