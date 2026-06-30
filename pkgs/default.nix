@@ -10,7 +10,7 @@
     let
       inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication;
       inherit (inputs'.nix2container.packages) nix2container;
-      inherit (pkgs.callPackage ../lib/go) mkUpdateDeps;
+      inherit (pkgs.callPackage ../lib/go { }) mkUpdateDeps;
 
       callPackage = lib.callPackageWith (
         { inherit buildGoApplication nix2container mkUpdateDeps; } // pkgs
@@ -26,6 +26,7 @@
         kubectl-get-resources = callPackage ./kubectl-get-resources { };
         kubectl-slice = callPackage ./kubectl-slice { };
         mmake = callPackage ./mmake { };
+        oc-mirror = callPackage ./oc-mirror { };
         pbrt = callPackage ./pbrt { };
         ocaml-protoc = callPackage ./ocaml-protoc { inherit (config.packages) pbrt; };
         ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
@@ -61,6 +62,7 @@
           kubectl-get-resources
           kubectl-slice
           mmake
+          oc-mirror
           ocaml-protoc
           ocaml-protoc-plugin
           openshift-installer
