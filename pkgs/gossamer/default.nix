@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-33jSqzJLib7Irh8dXFZcYMr269YwDdwc6Ykhc7K9N0s=";
 
+  # Tests invoke `gos build` which requires LLVM opt at runtime.
+  doCheck = false;
+
   # build.rs for gossamer-cli spawns a nested `cargo build -p gossamer-runtime`
   # to produce the staticlib. In Nix's sandbox the nested invocation succeeds
   # but produces no file (vendor/env mismatch in subprocess). Pre-building here
