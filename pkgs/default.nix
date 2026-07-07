@@ -41,6 +41,8 @@
             image = callPackage ./images/hercules-ci-agent { };
           };
         });
+        gossamer = callPackage ./gossamer { };
+
         github-runner = pkgs.github-runner.overrideAttrs (old: {
           passthru = (old.passthru or { }) // {
             image = callPackage ./images/github-runner { };
@@ -56,6 +58,7 @@
           awxkit
           chart-releaser
           github-runner
+          gossamer
           hercules-ci-agent
           kube-vip
           kubectl-get-all
