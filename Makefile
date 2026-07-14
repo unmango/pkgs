@@ -1,21 +1,7 @@
 GO_PKGS := chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice mmake openshift-installer terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
 
 build:
-	nix build --no-link \
-		.#aspire-cli \
-		.#awxkit \
-		.#chart-releaser \
-		.#kube-vip \
-		.#kubectl-get-all \
-		.#kubectl-get-resources \
-		.#kubectl-slice \
-		.#mmake \
-		.#openshift-installer \
-		.#terraform-plugin-codegen-framework \
-		.#terraform-plugin-codegen-openapi \
-		.#terraform-provider-pfsense \
-		.#hercules-ci-agent.image \
-		.#github-runner.image
+	nix build --no-link $$($(CURDIR)/scripts/list-build-targets.sh | sed 's/^/.#/' | tr '\n' ' ')
 
 update:
 	nix flake update

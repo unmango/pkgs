@@ -47,4 +47,11 @@ After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell 
 
 ## CI
 
-`nix flake check` (lint + eval) and `nix build .#` run on every push/PR. A separate `codegen` job runs `make generate` and fails if the README diff is non-empty — keep the generated table committed.
+`.github/workflows/ci.yml` has four jobs:
+
+- **`matrix`** — enumerates all package/image targets via `scripts/list-build-targets.sh` (`nix eval` over `packages.<system>`, source of truth is `pkgs/default.nix`), then diffs the push/PR against its base to filter down to only the changed targets. Any change outside `pkgs/**` (e.g. `flake.nix`, `pkgs/default.nix`, `lib/**`) falls back to building everything.
+- **`build`** — matrix job, one `nix build .#<target>` per changed package/image, each on its own runner (fixes prior disk exhaustion from building everything in one job).
+- **`check`** — `nix flake check` (lint + eval), runs unconditionally.
+- **`codegen`** — runs `make generate` and fails if the README diff is non-empty — keep the generated table committed.
+
+`scripts/list-build-targets.sh` is also used by `make build` locally, so the local and CI target lists can't drift.
