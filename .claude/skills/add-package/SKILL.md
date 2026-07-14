@@ -10,13 +10,14 @@ Walks through adding `pkgs/<name>/default.nix`, wiring it into `pkgs/default.nix
 ## 1. Decide the shape
 
 - **Standalone package** (most common) — new derivation under `pkgs/<name>/`. Go to §2.
-- **Container image** — an OCI image attached to an *existing* nixpkgs package (e.g. `hercules-ci-agent`, `github-runner`). Not a new `packages` entry. Skip to §5.
+- **Container image** — an OCI image attached to an _existing_ nixpkgs package (e.g. `hercules-ci-agent`, `github-runner`). Not a new `packages` entry. Skip to §5.
 
 For standalone packages, identify the language/build system: Go, .NET, Python, or other (e.g. OCaml). Pick the matching checklist in §3.
 
 ## 2. Common steps (every standalone package)
 
 1. Create `pkgs/<name>/default.nix` following the shared skeleton:
+
    ```nix
    { <builder-and-inputs>, lib, fetchFromGitHub, nix-update-script }:
    let
@@ -44,6 +45,7 @@ For standalone packages, identify the language/build system: Go, .NET, Python, o
      };
    }
    ```
+
 2. Register in `pkgs/default.nix`, alphabetically, inside `packages = { ... };`:
    ```nix
    <name> = callPackage ./<name> { };
@@ -56,6 +58,7 @@ For standalone packages, identify the language/build system: Go, .NET, Python, o
 ## 3. Per-language checklist
 
 **Go** — `buildGoApplication` (gomod2nix). Reference: `pkgs/kubectl-slice/default.nix`.
+
 - Function args include `buildGoApplication, mkUpdateDeps`.
 - Derivation attrs: `modules = ./gomod2nix.toml;`, optional `ldflags`.
 - Passthru: also add `passthru.update-deps = mkUpdateDeps src;` (alongside `updateScript`).
@@ -63,15 +66,18 @@ For standalone packages, identify the language/build system: Go, .NET, Python, o
 - Run `make deps` (or `nix run .#<name>.update-deps pkgs/<name>/gomod2nix.toml`) to generate `gomod2nix.toml` — the build fails without it.
 
 **.NET** — `buildDotnetModule`. Reference: `pkgs/aspire-cli/default.nix`.
+
 - Function args include `buildDotnetModule, dotnetCorePackages`.
 - Derivation attrs: `dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;` (or current pin), `projectFile`, `nugetDeps = ./deps.json;`, `selfContainedBuild = true;`.
 - `deps.json` must exist before the build succeeds — generate/update it per the nixpkgs `buildDotnetModule` deps workflow if missing.
 
 **Python** — `python3Packages.buildPythonApplication`. Reference: `pkgs/awxkit/default.nix`.
+
 - Function args include `python3Packages`.
 - Derivation attrs: `pyproject = true;`, `build-system = with python3Packages; [ ... ];`, `dependencies = with python3Packages; [ ... ];`, optional `postPatch` for source patches.
 
 **Other/minimal** (e.g. OCaml via `ocamlPackages.buildDunePackage`). References: `pkgs/pbrt/default.nix`, `pkgs/ocaml-protoc-plugin/default.nix`.
+
 - Function args are builder-specific (e.g. `ocamlPackages`).
 - Minimal shape: `src`, builder call, optional `propagatedBuildInputs`, `meta` (may omit `mainProgram` for libraries).
 
@@ -79,7 +85,7 @@ For standalone packages, identify the language/build system: Go, .NET, Python, o
 
 ## 5. Special case: container images
 
-Applies when packaging an image for an *existing* nixpkgs derivation, not creating a new one.
+Applies when packaging an image for an _existing_ nixpkgs derivation, not creating a new one.
 
 1. Create `pkgs/images/<name>/default.nix`:
    ```nix
@@ -115,10 +121,10 @@ Applies when packaging an image for an *existing* nixpkgs derivation, not creati
 
 ## Quick reference
 
-| Language | Builder | Extra passthru | Example |
-|---|---|---|---|
-| Go | `buildGoApplication` | `update-deps` | `pkgs/kubectl-slice` |
-| .NET | `buildDotnetModule` | — | `pkgs/aspire-cli` |
-| Python | `python3Packages.buildPythonApplication` | — | `pkgs/awxkit` |
-| Other/OCaml | `ocamlPackages.buildDunePackage` | — | `pkgs/pbrt` |
-| Container image | `nix2container.buildImage` | `passthru.image` on base pkg | `pkgs/images/github-runner` |
+| Language        | Builder                                  | Extra passthru               | Example                     |
+| --------------- | ---------------------------------------- | ---------------------------- | --------------------------- |
+| Go              | `buildGoApplication`                     | `update-deps`                | `pkgs/kubectl-slice`        |
+| .NET            | `buildDotnetModule`                      | —                            | `pkgs/aspire-cli`           |
+| Python          | `python3Packages.buildPythonApplication` | —                            | `pkgs/awxkit`               |
+| Other/OCaml     | `ocamlPackages.buildDunePackage`         | —                            | `pkgs/pbrt`                 |
+| Container image | `nix2container.buildImage`               | `passthru.image` on base pkg | `pkgs/images/github-runner` |
