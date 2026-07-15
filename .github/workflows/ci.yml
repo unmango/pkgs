@@ -6,11 +6,14 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   matrix:
     runs-on: ubuntu-latest
     outputs:
-      packages: ${{ steps.filter.outputs.packages }}
+      packages: ${{ steps.targets.outputs.packages }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -25,30 +28,29 @@ jobs:
           all=$(./scripts/list-build-targets.sh | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "packages=$all" >> "$GITHUB_OUTPUT"
 
+      # A change outside pkgs/** (flake.nix, flake.lock, lib/**, pkgs/default.nix, ...)
+      # can affect any package, so fall back to building everything.
       - id: filter
+        uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3.0.3
+        with:
+          predicate-quantifier: every
+          list-files: json
+          filters: |
+            pkgs:
+              - 'pkgs/**'
+
+      - id: targets
         env:
           ALL_PACKAGES: ${{ steps.all.outputs.packages }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          ONLY_PKGS: ${{ steps.filter.outputs.pkgs }}
+          CHANGED_FILES: ${{ steps.filter.outputs.pkgs_files }}
         run: |
-          fallback=false
-          if [ -z "$BASE_SHA" ] || ! git cat-file -e "$BASE_SHA" 2>/dev/null; then
-            fallback=true
-          fi
-
-          changed=""
-          if [ "$fallback" = false ]; then
-            changed=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
-          fi
-
-          # A change outside pkgs/** (flake.nix, flake.lock, lib/**, pkgs/default.nix, ...)
-          # can affect any package, so fall back to building everything.
-          if [ "$fallback" = true ] || { [ -n "$changed" ] && echo "$changed" | grep -qvE '^pkgs/'; }; then
+          if [ "$ONLY_PKGS" != "true" ]; then
             echo "packages=$ALL_PACKAGES" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          changed_targets=$(echo "$changed" | awk -F/ '
+          changed_targets=$(echo "$CHANGED_FILES" | jq -r '.[]' | awk -F/ '
             /^pkgs\/images\// { print $3 ".image"; next }
             /^pkgs\// { print $2 }
           ' | sort -u)
