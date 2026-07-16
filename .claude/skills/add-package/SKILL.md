@@ -51,7 +51,7 @@ For standalone packages, identify the language/build system: Go, .NET, Python, o
    <name> = callPackage ./<name> { };
    ```
    If it needs another local package as an input, use `inherit (config.packages) <dep>;` (see `ocaml-protoc` → `pbrt`).
-3. Add the same name, alphabetically, to the `overlayAttrs` inherit list in `pkgs/default.nix`. Do this unless there's a clear reason not to — one existing package (`awxkit`) is missing from `overlayAttrs`, but that's an inconsistency, not a pattern to follow.
+3. Add the same name, alphabetically, to the `overlayAttrs` inherit list in `pkgs/default.nix` to keep `overlays.default` in sync with the flake’s `packages` outputs.
 4. Do **not** hand-edit the README package table — `lib/packages.nix` generates it from `config.packages` automatically (`make generate` refreshes it, §6).
 5. Do **not** add a new maintainer entry — `UnstoppableMango` already exists in `lib/maintainers.nix`.
 
