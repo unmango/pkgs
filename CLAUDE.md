@@ -36,6 +36,8 @@ After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell 
 | Go              | `buildGoApplication` (gomod2nix)         | `gomod2nix.toml` per package           |
 | .NET            | `buildDotnetModule`                      | `deps.json` per package                |
 | Python          | `python3Packages.buildPythonApplication` | —                                      |
+| Rust            | `rustPlatform.buildRustPackage`          | `cargoHash` in derivation              |
+| OCaml           | `ocamlPackages.buildDunePackage`         | —                                      |
 | Container image | `nix2container.buildImage`               | `manifest.json` for pulled base images |
 
 ## Adding a package
@@ -48,3 +50,8 @@ After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell 
 ## CI
 
 `nix flake check` (lint + eval) and `nix build .#` run on every push/PR. A separate `codegen` job runs `make generate` and fails if the README diff is non-empty — keep the generated table committed.
+
+## Gotchas
+
+- CI runs `make check build`: `nix flake check` does lint + eval, and `make build` (via `nix build`) builds the packages listed in the Makefile. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`/`overlayAttrs` (and the Makefile build list) until real hashes exist.
+- A `pkgs/<name>/default.nix` existing doesn't mean it's wired up — packages blocked on an upstream fix are deliberately left out of `pkgs/default.nix`'s `packages` attrset (see the `smarter-device-manager` comment there).
