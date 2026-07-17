@@ -53,5 +53,5 @@ After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell 
 
 ## Gotchas
 
-- `nix flake check` **builds** every `packages.<system>.*` derivation, not just evaluates it. A placeholder/unfetchable hash fails CI. Keep in-progress packages in `legacyPackages` only until real hashes exist; move to `packages` (and `overlayAttrs`) once buildable.
+- CI runs `make check build`: `nix flake check` does lint + eval, and `make build` (via `nix build`) builds the packages listed in the Makefile. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`/`overlayAttrs` (and the Makefile build list) until real hashes exist.
 - A `pkgs/<name>/default.nix` existing doesn't mean it's wired up — packages blocked on an upstream fix are deliberately left out of `pkgs/default.nix`'s `packages` attrset (see the `smarter-device-manager` comment there).
