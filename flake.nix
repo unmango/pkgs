@@ -2,6 +2,7 @@
   description = "Mini-nixpkgs of dubious quality";
 
   nixConfig = {
+    allow-import-from-derivation = false;
     extra-substituters = [
       "https://mangopkgs.cachix.org"
     ];
