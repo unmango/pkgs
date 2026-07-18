@@ -21,6 +21,7 @@ buildGoApplication {
   inherit pname version src;
 
   modules = ./gomod2nix.toml;
+  disableGoCache = true;
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''

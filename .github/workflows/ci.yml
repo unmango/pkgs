@@ -30,6 +30,7 @@ jobs:
             # Trigger Nix GC on GitHub-hosted runners when < 3GiB free; keep up to 10GiB free.
             min-free = 3221225472
             max-free = 10737418240
+            allow-import-from-derivation = false
 
       - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         with:

@@ -20,6 +20,7 @@ buildGoApplication {
   inherit version src;
 
   modules = ./gomod2nix.toml;
+  disableGoCache = true;
   subPackages = [ "cmd/oc-mirror" ];
 
   # CGO_ENABLED=0 selects the pure-Go btrfs/devicemapper/openpgp stubs
