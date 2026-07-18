@@ -21,6 +21,7 @@ buildGoApplication {
   inherit version src;
 
   modules = ./gomod2nix.toml;
+  disableGoCache = true;
 
   checkPhase = ''
     go test -v ./... -skip 'Installer|Github|Universal'

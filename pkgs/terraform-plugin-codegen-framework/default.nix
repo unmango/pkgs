@@ -19,6 +19,7 @@ buildGoApplication {
   inherit version src;
 
   modules = ./gomod2nix.toml;
+  disableGoCache = true;
   subPackages = [ "cmd/tfplugingen-framework" ];
 
   passthru.update-deps = mkUpdateDeps src;
