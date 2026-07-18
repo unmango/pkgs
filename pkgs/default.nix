@@ -74,15 +74,20 @@
           ocaml-protoc-plugin
           openshift-installer
           pbrt
+          pulumi-bun
+          pulumi-dotnet
+          pulumi-java
+          pulumi-yaml
           terraform-plugin-codegen-framework
           terraform-plugin-codegen-openapi
           terraform-provider-pfsense
           ;
 
-        # Mirrors nixpkgs' pulumiPackages package set (pulumi-go, pulumi-nodejs,
-        # pulumi-python), covering the officially-supported language plugins
-        # nixpkgs doesn't package because they live outside the pulumi/pulumi repo.
-        pulumiPackages = {
+        # Extends nixpkgs' pulumiPackages package set (pulumi-go, pulumi-nodejs,
+        # pulumi-python) with officially-supported language plugins nixpkgs doesn't
+        # package because they live outside the pulumi/pulumi repo. Merges onto
+        # pkgs.pulumiPackages so overlays.default doesn't clobber nixpkgs' entries.
+        pulumiPackages = pkgs.pulumiPackages // {
           inherit (config.packages)
             pulumi-bun
             pulumi-dotnet
