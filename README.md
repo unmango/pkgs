@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-19-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-23-blue)](#packages)
 
 <p align="center">
 
@@ -38,6 +38,10 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                    |
 | `openshift-installer`                | Install an OpenShift Cluster                                                                                    |
 | `pbrt`                               | Runtime library for Protobuf tooling                                                                            |
+| `pulumi-bun`                         | Pulumi language host for Bun programs                                                                           |
+| `pulumi-dotnet`                      | Pulumi language host for .NET programs                                                                          |
+| `pulumi-java`                        | Pulumi language host for Java programs                                                                          |
+| `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                          |
 | `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                      |
 | `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                     |
 | `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                |

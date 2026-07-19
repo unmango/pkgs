@@ -31,6 +31,10 @@
         ocaml-protoc = callPackage ./ocaml-protoc { inherit (config.packages) pbrt; };
         ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
         openshift-installer = callPackage ./openshift-installer { };
+        pulumi-bun = callPackage ./pulumi-bun { };
+        pulumi-dotnet = callPackage ./pulumi-dotnet { };
+        pulumi-java = callPackage ./pulumi-java { };
+        pulumi-yaml = callPackage ./pulumi-yaml { };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
         terraform-plugin-codegen-openapi = callPackage ./terraform-plugin-codegen-openapi { };
@@ -70,10 +74,27 @@
           ocaml-protoc-plugin
           openshift-installer
           pbrt
+          pulumi-bun
+          pulumi-dotnet
+          pulumi-java
+          pulumi-yaml
           terraform-plugin-codegen-framework
           terraform-plugin-codegen-openapi
           terraform-provider-pfsense
           ;
+
+        # Extends nixpkgs' pulumiPackages package set (pulumi-go, pulumi-nodejs,
+        # pulumi-python) with officially-supported language plugins nixpkgs doesn't
+        # package because they live outside the pulumi/pulumi repo. Merges onto
+        # pkgs.pulumiPackages so overlays.default doesn't clobber nixpkgs' entries.
+        pulumiPackages = pkgs.pulumiPackages // {
+          inherit (config.packages)
+            pulumi-bun
+            pulumi-dotnet
+            pulumi-java
+            pulumi-yaml
+            ;
+        };
       };
     };
 }
