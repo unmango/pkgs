@@ -1,4 +1,5 @@
 {
+  callPackage,
   fetchFromGitHub,
   lib,
   llvmPackages_18,
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.editorSupport = callPackage ./editor-support.nix { };
 
   meta = with lib; {
     description = "The Gossamer programming language compiler";
