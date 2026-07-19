@@ -15,7 +15,8 @@
     };
 
     gomod2nix = {
-      url = "github:nix-community/gomod2nix";
+      # url = "github:nix-community/gomod2nix";
+      url = "github:UnstoppableMango/gomod2nix?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.inputs.systems.follows = "systems";
     };

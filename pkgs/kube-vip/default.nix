@@ -19,7 +19,6 @@ buildGoApplication {
   inherit version src;
 
   modules = ./gomod2nix.toml;
-  disableGoCache = true;
   subPackages = [ "." ];
 
   ldflags = [
