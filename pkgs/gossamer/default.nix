@@ -1,6 +1,8 @@
 {
   fetchFromGitHub,
   lib,
+  llvmPackages_18,
+  makeWrapper,
   nix-update-script,
   rustPlatform,
 }:
@@ -32,6 +34,13 @@ rustPlatform.buildRustPackage {
       --target-dir target/runtime-staticlib \
       --release \
       --offline
+  '';
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  # `gos build` shells out to `opt`/`llc` at runtime, not just build time.
+  postInstall = ''
+    wrapProgram $out/bin/gos --prefix PATH : ${lib.makeBinPath [ llvmPackages_18.llvm ]}
   '';
 
   passthru.updateScript = nix-update-script { };
