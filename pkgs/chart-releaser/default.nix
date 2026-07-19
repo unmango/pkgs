@@ -27,7 +27,6 @@ buildGoApplication {
   inherit version src;
 
   modules = ./gomod2nix.toml;
-  disableGoCache = true;
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \
