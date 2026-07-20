@@ -26,7 +26,7 @@ $ nix eval --impure --expr '(builtins.getFlake "/home/erik/src/github.com/unmang
 { nativeBuildInputs = []; propagated = []; }
 ```
 
-`gos build` shells out to `opt`/`llc` (LLVM 18+) at *runtime*, not just build time,
+`gos build` shells out to `opt`/`llc` (LLVM 18+) at _runtime_, not just build time,
 so it needs to find them via `GOS_LLVM_OPT`/`$PATH` wherever `gos` itself runs —
 this makes it a `propagatedBuildInputs` (or a wrapped `$PATH`) concern, not just
 `nativeBuildInputs` on the package's own build.
@@ -57,7 +57,7 @@ hello> Running phase: buildPhase
 hello> error: build: native codegen cannot yet lower this program: opt (LLVM toolchain) not found. ...
 ```
 
-Works fine in an *unsandboxed* `nix develop` shell only because `opt`/`llc`
+Works fine in an _unsandboxed_ `nix develop` shell only because `opt`/`llc`
 happen to be present via the host system profile (`/run/current-system/sw/bin`)
 on that particular machine — not because the `gossamer` derivation provides
 them.
