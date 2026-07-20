@@ -1,0 +1,30 @@
+--- a/crates/gossamer-cli/build.rs
++++ b/crates/gossamer-cli/build.rs
+@@ -127,6 +127,27 @@
+     };
+     let lib_path = lib_dir.join(lib_name);
+
++    // When GOS_RUNTIME_LIB points to a pre-built staticlib, copy it into
++    // the outer target/<profile>/ directory and skip the inner cargo build.
++    // This is used in sandboxed environments (e.g. Nix) where the inner
++    // `cargo build` cannot produce the artifact at the expected path.
++    if let Ok(prebuilt) = env::var("GOS_RUNTIME_LIB") {
++        let outer_artifact = lib_path.clone();
++        if let Some(parent) = outer_artifact.parent() {
++            std::fs::create_dir_all(parent).expect("create outer profile dir");
++        }
++        let tmp = outer_artifact.with_extension(format!("a.tmp-{}", std::process::id()));
++        std::fs::copy(&prebuilt, &tmp)
++            .unwrap_or_else(|e| panic!("copy pre-built gossamer-runtime: {e}"));
++        std::fs::rename(&tmp, &outer_artifact)
++            .expect("atomically publish pre-built gossamer-runtime");
++        println!(
++            "cargo:rustc-env=GOSSAMER_RUNTIME_LIB_PATH={}",
++            outer_artifact.display()
++        );
++        return;
++    }
++
+     // Force-build the runtime crate so the staticlib gets emitted.
+     // Use a separate target dir to avoid a deadlock against the
+     // outer cargo invocation that owns `target/`'s build lock.

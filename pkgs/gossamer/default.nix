@@ -23,6 +23,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-33jSqzJLib7Irh8dXFZcYMr269YwDdwc6Ykhc7K9N0s=";
 
+  # Teach build.rs to use a pre-built libgossamer_runtime.a when GOS_RUNTIME_LIB
+  # is set, instead of spawning a nested cargo build. This is needed for the JIT
+  # tests: they create a runner project in a tmpdir whose build.rs otherwise
+  # cannot produce the staticlib (sandbox prevents the nested cargo invocation
+  # from finding the vendor directory).
+  patches = [ ./gos-runtime-lib-env.patch ];
+
   # build.rs for gossamer-cli spawns a nested `cargo build -p gossamer-runtime`
   # to produce the staticlib. In Nix's sandbox the nested invocation succeeds
   # but produces no file (vendor/env mismatch in subprocess). Pre-building here
@@ -34,10 +41,18 @@ rustPlatform.buildRustPackage {
       --offline
   '';
 
+  # JIT tests spawn a runner (a cargo project in a tmpdir) whose build.rs also
+  # tries to build gossamer-runtime. Point it at the release staticlib already
+  # built in preBuild; the patched build.rs copies it into place without
+  # invoking cargo again.
+  preCheck = ''
+    export GOS_RUNTIME_LIB="$PWD/target/runtime-staticlib/release/libgossamer_runtime.a"
+  '';
+
   nativeBuildInputs = [ makeWrapper ];
 
-  # Tests invoke `gos build` which requires LLVM opt at runtime.
-  doCheck = false;
+  # Tests invoke `gos build` which shells out to `opt`/`llc` at runtime.
+  nativeCheckInputs = [ llvmPackages_18.llvm ];
 
   # `gos build` shells out to `opt`/`llc` at runtime, not just build time.
   postInstall = ''
