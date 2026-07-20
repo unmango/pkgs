@@ -1,6 +1,8 @@
 {
   fetchFromGitHub,
   lib,
+  llvmPackages_18,
+  makeWrapper,
   nix-update-script,
   rustPlatform,
 }:
@@ -20,9 +22,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-33jSqzJLib7Irh8dXFZcYMr269YwDdwc6Ykhc7K9N0s=";
 
-  # Tests invoke `gos build` which requires LLVM opt at runtime.
-  doCheck = false;
-
   # build.rs for gossamer-cli spawns a nested `cargo build -p gossamer-runtime`
   # to produce the staticlib. In Nix's sandbox the nested invocation succeeds
   # but produces no file (vendor/env mismatch in subprocess). Pre-building here
@@ -32,6 +31,13 @@ rustPlatform.buildRustPackage {
       --target-dir target/runtime-staticlib \
       --release \
       --offline
+  '';
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  # `gos build` shells out to `opt`/`llc` at runtime, not just build time.
+  postInstall = ''
+    wrapProgram $out/bin/gos --prefix PATH : ${lib.makeBinPath [ llvmPackages_18.llvm ]}
   '';
 
   passthru.updateScript = nix-update-script { };
