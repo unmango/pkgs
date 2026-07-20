@@ -8,6 +8,9 @@
   emacsPackages,
 }:
 let
+  # Repo snapshot date (upstream has no tags/releases). vscode and
+  # tree-sitter-gossamer instead pin their own package.json "version" -
+  # bump those alongside `rev` when updating.
   version = "0-unstable-2026-06-17";
 
   src = fetchFromGitHub {
@@ -53,7 +56,7 @@ in
   # what the extension actually is.
   vscode = vscode-utils.buildVscodeExtension {
     pname = "gossamer-vscode";
-    version = "0.2.0";
+    version = "0.2.0"; # vscode/package.json "version", not the repo snapshot
 
     vscodeExtPublisher = "gossamer-lang";
     vscodeExtName = "gossamer";
@@ -149,7 +152,7 @@ in
 
   tree-sitter-gossamer = tree-sitter.buildGrammar {
     language = "gossamer";
-    version = "0.2.0";
+    version = "0.2.0"; # tree-sitter-gossamer/package.json "version", not the repo snapshot
     inherit src;
     location = "tree-sitter-gossamer";
 
