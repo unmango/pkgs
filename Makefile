@@ -10,7 +10,12 @@ build:
 		.#kubectl-get-resources \
 		.#kubectl-slice \
 		.#mmake \
+		.#oc-mirror \
+		.#ocaml-protoc \
+		.#ocaml-protoc-plugin \
 		.#openshift-installer \
+		.#pbrt \
+		.#gossamer \
 		.#pulumi-bun \
 		.#pulumi-dotnet \
 		.#pulumi-java \
