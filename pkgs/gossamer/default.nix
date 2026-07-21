@@ -36,6 +36,9 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # Tests invoke `gos build` which requires LLVM opt at runtime.
+  doCheck = false;
+
   # `gos build` shells out to `opt`/`llc` at runtime, not just build time.
   postInstall = ''
     wrapProgram $out/bin/gos --prefix PATH : ${lib.makeBinPath [ llvmPackages_18.llvm ]}
