@@ -1,0 +1,16 @@
+--- a/crates/gossamer-driver/src/binding_runner.rs
++++ b/crates/gossamer-driver/src/binding_runner.rs
+@@ -1075,6 +1075,13 @@
+         cmd.arg(kind_flag).arg(kind_value);
+     }
+     cmd.env("CARGO_TARGET_DIR", target_dir);
++    // Unset CARGO_BUILD_TARGET so the runner binary lands at
++    // target/{profile}/ rather than target/{triple}/{profile}/.
++    // Without this, CARGO_BUILD_TARGET set by the host environment
++    // (e.g. Nix's explicit target triple) causes cargo to nest the
++    // output under the target triple, which runner_binary_path()
++    // does not account for.
++    cmd.env_remove("CARGO_BUILD_TARGET");
+     // Capture both streams so cargo's progress and diagnostics are shown
+     // only when the build fails, keeping the user's terminal clean on
+     // success while still surfacing errors.

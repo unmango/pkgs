@@ -28,7 +28,15 @@ rustPlatform.buildRustPackage {
   # tests: they create a runner project in a tmpdir whose build.rs otherwise
   # cannot produce the staticlib (sandbox prevents the nested cargo invocation
   # from finding the vendor directory).
-  patches = [ ./gos-runtime-lib-env.patch ];
+  patches = [
+    # Teach build.rs to copy GOS_RUNTIME_LIB instead of spawning a nested
+    # `cargo build` (which fails in the sandbox due to vendor/env mismatch).
+    ./gos-runtime-lib-env.patch
+    # Unset CARGO_BUILD_TARGET in run_cargo_build so the runner binary lands
+    # at target/{profile}/ where runner_binary_path() expects it, not at
+    # target/{triple}/{profile}/ (Nix sets CARGO_BUILD_TARGET explicitly).
+    ./gos-runner-build-target.patch
+  ];
 
   # build.rs for gossamer-cli spawns a nested `cargo build -p gossamer-runtime`
   # to produce the staticlib. In Nix's sandbox the nested invocation succeeds
@@ -47,6 +55,9 @@ rustPlatform.buildRustPackage {
   # invoking cargo again.
   preCheck = ''
     export GOS_RUNTIME_LIB="$PWD/target/runtime-staticlib/release/libgossamer_runtime.a"
+    # Writable cache dir for tests that don't set GOSSAMER_CACHE themselves;
+    # $HOME/.cache is read-only in the Nix sandbox.
+    export GOSSAMER_CACHE="$TMPDIR/gossamer-test-cache"
   '';
 
   nativeBuildInputs = [ makeWrapper ];
