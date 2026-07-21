@@ -37,6 +37,10 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - run: make check build
+        if: matrix.runs-on != 'macos-latest'
+
+      - run: make check build EXCLUDE=aspire-cli
+        if: matrix.runs-on == 'macos-latest'
 
   codegen:
     runs-on: ubuntu-latest

@@ -1,25 +1,11 @@
 GO_PKGS := chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice mmake openshift-installer pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
 
+BUILD_PKGS := aspire-cli awxkit chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice mmake openshift-installer pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
+BUILD_IMAGES := hercules-ci-agent.image github-runner.image
+EXCLUDE ?=
+
 build:
-	nix build --no-link \
-		.#aspire-cli \
-		.#awxkit \
-		.#chart-releaser \
-		.#kube-vip \
-		.#kubectl-get-all \
-		.#kubectl-get-resources \
-		.#kubectl-slice \
-		.#mmake \
-		.#openshift-installer \
-		.#pulumi-bun \
-		.#pulumi-dotnet \
-		.#pulumi-java \
-		.#pulumi-yaml \
-		.#terraform-plugin-codegen-framework \
-		.#terraform-plugin-codegen-openapi \
-		.#terraform-provider-pfsense \
-		.#hercules-ci-agent.image \
-		.#github-runner.image
+	nix build --no-link $(filter-out $(EXCLUDE:%=.#%),$(BUILD_PKGS:%=.#%) $(BUILD_IMAGES:%=.#%))
 
 update:
 	nix flake update
