@@ -10,6 +10,11 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     gomod2nix = {
       url = "github:nix-community/gomod2nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,13 +38,14 @@
       systems = import inputs.systems;
 
       imports = with inputs; [
+        devenv.flakeModule
         treefmt-nix.flakeModule
         flake-parts.flakeModules.easyOverlay
         ./pkgs
       ];
 
       perSystem =
-        { pkgs, system, ... }:
+        { inputs', pkgs, system, ... }:
         {
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
@@ -57,6 +63,7 @@
 
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
+              inputs'.devenv.packages.devenv
               gnumake
               gomod2nix
               nix-update
