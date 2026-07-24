@@ -38,5 +38,6 @@ buildGoApplication {
     license = licenses.asl20;
     maintainers = with maintainers; [ UnstoppableMango ];
     mainProgram = "kube-vip";
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
