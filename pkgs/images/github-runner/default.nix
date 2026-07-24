@@ -9,6 +9,7 @@ nix2container.buildImage {
     imageName = "actions/actions-runner";
     imageTag = "2.334.0";
     imageManifest = ./manifest.json;
+    imageHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   config = {

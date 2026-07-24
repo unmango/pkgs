@@ -68,15 +68,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1775487831,
-        "narHash": "sha256-2lguQpLPQaxpQCJjXhmEEAfabwsAhkP29Z7fgLzHARA=",
-        "owner": "nlewo",
+        "lastModified": 1784321123,
+        "narHash": "sha256-BYUppCAOneL6tzqMbD+lZmz0yO+rV5cEpY/wqme5McU=",
+        "owner": "UnstoppableMango",
         "repo": "nix2container",
-        "rev": "76be9608a7f4d6c985d28b0e7be903ae2547df3e",
+        "rev": "5b2483f0eac415f1e01a979d197eaac3698e7e24",
         "type": "github"
       },
       "original": {
-        "owner": "nlewo",
+        "owner": "UnstoppableMango",
+        "ref": "skopeo-layers",
         "repo": "nix2container",
         "type": "github"
       }

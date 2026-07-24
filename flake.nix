@@ -17,7 +17,7 @@
     };
 
     nix2container = {
-      url = "github:nlewo/nix2container";
+      url = "github:UnstoppableMango/nix2container/skopeo-layers";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
