@@ -36,5 +36,6 @@ buildDotnetModule {
     maintainers = with maintainers; [ UnstoppableMango ];
     license = licenses.mit;
     mainProgram = "aspire";
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }

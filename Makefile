@@ -1,25 +1,10 @@
 GO_PKGS := chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice mmake openshift-installer pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
+SYSTEM ?= $(shell nix run github:nix-systems/current-system)
 
 build:
-	nix build --no-link \
-		.#aspire-cli \
-		.#awxkit \
-		.#chart-releaser \
-		.#kube-vip \
-		.#kubectl-get-all \
-		.#kubectl-get-resources \
-		.#kubectl-slice \
-		.#mmake \
-		.#openshift-installer \
-		.#pulumi-bun \
-		.#pulumi-dotnet \
-		.#pulumi-java \
-		.#pulumi-yaml \
-		.#terraform-plugin-codegen-framework \
-		.#terraform-plugin-codegen-openapi \
-		.#terraform-provider-pfsense \
-		.#hercules-ci-agent.image \
-		.#github-runner.image
+	nix flake show --json \
+	| jq  '.packages."${SYSTEM}" | keys[]' \
+	| xargs -I {} nix build .#{}
 
 update:
 	nix flake update

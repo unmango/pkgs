@@ -17,7 +17,7 @@
       );
     in
     {
-      packages = {
+      packages = lib.filterAttrs (_: pkg: pkg.meta.available or true) {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
@@ -56,33 +56,7 @@
 
       legacyPackages.packagesTable = import ../lib/packages.nix config.packages;
 
-      overlayAttrs = {
-        inherit (config.packages)
-          aspire-cli
-          awxkit
-          chart-releaser
-          github-runner
-          gossamer
-          hercules-ci-agent
-          kube-vip
-          kubectl-get-all
-          kubectl-get-resources
-          kubectl-slice
-          mmake
-          oc-mirror
-          ocaml-protoc
-          ocaml-protoc-plugin
-          openshift-installer
-          pbrt
-          pulumi-bun
-          pulumi-dotnet
-          pulumi-java
-          pulumi-yaml
-          terraform-plugin-codegen-framework
-          terraform-plugin-codegen-openapi
-          terraform-provider-pfsense
-          ;
-
+      overlayAttrs = config.packages // {
         # Extends nixpkgs' pulumiPackages package set (pulumi-go, pulumi-nodejs,
         # pulumi-python) with officially-supported language plugins nixpkgs doesn't
         # package because they live outside the pulumi/pulumi repo. Merges onto
