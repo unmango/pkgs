@@ -59,6 +59,7 @@
             packages = with pkgs; [
               gnumake
               gomod2nix
+              jq
               nix-update
               nixfmt
             ];
