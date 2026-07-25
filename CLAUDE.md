@@ -13,7 +13,7 @@ make generate        # regenerate README package table and badge
 nix build .#<name>   # build a single package
 ```
 
-After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell to regenerate `gomod2nix.toml`.
+After changing `go.mod` in any Go package, run `make deps` (or `nix run .#<name>.update-deps pkgs/<name>/gomod2nix.toml` for a single package) to regenerate `gomod2nix.toml`.
 
 ## Architecture
 
@@ -45,11 +45,11 @@ After changing `go.mod` in any Go package, run `gomod2nix` inside the dev shell 
 1. Create `pkgs/<name>/default.nix` following an existing derivation of the same language.
 2. Add the package to `pkgs/default.nix` — both the `packages` attrset and `overlayAttrs`.
 3. Run `make generate` to update the README table and badge.
-4. For Go packages: run `gomod2nix` to produce `gomod2nix.toml`.
+4. For Go packages: run `make deps` to produce `gomod2nix.toml`.
 
 ## CI
 
-`nix flake check` (lint + eval) and `nix build .#` run on every push/PR. A separate `codegen` job runs `make generate` and fails if the README diff is non-empty — keep the generated table committed.
+`make check build` runs on every push/PR across a 3-system matrix (x86_64-linux, aarch64-linux, aarch64-darwin), pulling from the `unstoppablemango` and `mangopkgs` cachix caches. A separate `codegen` job runs `make generate` and fails if the README diff is non-empty — keep the generated table committed.
 
 ## Gotchas
 
