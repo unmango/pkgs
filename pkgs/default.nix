@@ -17,7 +17,7 @@
 
       callPackage = lib.callPackageWith (tools // pkgs);
 
-      packages = lib.filterAttrs (_: pkg: pkg.meta.available or true) {
+      packages = {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
@@ -55,7 +55,7 @@
       };
     in
     {
-      inherit packages;
+      packages = lib.filterAttrs (_: pkg: pkg.meta.available or true) packages;
 
       legacyPackages = {
         packagesTable = import ../lib/packages.nix packages;
