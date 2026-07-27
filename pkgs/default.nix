@@ -8,15 +8,16 @@
       ...
     }:
     let
-      inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication;
-      inherit (inputs'.nix2container.packages) nix2container;
-      inherit (pkgs.callPackage ../lib/go { }) mkUpdateDeps;
+      inherit (pkgs) ocamlPackages pulumiPackages;
 
-      callPackage = lib.callPackageWith (
-        { inherit buildGoApplication nix2container mkUpdateDeps; } // pkgs
-      );
-    in
-    {
+      tools = {
+        inherit (inputs'.nix2container.packages) nix2container;
+        inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication;
+        inherit (pkgs.callPackage ../lib/go { }) mkUpdateDeps;
+      };
+
+      callPackage = lib.callPackageWith (tools // pkgs);
+
       packages = lib.filterAttrs (_: pkg: pkg.meta.available or true) {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
@@ -28,7 +29,7 @@
         mmake = callPackage ./mmake { };
         oc-mirror = callPackage ./oc-mirror { };
         pbrt = callPackage ./pbrt { };
-        ocaml-protoc = callPackage ./ocaml-protoc { inherit (config.packages) pbrt; };
+        ocaml-protoc = ocamlPackages.callPackage ./ocaml-protoc { };
         ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
         openshift-installer = callPackage ./openshift-installer { };
         pulumi-bun = callPackage ./pulumi-bun { };
@@ -53,16 +54,17 @@
           };
         });
       };
+    in
+    {
+      inherit packages;
 
-      legacyPackages.packagesTable = import ../lib/packages.nix config.packages;
+      legacyPackages = {
+        packagesTable = import ../lib/packages.nix packages;
+      };
 
-      overlayAttrs = config.packages // {
-        # Extends nixpkgs' pulumiPackages package set (pulumi-go, pulumi-nodejs,
-        # pulumi-python) with officially-supported language plugins nixpkgs doesn't
-        # package because they live outside the pulumi/pulumi repo. Merges onto
-        # pkgs.pulumiPackages so overlays.default doesn't clobber nixpkgs' entries.
-        pulumiPackages = pkgs.pulumiPackages // {
-          inherit (config.packages)
+      overlayAttrs = packages // {
+        pulumiPackages = pulumiPackages // {
+          inherit (packages)
             pulumi-bun
             pulumi-dotnet
             pulumi-java
