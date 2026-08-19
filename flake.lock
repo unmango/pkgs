@@ -48,15 +48,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1770585520,
-        "narHash": "sha256-yBz9Ozd5Wb56i3e3cHZ8WcbzCQ9RlVaiW18qDYA/AzA=",
-        "owner": "nix-community",
+        "lastModified": 1784416943,
+        "narHash": "sha256-Ckg+61JTnkyZWzI/LeFHJ37T/yy7YtZNo/UuvCfKuL8=",
+        "owner": "UnstoppableMango",
         "repo": "gomod2nix",
-        "rev": "1201ddd1279c35497754f016ef33d5e060f3da8d",
+        "rev": "35fa79cfae1d37416e8c9346c91ab044f4fe5b0c",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "UnstoppableMango",
+        "ref": "main",
         "repo": "gomod2nix",
         "type": "github"
       }
