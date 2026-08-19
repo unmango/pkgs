@@ -1,4 +1,4 @@
-GO_PKGS := chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice mmake openshift-installer pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
+GO_PKGS := chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice mmake openshift-installer pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml slackdump terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
 SYSTEM ?= $(shell nix run github:nix-systems/current-system)
 
 build:

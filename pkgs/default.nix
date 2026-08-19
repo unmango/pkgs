@@ -36,6 +36,7 @@
         pulumi-java = callPackage ./pulumi-java { };
         pulumi-yaml = callPackage ./pulumi-yaml { };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
+        slackdump = callPackage ./slackdump { };
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
         terraform-plugin-codegen-openapi = callPackage ./terraform-plugin-codegen-openapi { };
         terraform-provider-pfsense = callPackage ./terraform-provider-pfsense { };
