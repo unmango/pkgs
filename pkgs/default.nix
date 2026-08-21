@@ -35,6 +35,7 @@
         pulumi-dotnet = callPackage ./pulumi-dotnet { };
         pulumi-java = callPackage ./pulumi-java { };
         pulumi-yaml = callPackage ./pulumi-yaml { };
+        rust-analyzer-mcp = callPackage ./rust-analyzer-mcp { };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
         slackdump = callPackage ./slackdump { };
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
