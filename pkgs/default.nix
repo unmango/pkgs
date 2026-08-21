@@ -33,6 +33,7 @@
         ocaml-protoc = ocamlPackages.callPackage ./ocaml-protoc { };
         ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
         openshift-installer = callPackage ./openshift-installer { };
+        podman-mcp-server = callPackage ./podman-mcp-server { };
         pulumi-bun = callPackage ./pulumi-bun { };
         pulumi-dotnet = callPackage ./pulumi-dotnet { };
         pulumi-java = callPackage ./pulumi-java { };
