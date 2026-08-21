@@ -44,7 +44,7 @@ buildNpmPackage {
     EOF
   '';
 
-  npmDepsHash = "sha256-9kVqalzZrvG5DicydrzSpbsHn4gJPUkhdGvpUAlmgME=";
+  npmDepsHash = "sha256-3AMzQhsI6i5y5kY+PecyzLsx8NDcyJy1RaKFST+N/sg=";
 
   dontNpmBuild = true;
 
