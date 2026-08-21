@@ -25,6 +25,7 @@
         kubectl-get-all = callPackage ./kubectl-get-all { };
         kubectl-get-resources = callPackage ./kubectl-get-resources { };
         kubectl-slice = callPackage ./kubectl-slice { };
+        lsmcp = callPackage ./lsmcp { };
         mmake = callPackage ./mmake { };
         oc-mirror = callPackage ./oc-mirror { };
         pbrt = callPackage ./pbrt { };
