@@ -21,12 +21,15 @@
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
+        java-jdtls-mcp-server = callPackage ./java-jdtls-mcp-server { };
+        jdtls-mcp = callPackage ./jdtls-mcp { };
         kube-vip = callPackage ./kube-vip { };
         kubectl-get-all = callPackage ./kubectl-get-all { };
         kubectl-get-resources = callPackage ./kubectl-get-resources { };
         kubectl-slice = callPackage ./kubectl-slice { };
         kubernetes-mcp-server = callPackage ./kubernetes-mcp-server { };
         lsmcp = callPackage ./lsmcp { };
+        lsp4j-mcp = callPackage ./lsp4j-mcp { };
         mmake = callPackage ./mmake { };
         oc-mirror = callPackage ./oc-mirror { };
         pbrt = callPackage ./pbrt { };
