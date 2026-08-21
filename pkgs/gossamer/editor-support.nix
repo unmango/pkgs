@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  formats,
   tree-sitter,
   vscode-utils,
   vimUtils,
@@ -22,16 +23,29 @@ let
 
   homepage = "https://github.com/danpozmanter/gossamer-editor-support";
 
-  # Plain copy of an editor subdir to $out, no home-manager integration.
+  # Home-manager's `programs.helix.languages` option has no "point me at an
+  # existing languages.toml" escape hatch - it serializes a Nix attrset to
+  # TOML itself. That data (and the derivation that renders it back to
+  # `languages.toml`) is custom to this flake, not a copy of upstream, so it
+  # lives in its own file instead of alongside the plain upstream-subdir
+  # wrappers below.
+  helixLanguages = import ./helix-languages.nix { inherit formats; };
+
+  # Copy of an editor subdir to $out, no home-manager integration.
+  # `extraInstall` runs after the copy, to overwrite specific files with
+  # ones generated from Nix data (see `helix` below); `passthru` is merged
+  # in as-is for callers that need to expose that same data.
   mkEditorSupport =
     {
       name,
       subdir,
       description,
+      extraInstall ? "",
+      passthru ? { },
     }:
     stdenv.mkDerivation {
       pname = "gossamer-editor-support-${name}";
-      inherit version src;
+      inherit version src passthru;
 
       dontConfigure = true;
       dontBuild = true;
@@ -39,6 +53,7 @@ let
       installPhase = ''
         runHook preInstall
         cp -r ${lib.escapeShellArg subdir} $out
+        ${extraInstall}
         runHook postInstall
       '';
 
@@ -111,13 +126,18 @@ in
     };
   };
 
-  # Helix's `languages`/`themes` home-manager options only accept
-  # TOML-serializable data, not a local derivation - plain copy, useful
-  # only for manual install.
+  # `languages.toml` is rendered from `helixLanguages.languages` (see
+  # helix-languages.nix), overwriting the copy of upstream's file, and that
+  # same attrset is handed back on `passthru.languages` for home-manager's
+  # `programs.helix.languages` - the file and the passthru can't disagree.
   helix = mkEditorSupport {
     name = "helix";
     subdir = "helix";
     description = "Gossamer language configuration for Helix";
+    extraInstall = ''
+      cp ${helixLanguages.toml} $out/languages.toml
+    '';
+    passthru.languages = helixLanguages.languages;
   };
 
   emacs = emacsPackages.trivialBuild {
