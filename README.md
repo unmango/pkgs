@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-26-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-27-blue)](#packages)
 
 <p align="center">
 
@@ -32,6 +32,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `kubectl-get-all`                    | Like `kubectl get all`, but get really all resources                                                              |
 | `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags.   |
 | `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.       |
+| `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                  |
 | `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                         |
 | `mmake`                              | Modern Make                                                                                                       |
 | `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                |
