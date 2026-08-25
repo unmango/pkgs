@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-30-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-31-blue)](#packages)
 
 <p align="center">
 
@@ -40,6 +40,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                |
 | `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                              |
 | `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                      |
+| `opencommit`                         | Auto-generate impressive commits in 1 second, killing lame commits with AI                                        |
 | `openshift-installer`                | Install an OpenShift Cluster                                                                                      |
 | `pbrt`                               | Runtime library for Protobuf tooling                                                                              |
 | `podman-mcp-server`                  | Model Context Protocol (MCP) server for container runtimes (Podman and Docker)                                    |
