@@ -21,6 +21,7 @@
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
+        gitlab-operator = callPackage ./gitlab-operator { };
         gitlab-operator-v2 =
           let
             pkg = callPackage ./gitlab-operator-v2 { };
