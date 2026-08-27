@@ -21,6 +21,15 @@
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
+        gitlab-operator-v2 =
+          let
+            pkg = callPackage ./gitlab-operator-v2 { };
+          in
+          pkg.overrideAttrs (old: {
+            passthru = (old.passthru or { }) // {
+              image = callPackage ./images/gitlab-operator-v2 { gitlab-operator-v2 = pkg; };
+            };
+          });
         kube-vip = callPackage ./kube-vip { };
         kubectl-get-all = callPackage ./kubectl-get-all { };
         kubectl-get-resources = callPackage ./kubectl-get-resources { };

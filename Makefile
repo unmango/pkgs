@@ -1,4 +1,4 @@
-GO_PKGS := chart-releaser kube-vip kubectl-get-all kubectl-get-resources kubectl-slice kubernetes-mcp-server mmake openshift-installer podman-mcp-server pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml slackdump terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
+GO_PKGS := chart-releaser gitlab-operator-v2 kube-vip kubectl-get-all kubectl-get-resources kubectl-slice kubernetes-mcp-server mmake openshift-installer podman-mcp-server pulumi-bun pulumi-dotnet pulumi-java pulumi-yaml slackdump terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
 SYSTEM ?= $(shell nix run github:nix-systems/current-system)
 
 build:
