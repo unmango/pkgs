@@ -66,6 +66,7 @@
 
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
+              gh
               gnumake
               gomod2nix
               jq

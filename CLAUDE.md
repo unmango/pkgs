@@ -47,6 +47,19 @@ After changing `go.mod` in any Go package, run `make deps` (or `nix run .#<name>
 3. Run `make generate` to update the README table and badge.
 4. For Go packages: run `make deps` to produce `gomod2nix.toml`.
 
+## Update automation
+
+`scripts/update.sh`, run daily by `.github/workflows/update.yml`, bumps every wired-up package to its latest upstream release:
+
+1. Skip packages listed in the script's `manual_only` map, packages absent from `pkgs/default.nix`, and `unstable-` pins.
+1. `nix-update --flake <name> --override-filename pkgs/<name>/default.nix` rewrites `version` and the source hashes. `--flake` is required (there's no top-level `default.nix` to import) and `--override-filename` names the file to rewrite directly.
+1. Regenerate `gomod2nix.toml` via the package's `update-deps` if it has one. Other vendored manifests (`nugetDeps`, `cargoHash`, `npmDepsHash`) are nix-update's own job; gomod2nix is opaque to it.
+1. `nix build .#<name>`, then commit the package directory's changed files on `update-<name>-<version>` and open a pull request with auto-merge enabled.
+
+Commits go through the GraphQL `createCommitOnBranch` mutation rather than `git push`, because main's ruleset requires GitHub-signed commits and the API signs what it commits. The workflow authenticates with the `UPDATE_TOKEN` PAT: `GITHUB_TOKEN`'s commits are unattributed (which the ruleset requires an extra approval for) and its pull requests don't trigger the required `build` check.
+
+Each package is independent — a failure is recorded and the run continues, and the script exits non-zero only if something failed. Run it locally with `DRY_RUN=1 ./scripts/update.sh` to stop short of touching the remote.
+
 ## CI
 
 `make check build` runs on every push/PR across a 3-system matrix (x86_64-linux, aarch64-linux, aarch64-darwin), pulling from the `unstoppablemango` and `mangopkgs` cachix caches. A separate `codegen` job runs `make generate` and fails if the README diff is non-empty — keep the generated table committed.
