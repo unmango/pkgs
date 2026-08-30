@@ -39,6 +39,7 @@
         lsmcp = callPackage ./lsmcp { };
         mmake = callPackage ./mmake { };
         oc-mirror = callPackage ./oc-mirror { };
+        opencommit = callPackage ./opencommit { };
         pbrt = callPackage ./pbrt { };
         ocaml-protoc = ocamlPackages.callPackage ./ocaml-protoc { };
         ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
