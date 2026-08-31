@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 let
-  version = "3.113.0";
+  version = "3.113.1";
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-dotnet";
     tag = "v${version}";
-    hash = "sha256-z2U6PlvKM5Snr5es+BgIKEZWuEo9OXbrqN73FK28Fko=";
+    hash = "sha256-G4sfB7qmnXw+THi6tZMyAHmy7R+/6jbDUn7JqJ7/fRA=";
   };
 in
 buildGoApplication {
