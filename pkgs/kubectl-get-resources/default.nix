@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 let
-  version = "0.1.1";
+  version = "0.1.2";
   src = fetchFromGitHub {
     owner = "Sandeep-Prajapati";
     repo = "kubectl-get-resources";
     rev = "v${version}";
-    hash = "sha256-XDd3B95dnhpuG4redqFOysIYEQm3G6+hiE7uqdksok4=";
+    hash = "sha256-NFL9hfOW3a5sdpuV377qfcYRKchjE58x46DFbzkPjI0=";
   };
 in
 buildGoApplication {
