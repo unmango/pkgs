@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "0.3.1";
+  version = "0.4.0";
 in
 rustPlatform.buildRustPackage {
   pname = "rust-analyzer-mcp";
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage {
     owner = "zeenix";
     repo = "rust-analyzer-mcp";
     rev = "v${version}";
-    hash = "sha256-PWEl5Ik4F6u8wXi+oPSL3+C3z9dOSVMNAJvEcYf3Q4s=";
+    hash = "sha256-W9LFTQ4KxUHDFuENRhDsv+jUjzgHdCEn7xXWzVKF6y0=";
   };
 
-  cargoHash = "sha256-NUOqAUsFyALfnDVLZIQeUWR9wPLF9Tr3BFDBN9zZAwk=";
+  cargoHash = "sha256-LcX9VO1ArCdiq5j57JB/Tkfw6pAl6QvckhzMRv5C5dA=";
 
   # Integration tests spawn a live rust-analyzer process, which isn't
   # available in the build sandbox.
