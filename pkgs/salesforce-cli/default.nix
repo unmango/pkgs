@@ -124,12 +124,12 @@ buildNpmPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "CLI for developing against the Salesforce Platform";
     homepage = "https://developer.salesforce.com/tools/salesforcecli";
     downloadPage = "https://github.com/salesforcecli/cli/releases";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ UnstoppableMango ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ UnstoppableMango ];
     mainProgram = "sf";
   };
 }
