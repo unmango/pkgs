@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-31-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-32-blue)](#packages)
 
 <p align="center">
 
@@ -49,6 +49,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `pulumi-java`                        | Pulumi language host for Java programs                                                                            |
 | `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                            |
 | `rust-analyzer-mcp`                  | Model Context Protocol (MCP) server that provides integration with rust-analyzer                                  |
+| `salesforce-cli`                     | CLI for developing against the Salesforce Platform                                                                |
 | `slackdump`                          | Save or export your private and public Slack messages, threads, files, and users locally without admin privileges |
 | `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                        |
 | `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                       |
