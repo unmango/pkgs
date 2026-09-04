@@ -3,6 +3,7 @@
   buildGoApplication,
   fetchFromGitHub,
   mkUpdateDeps,
+  nix-update-script,
   stdenv,
 }:
 let
@@ -20,7 +21,7 @@ let
   };
 in
 buildGoApplication {
-  pname = "nix2container";
+  pname = "nix2container-bin";
   inherit version src;
 
   modules = ./gomod2nix.toml;
@@ -32,8 +33,12 @@ buildGoApplication {
 
   passthru = {
     update-deps = mkUpdateDeps src;
-    # No updateScript: the version tracks the nix2container flake input rather
-    # than an upstream release.
+
+    # A plain nix-update run would try to move backwards onto the v1.0.0 tag,
+    # so this tracks the default branch instead. scripts/update.sh skips
+    # unstable- pins, so it only ever runs by hand; pair it with
+    # `nix flake update` to bring the nix2container input along.
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = with lib; {
