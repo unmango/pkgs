@@ -48,6 +48,7 @@
         kubernetes-mcp-server = callPackage ./kubernetes-mcp-server { };
         lsmcp = callPackage ./lsmcp { };
         mmake = callPackage ./mmake { };
+        nix2container-bin = callPackage ./nix2container-bin { };
         oc-mirror = callPackage ./oc-mirror { };
         opencommit = callPackage ./opencommit { };
         pbrt = callPackage ./pbrt { };
@@ -61,6 +62,9 @@
         pulumi-yaml = callPackage ./pulumi-yaml { };
         rust-analyzer-mcp = callPackage ./rust-analyzer-mcp { };
         salesforce-cli = callPackage ./salesforce-cli { };
+        skopeo-nix2container = callPackage ./skopeo-nix2container {
+          inherit (packages) nix2container-bin;
+        };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
         slackdump = callPackage ./slackdump { };
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
@@ -89,6 +93,10 @@
       };
 
       overlayAttrs = packages // {
+        # A drop-in skopeo that also understands nix2container's `nix:`
+        # transport, so overlay consumers get it without opting in per-call.
+        skopeo = packages.skopeo-nix2container;
+
         pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [ pythonOverrides ];
 
         pulumiPackages = pulumiPackages // {
