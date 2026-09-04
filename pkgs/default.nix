@@ -48,7 +48,9 @@
         kubernetes-mcp-server = callPackage ./kubernetes-mcp-server { };
         lsmcp = callPackage ./lsmcp { };
         mmake = callPackage ./mmake { };
-        nix2container-bin = callPackage ./nix2container-bin { };
+        nix2container-bin = callPackage ./nix2container-bin {
+          inherit (inputs'.nix2container.packages) nix2container-bin;
+        };
         oc-mirror = callPackage ./oc-mirror { };
         opencommit = callPackage ./opencommit { };
         pbrt = callPackage ./pbrt { };
@@ -63,7 +65,7 @@
         rust-analyzer-mcp = callPackage ./rust-analyzer-mcp { };
         salesforce-cli = callPackage ./salesforce-cli { };
         skopeo-nix2container = callPackage ./skopeo-nix2container {
-          inherit (packages) nix2container-bin;
+          inherit (inputs'.nix2container.packages) skopeo-nix2container;
         };
         # smarter-device-manager: awaiting UnstoppableMango/smarter-device-manager fork with go.mod fix
         slackdump = callPackage ./slackdump { };
