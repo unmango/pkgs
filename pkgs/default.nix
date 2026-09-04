@@ -17,10 +17,20 @@
 
       callPackage = lib.callPackageWith (tools // pkgs);
 
+      # Libraries missing from nixpkgs that CumulusCI needs.
+      pythonOverrides = import ./python-packages;
+
+      # CumulusCI requires python <3.14, so it can't ride the default interpreter.
+      python313 = pkgs.python313.override {
+        self = python313;
+        packageOverrides = pythonOverrides;
+      };
+
       packages = {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
+        cumulusci = callPackage ./cumulusci { python313Packages = python313.pkgs; };
         gitlab-operator = callPackage ./gitlab-operator { };
         gitlab-operator-v2 =
           let
@@ -79,6 +89,8 @@
       };
 
       overlayAttrs = packages // {
+        pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [ pythonOverrides ];
+
         pulumiPackages = pulumiPackages // {
           inherit (packages)
             pulumi-bun
