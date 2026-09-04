@@ -20,43 +20,43 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 
 <!-- PACKAGES:START -->
 
-| Name                                 | Description                                                                                                                         |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                                             |
-| `awxkit`                             | Official command line interface for Ansible AWX                                                                                     |
-| `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                                                   |
-| `cumulusci`                          | Build and release tools for Salesforce developers                                                                                   |
-| `github-runner`                      | Self-hosted runner for GitHub Actions                                                                                               |
-| `gitlab-operator`                    | Kubernetes Operator for managing the lifecycle of GitLab instances                                                                  |
-| `gitlab-operator-v2`                 | Kubernetes Operator for managing the lifecycle of GitLab instances (experimental V2 rewrite)                                        |
-| `gossamer`                           | The Gossamer programming language compiler                                                                                          |
-| `hercules-ci-agent`                  | Runs Continuous Integration tasks on your machines                                                                                  |
-| `kube-vip`                           | Kube-VIP: Virtual IP for Kubernetes clusters                                                                                        |
-| `kubectl-get-all`                    | Like `kubectl get all`, but get really all resources                                                                                |
-| `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags.                     |
-| `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.                         |
-| `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                                    |
-| `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                                           |
-| `mmake`                              | Modern Make                                                                                                                         |
-| `nix2container-bin`                  | Build container images with Nix, without a Docker daemon or a tarball                                                               |
-| `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                                  |
-| `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                                                |
-| `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                                        |
-| `opencommit`                         | Auto-generate impressive commits in 1 second, killing lame commits with AI                                                          |
-| `openshift-installer`                | Install an OpenShift Cluster                                                                                                        |
-| `pbrt`                               | Runtime library for Protobuf tooling                                                                                                |
-| `podman-mcp-server`                  | Model Context Protocol (MCP) server for container runtimes (Podman and Docker)                                                      |
-| `pulumi-bun`                         | Pulumi language host for Bun programs                                                                                               |
-| `pulumi-dotnet`                      | Pulumi language host for .NET programs                                                                                              |
-| `pulumi-java`                        | Pulumi language host for Java programs                                                                                              |
-| `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                                              |
-| `rust-analyzer-mcp`                  | Model Context Protocol (MCP) server that provides integration with rust-analyzer                                                    |
-| `salesforce-cli`                     | CLI for developing against the Salesforce Platform                                                                                  |
-| `skopeo-nix2container`               | Command line utility for various operations on container images and image repositories, patched with nix2container's nix: transport |
-| `slackdump`                          | Save or export your private and public Slack messages, threads, files, and users locally without admin privileges                   |
-| `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                                          |
-| `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                                         |
-| `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                                    |
+| Name                                 | Description                                                                                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                                     |
+| `awxkit`                             | Official command line interface for Ansible AWX                                                                             |
+| `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                                           |
+| `cumulusci`                          | Build and release tools for Salesforce developers                                                                           |
+| `github-runner`                      | Self-hosted runner for GitHub Actions                                                                                       |
+| `gitlab-operator`                    | Kubernetes Operator for managing the lifecycle of GitLab instances                                                          |
+| `gitlab-operator-v2`                 | Kubernetes Operator for managing the lifecycle of GitLab instances (experimental V2 rewrite)                                |
+| `gossamer`                           | The Gossamer programming language compiler                                                                                  |
+| `hercules-ci-agent`                  | Runs Continuous Integration tasks on your machines                                                                          |
+| `kube-vip`                           | Kube-VIP: Virtual IP for Kubernetes clusters                                                                                |
+| `kubectl-get-all`                    | Like `kubectl get all`, but get really all resources                                                                        |
+| `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags.             |
+| `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.                 |
+| `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                            |
+| `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                                   |
+| `mmake`                              | Modern Make                                                                                                                 |
+| `nix2container-bin`                  | Build container images with Nix, without a Docker daemon or a tarball                                                       |
+| `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                          |
+| `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                                        |
+| `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                                |
+| `opencommit`                         | Auto-generate impressive commits in 1 second, killing lame commits with AI                                                  |
+| `openshift-installer`                | Install an OpenShift Cluster                                                                                                |
+| `pbrt`                               | Runtime library for Protobuf tooling                                                                                        |
+| `podman-mcp-server`                  | Model Context Protocol (MCP) server for container runtimes (Podman and Docker)                                              |
+| `pulumi-bun`                         | Pulumi language host for Bun programs                                                                                       |
+| `pulumi-dotnet`                      | Pulumi language host for .NET programs                                                                                      |
+| `pulumi-java`                        | Pulumi language host for Java programs                                                                                      |
+| `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                                      |
+| `rust-analyzer-mcp`                  | Model Context Protocol (MCP) server that provides integration with rust-analyzer                                            |
+| `salesforce-cli`                     | CLI for developing against the Salesforce Platform                                                                          |
+| `skopeo-nix2container`               | Command line utility for various operations on container images and image repositories, with nix2container's nix: transport |
+| `slackdump`                          | Save or export your private and public Slack messages, threads, files, and users locally without admin privileges           |
+| `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                                  |
+| `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                                 |
+| `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                            |
 
 <!-- PACKAGES:END -->
 
