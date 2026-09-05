@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-35-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-36-blue)](#packages)
 
 <p align="center">
 
@@ -25,6 +25,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                                     |
 | `awxkit`                             | Official command line interface for Ansible AWX                                                                             |
 | `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                                           |
+| `coderabbit`                         | CodeRabbit AI code review, in the terminal                                                                                  |
 | `cumulusci`                          | Build and release tools for Salesforce developers                                                                           |
 | `github-runner`                      | Self-hosted runner for GitHub Actions                                                                                       |
 | `gitlab-operator`                    | Kubernetes Operator for managing the lifecycle of GitLab instances                                                          |

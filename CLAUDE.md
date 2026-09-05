@@ -21,7 +21,7 @@ After changing `go.mod` in any Go package, run `make deps` (or `nix run .#<name>
 
 **`pkgs/default.nix`** — central wiring: builds a custom `callPackage` that injects `buildGoApplication` (from gomod2nix) and `nix2container`, then calls each package derivation. This is the file to edit when adding a new package.
 
-**`pkgs/<name>/default.nix`** — individual derivation. All packages set `passthru.updateScript = nix-update-script { }` for `nix-update` support.
+**`pkgs/<name>/default.nix`** — individual derivation. Packages set `passthru.updateScript = nix-update-script { }` for `nix-update` support, except the ones `scripts/update.sh` lists as `manual_only`.
 
 **`pkgs/images/`** — container images built with `nix2container.buildImage`. Images are not standalone packages; they attach to an existing nixpkgs package via `overrideAttrs` + `passthru.image` (see `hercules-ci-agent` and `github-runner` in `pkgs/default.nix`).
 
@@ -67,4 +67,5 @@ Each package is independent — a failure is recorded and the run continues, and
 ## Gotchas
 
 - CI runs `make check build`: `nix flake check` does lint + eval, and `make build` (via `nix build`) builds the packages listed in the Makefile. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`/`overlayAttrs` (and the Makefile build list) until real hashes exist.
+- `packages` filters on `meta.available`, which is false for an unfree package unless `flake.nix`'s `config.allowUnfreePredicate` names it. An unfree package missing from that list disappears from the flake outputs with no error.
 - A `pkgs/<name>/default.nix` existing doesn't mean it's wired up — packages blocked on an upstream fix are deliberately left out of `pkgs/default.nix`'s `packages` attrset (see the `smarter-device-manager` comment there).

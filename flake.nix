@@ -52,6 +52,16 @@
         {
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
+            config = {
+              # `meta.available` is false for an unfree package unless it is
+              # allowed here, and `packages` filters on that, so an unfree
+              # package would otherwise be silently dropped from the flake.
+              allowUnfreePredicate =
+                pkg:
+                builtins.elem (inputs.nixpkgs.lib.getName pkg) [
+                  "coderabbit"
+                ];
+            };
             overlays = [
               inputs.gomod2nix.overlays.default
               (_: prev: {
