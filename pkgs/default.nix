@@ -30,6 +30,7 @@
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
+        coderabbit = callPackage ./coderabbit { };
         cumulusci = callPackage ./cumulusci { python313Packages = python313.pkgs; };
         gitlab-operator = callPackage ./gitlab-operator { };
         gitlab-operator-v2 =

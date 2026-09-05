@@ -13,6 +13,7 @@ cd "$repo_root" || exit 1
 # rewrite [aspire-cli] to [aspire - cli].
 declare -A manual_only=(
   ["aspire-cli"]="nix-update's fetch-deps run fails to load the dotnet command"
+  ["coderabbit"]="four per-platform zip hashes that move together, and no git host to read a version from"
   ["lsmcp"]="npm tarball src plus a hand-vendored package-lock.json"
   ["opencommit"]="npm tarball src plus a hand-vendored package-lock.json"
   ["salesforce-cli"]="npm tarball src rewritten by a runCommand nix-update cannot see through"
