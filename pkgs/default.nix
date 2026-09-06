@@ -47,6 +47,7 @@
         kubectl-get-resources = callPackage ./kubectl-get-resources { };
         kubectl-slice = callPackage ./kubectl-slice { };
         kubernetes-mcp-server = callPackage ./kubernetes-mcp-server { };
+        likec4 = callPackage ./likec4 { };
         lsmcp = callPackage ./lsmcp { };
         mmake = callPackage ./mmake { };
         nix2container-bin = callPackage ./nix2container-bin {

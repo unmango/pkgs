@@ -125,7 +125,12 @@ open_pr() {
 attempt_bump() {
   local new_version="" branch
 
-  nix-update --flake "$name" --override-filename "$dir/default.nix" ||
+  local -a extra=()
+  # buildNpmPackage sources with a vendored lockfile: nix-update can regenerate
+  # it from the unpacked src before refreshing npmDepsHash.
+  [[ -f "$dir/package-lock.json" ]] && extra+=(--generate-lockfile)
+
+  nix-update --flake "$name" --override-filename "$dir/default.nix" "${extra[@]}" ||
     {
       new_version="?"
       fail "nix-update failed"

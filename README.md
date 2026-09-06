@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-36-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-37-blue)](#packages)
 
 <p align="center">
 
@@ -37,6 +37,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 | `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags.             |
 | `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.                 |
 | `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                            |
+| `likec4`                             | Toolchain for your architecture diagrams                                                                                    |
 | `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                                   |
 | `mmake`                              | Modern Make                                                                                                                 |
 | `nix2container-bin`                  | Build container images with Nix, without a Docker daemon or a tarball                                                       |
