@@ -1,7 +1,8 @@
 {
   lib,
   buildNpmPackage,
-  fetchurl,
+  fetchzip,
+  jq,
   nix-update-script,
 }:
 let
@@ -11,44 +12,34 @@ buildNpmPackage {
   pname = "lsmcp";
   inherit version;
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/@mizchi/lsmcp/-/lsmcp-${version}.tgz";
-    hash = "sha256-NdnhTN9HyPlTuy3E0dw6r2jh1WRJXavJQ5WZM3LDmKY=";
-  };
-
   # The published package.json's devDependencies pull in internal pnpm
   # workspace packages (@internal/types, @internal/lsp-client,
-  # @internal/code-indexer) not published to the public registry, so
-  # npm ci can't resolve them. They're also unneeded since dist/ ships
-  # prebuilt. Replace it with a minimal stub (no external tools available
-  # here: this postPatch also runs inside the fetchNpmDeps FOD, which has
-  # no jq/node on PATH, only coreutils) and vendor a matching lockfile.
+  # @internal/code-indexer) not published to the public registry, so npm
+  # can't resolve them. They're also unneeded since dist/ ships prebuilt.
+  # Stripping them at fetch time keeps upstream's dependency list
+  # authoritative and lets `nix-update --generate-lockfile` regenerate
+  # package-lock.json from the unpacked source.
+  src = fetchzip {
+    url = "https://registry.npmjs.org/@mizchi/lsmcp/-/lsmcp-${version}.tgz";
+    hash = "sha256-GJPAeP32Fpm/F8Z8HL+1IvJads+RjiKuNTLe0Nrb5K0=";
+    nativeBuildInputs = [ jq ];
+    postFetch = ''
+      jq 'del(.devDependencies)' "$out/package.json" > "$out/package.json.tmp"
+      mv "$out/package.json.tmp" "$out/package.json"
+    '';
+  };
+
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
-    cat > package.json <<EOF
-    {
-      "name": "lsmcp",
-      "version": "${version}",
-      "license": "MIT",
-      "dependencies": {
-        "gitaware-glob": "^0.2.0",
-        "glob": "^10.4.5",
-        "minimatch": "^9.0.5",
-        "uuid": "^11.1.0",
-        "zod": "^3.25.56"
-      },
-      "bin": {
-        "lsmcp": "./dist/lsmcp.js"
-      }
-    }
-    EOF
   '';
 
-  npmDepsHash = "sha256-3AMzQhsI6i5y5kY+PecyzLsx8NDcyJy1RaKFST+N/sg=";
+  npmDepsHash = "sha256-GEYTKhgzDu6KncBI/0FqkKZcE8djlzoXT9ci0i4jisA=";
 
   dontNpmBuild = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
 
   meta = with lib; {
     description = "Unified MCP server for language-service/LSP-based code analysis across multiple languages";
