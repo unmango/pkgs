@@ -34,10 +34,9 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-rVbzJwycyU98uMbIhPZsdCcaleT1rruwvMHkIhnETpM=";
 
-  # playwright's install script downloads browsers, which the sandbox
-  # can't do. Browsers for `likec4 export png` come from a separate
+  # playwright ships without an install script, so no browser download
+  # happens here. Browsers for `likec4 export png` come from a separate
   # `playwright install` (or PLAYWRIGHT_BROWSERS_PATH) at run time.
-  npmFlags = [ "--ignore-scripts" ];
 
   dontNpmBuild = true;
 
