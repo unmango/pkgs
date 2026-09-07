@@ -1,44 +1,39 @@
 {
   lib,
-  buildNpmPackage,
+  stdenvNoCC,
   fetchzip,
-  jq,
+  makeWrapper,
+  nodejs,
   nix-update-script,
 }:
-let
-  version = "3.3.10";
-in
-buildNpmPackage {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencommit";
-  inherit version;
+  version = "3.3.10";
 
-  # The published package.json's devDependencies pull in build/test/lint
-  # tooling (esbuild, jest, ts-node, biome, ...) that's unneeded since
-  # out/cli.cjs ships prebuilt. Stripping them at fetch time keeps
-  # upstream's dependency list authoritative and lets
-  # `nix-update --generate-lockfile` regenerate package-lock.json from the
-  # unpacked source.
+  # The published out/cli.cjs is an esbuild bundle that requires only Node
+  # builtins, so the tarball's dependencies are never loaded. Wrapping the
+  # bundle directly avoids installing ~115M of unreferenced node_modules.
   src = fetchzip {
-    url = "https://registry.npmjs.org/opencommit/-/opencommit-${version}.tgz";
-    hash = "sha256-flWO0AKHZsi2Sa9eiJo40u9K/a6NSo1qD3MKkNCIBd0=";
-    nativeBuildInputs = [ jq ];
-    postFetch = ''
-      jq 'del(.devDependencies)' "$out/package.json" > "$out/package.json.tmp"
-      mv "$out/package.json.tmp" "$out/package.json"
-    '';
+    url = "https://registry.npmjs.org/opencommit/-/opencommit-${finalAttrs.version}.tgz";
+    hash = "sha256-RRLsakHJ7tOs0fwOHt/j4Vu7U+2wWiQjC0HIxa+Xk84=";
   };
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/opencommit
+    cp -r out/. $out/lib/opencommit
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/opencommit \
+      --add-flags $out/lib/opencommit/cli.cjs
+    ln -s opencommit $out/bin/oco
+
+    runHook postInstall
   '';
 
-  npmDepsHash = "sha256-g2UwWjGLOksvyj/qXLF21WttnT8aVSMS7rzoYAgzSGI=";
-
-  dontNpmBuild = true;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--generate-lockfile" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Auto-generate impressive commits in 1 second, killing lame commits with AI";
@@ -47,4 +42,4 @@ buildNpmPackage {
     maintainers = with maintainers; [ UnstoppableMango ];
     mainProgram = "opencommit";
   };
-}
+})
