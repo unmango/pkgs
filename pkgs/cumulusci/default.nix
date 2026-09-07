@@ -5,7 +5,7 @@
   python313Packages,
 }:
 let
-  version = "4.10.0";
+  version = "4.10.1";
 in
 # CumulusCI declares requires-python >=3.11,<3.14, so it can't use the default
 # interpreter. pkgs/default.nix passes a 3.13 set extended with the libraries
@@ -19,7 +19,7 @@ python313Packages.buildPythonApplication {
     owner = "SFDO-Tooling";
     repo = "CumulusCI";
     tag = "v${version}";
-    hash = "sha256-h55nZpXvu3QvTZSJTx5Or/7x8OcDivUc5h9If3jFABU=";
+    hash = "sha256-uaf/UG2LKXubRa7J+HcRHgPiPDdNTLCtm3tsNiZigMM=";
   };
 
   build-system = with python313Packages; [
