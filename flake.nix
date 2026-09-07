@@ -96,6 +96,8 @@
             shfmt.enable = true;
             statix.enable = true;
           };
+
+          treefmt.settings.global.excludes = [ ".claude/skills/**" ];
         };
     };
 }
