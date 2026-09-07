@@ -5,7 +5,7 @@ description: Review checklist for pull requests in this nix flake-parts packages
 
 # Reviewing a pull request in this repo
 
-This repo is a `flake-parts` flake whose only content is Nix package derivations under `pkgs/`.
+This repo is a `flake-parts` flake whose package derivations live under `pkgs/`, supported by `flake.nix`, `lib/`, `scripts/`, the `Makefile`, and a generated `README.md`.
 Most defects here are wiring and generated-artifact mistakes that evaluate fine locally and fail in CI, or fail silently.
 Check the items below against the diff.
 Skip a section if the diff does not touch it.
@@ -22,8 +22,9 @@ Applies to `pkgs/<name>/default.nix`.
 
 ## 2. Wiring in `pkgs/default.nix`
 
-- A new package is registered alphabetically in **both** the `packages` attrset and the `overlayAttrs` inherit list.
-  Only one of the two means `overlays.default` and the flake's `packages` output disagree.
+- A new package is registered alphabetically in the `packages` attrset.
+  `overlayAttrs` is `packages // unfreePackages // { ... }`, so it picks the package up automatically. There is no second wiring step.
+- A new `pulumi-*` package is the exception: it also needs an entry in the `inherit (packages)` list under `overlayAttrs.pulumiPackages`, or overlay consumers won't find it there.
 - An unfree vendor binary belongs in the `unfreePackages` attrset instead, which already flows into `overlayAttrs` and `legacyPackages.<system>`. Putting it in `packages` makes CI build it and push it to the public cachix caches, redistributing the vendor's binary.
 - Every unfree package name must also appear in `allowUnfreePredicate` in `flake.nix`.
   Without it, `meta.available` is false and the package is filtered out of the flake outputs with no error at all.
@@ -39,12 +40,10 @@ Applies to `pkgs/<name>/default.nix`.
 
 ## 4. Per-language manifests
 
-| Language | Builder                                  | What must accompany the change                                                                                                                                |
-| -------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Go       | `buildGoApplication`                     | `gomod2nix.toml` committed and regenerated after any `go.mod` change, `passthru.update-deps = mkUpdateDeps src;`, and the name in `GO_PKGS` in the `Makefile` |
-| .NET     | `buildDotnetModule`                      | `deps.json` committed, `dotnet-sdk` pinned through `dotnetCorePackages`                                                                                       |
-| Python   | `python3Packages.buildPythonApplication` | `pyproject = true;` with `build-system` and `dependencies`                                                                                                    |
-| Rust     | `rustPlatform.buildRustPackage`          | a real `cargoHash`                                                                                                                                            |
+- Go (`buildGoApplication`): `gomod2nix.toml` committed and regenerated after any `go.mod` change, `passthru.update-deps = mkUpdateDeps src;`, and the name added to `GO_PKGS` in the `Makefile`.
+- .NET (`buildDotnetModule`): `deps.json` committed, `dotnet-sdk` pinned through `dotnetCorePackages`.
+- Python (`python3Packages.buildPythonApplication`): `pyproject = true;` with `build-system` and `dependencies`.
+- Rust (`rustPlatform.buildRustPackage`): a real `cargoHash`.
 
 `nix-update` maintains `nugetDeps`, `cargoHash`, and `npmDepsHash` on its own, but gomod2nix is opaque to it.
 A Go version bump that leaves `gomod2nix.toml` untouched is suspect.
