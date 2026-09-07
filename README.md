@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-39-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-42-blue)](#packages)
 
 <p align="center">
 
@@ -32,6 +32,8 @@ Mini-nixpkgs of dubious quality.
 | `gitlab-operator-v2`                 | Kubernetes Operator for managing the lifecycle of GitLab instances (experimental V2 rewrite)                                |
 | `gossamer`                           | The Gossamer programming language compiler                                                                                  |
 | `hercules-ci-agent`                  | Runs Continuous Integration tasks on your machines                                                                          |
+| `java-jdtls-mcp-server`              | Model Context Protocol (MCP) server for Java using Eclipse JDT.LS                                                           |
+| `jdtls-mcp`                          | Model Context Protocol (MCP) server embedding Eclipse JDT Language Server via OSGi                                          |
 | `kube-vip`                           | Kube-VIP: Virtual IP for Kubernetes clusters                                                                                |
 | `kubectl-get-all`                    | Like `kubectl get all`, but get really all resources                                                                        |
 | `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags.             |
@@ -39,6 +41,7 @@ Mini-nixpkgs of dubious quality.
 | `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                            |
 | `likec4`                             | Toolchain for your architecture diagrams                                                                                    |
 | `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                                   |
+| `lsp4j-mcp`                          | Model Context Protocol (MCP) server exposing Java IDE features via JDTLS                                                    |
 | `mmake`                              | Modern Make                                                                                                                 |
 | `nix2container-bin`                  | Build container images with Nix, without a Docker daemon or a tarball                                                       |
 | `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                          |

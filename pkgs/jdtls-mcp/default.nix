@@ -15,7 +15,7 @@ let
     };
     aarch64-linux = {
       url = "https://github.com/sunix/jdtls-mcp/releases/download/v${version}/jdtls-mcp-v${version}-linux-aarch64.tar.gz";
-      hash = "sha256-MR7ANOhp1luYNXhvYQbRlyG7rKMbOlznhpg1mgMm794=";
+      hash = "sha256-GsseNdlC0L+63c/UVEUnA+BRqy7uNsXInPHWByhGQK4=";
     };
     aarch64-darwin = {
       url = "https://github.com/sunix/jdtls-mcp/releases/download/v${version}/jdtls-mcp-v${version}-macos-aarch64.tar.gz";
