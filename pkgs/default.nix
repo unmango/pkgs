@@ -94,6 +94,10 @@
       # Reachable as legacyPackages.<system>.<name> and through overlays.default.
       unfreePackages = {
         claude-desktop = callPackage ./claude-desktop { };
+        # Not in nixpkgs, so callPackage can't fill claude-desktop in itself.
+        claude-desktop-fhs = callPackage ./claude-desktop/fhs.nix {
+          inherit (unfreePackages) claude-desktop;
+        };
         coderabbit = callPackage ./coderabbit { };
       };
     in
