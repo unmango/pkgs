@@ -81,7 +81,7 @@ nix shell github:unmango/pkgs#kube-vip
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.pkgs.overlays.default ];
+  nixpkgs.overlays = [ inputs.mangopkgs.overlays.default ];
 }
 ```
 
