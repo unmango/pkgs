@@ -13,7 +13,18 @@ fi
 LAUNCHER=$(ls "$PROD_DIR"/plugins/org.eclipse.equinox.launcher_*.jar | head -1)
 
 WORKSPACE="${1:-$PWD}"
-DATA_DIR="${2:-${TMPDIR:-/tmp}/jdtls-mcp-data}"
+WORKSPACE=$(cd "$WORKSPACE" && pwd)
+
+# Equinox takes an exclusive lock on the `-data` area, so two servers started
+# against different workspaces must not land on the same default. Key the
+# default on the canonical workspace path; an explicit second argument still
+# wins.
+if [ "$#" -ge 2 ]; then
+  DATA_DIR="$2"
+else
+  workspace_id=$(printf '%s' "$WORKSPACE" | cksum | cut -d' ' -f1)
+  DATA_DIR="${TMPDIR:-/tmp}/jdtls-mcp-data-$workspace_id"
+fi
 
 mkdir -p "$DATA_DIR"
 

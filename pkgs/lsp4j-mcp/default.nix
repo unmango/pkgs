@@ -8,9 +8,6 @@
 }:
 let
   version = "1.0.0";
-  # Upstream's pom.xml declares <version>1.0.0-SNAPSHOT</version>, so the
-  # shaded jar keeps that literal suffix regardless of the release tag.
-  jarName = "lsp4j-mcp-1.0.0-SNAPSHOT.jar";
 in
 maven.buildMavenPackage {
   pname = "lsp4j-mcp";
@@ -33,7 +30,14 @@ maven.buildMavenPackage {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 target/${jarName} $out/share/java/lsp4j-mcp.jar
+    # maven-shade-plugin replaces the main artifact in place and keeps the
+    # unshaded one as `original-*.jar`. The artifact's name tracks the pom's
+    # `<version>` (a literal `1.0.0-SNAPSHOT`), not the release tag, so match
+    # it by glob rather than pinning a name that a version bump would miss.
+    jar=$(find target -maxdepth 1 -name 'lsp4j-mcp-*.jar' ! -name 'original-*')
+    test -f "$jar" || { echo "expected exactly one shaded jar, got: $jar" >&2; exit 1; }
+
+    install -Dm644 "$jar" $out/share/java/lsp4j-mcp.jar
     makeWrapper ${jdk}/bin/java $out/bin/lsp4j-mcp \
       --add-flags "-jar $out/share/java/lsp4j-mcp.jar"
 
