@@ -52,6 +52,9 @@ For standalone packages, identify the language/build system: Go, .NET, Python, o
    ```
    If it needs another local package as an input, use `inherit (config.packages) <dep>;` (see `ocaml-protoc` → `pbrt`).
 3. Add the same name, alphabetically, to the `overlayAttrs` inherit list in `pkgs/default.nix` to keep `overlays.default` in sync with the flake’s `packages` outputs.
+
+   **Unfree vendor binaries take a different route.** Register them in the `unfreePackages` attrset instead of `packages`; it already flows into `overlayAttrs`, `legacyPackages.<system>.<name>`, and the README table, so steps 2 and 3 are replaced by that one entry. `make build` builds every attr of `packages.<system>`, so a package there is built by CI and pushed to the public cachix caches, which would redistribute the vendor's binary. Also add the name to `allowUnfreePredicate` in `flake.nix` (`meta.available` is false without it, and the entry is silently filtered out) and to `manual_only` in `scripts/update.sh` if `nix-update` can't drive the source. References: `pkgs/claude-desktop`, `pkgs/coderabbit`.
+
 4. Do **not** hand-edit the README package table — `lib/packages.nix` generates it from `config.packages` automatically (`make generate` refreshes it, §6).
 5. Do **not** add a new maintainer entry — `UnstoppableMango` already exists in `lib/maintainers.nix`.
 
