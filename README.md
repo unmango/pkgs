@@ -14,8 +14,6 @@
 
 Mini-nixpkgs of dubious quality.
 
-See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
-
 ## Packages
 
 <!-- PACKAGES:START -->
@@ -68,7 +66,7 @@ See [GOALS](GOALS.md) for purpose, non-goals, and upstream policy.
 
 ```nix
 {
-  inputs.pkgs.url = "github:unmango/pkgs";
+  inputs.mangopkgs.url = "github:unmango/pkgs";
 }
 ```
 
