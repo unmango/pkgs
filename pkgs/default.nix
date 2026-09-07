@@ -41,6 +41,8 @@
               image = callPackage ./images/gitlab-operator-v2 { gitlab-operator-v2 = pkg; };
             };
           });
+        java-jdtls-mcp-server = callPackage ./java-jdtls-mcp-server { };
+        jdtls-mcp = callPackage ./jdtls-mcp { };
         kube-vip = callPackage ./kube-vip { };
         kubectl-get-all = callPackage ./kubectl-get-all { };
         kubectl-get-resources = callPackage ./kubectl-get-resources { };
@@ -48,6 +50,7 @@
         kubernetes-mcp-server = callPackage ./kubernetes-mcp-server { };
         likec4 = callPackage ./likec4 { };
         lsmcp = callPackage ./lsmcp { };
+        lsp4j-mcp = callPackage ./lsp4j-mcp { };
         mmake = callPackage ./mmake { };
         nix2container-bin = callPackage ./nix2container-bin {
           inherit (inputs'.nix2container.packages) nix2container-bin;

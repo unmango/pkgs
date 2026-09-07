@@ -15,6 +15,7 @@ declare -A manual_only=(
   ["aspire-cli"]="nix-update's fetch-deps run fails to load the dotnet command"
   ["claude-desktop"]="two per-arch .deb hashes that move together, read from an apt pool index rather than a git host"
   ["coderabbit"]="four per-platform zip hashes that move together, and no git host to read a version from"
+  ["jdtls-mcp"]="three per-platform tarball hashes that move together"
   ["salesforce-cli"]="npm tarball src rewritten by a runCommand nix-update cannot see through"
 )
 
