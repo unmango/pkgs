@@ -30,7 +30,6 @@
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
-        coderabbit = callPackage ./coderabbit { };
         cumulusci = callPackage ./cumulusci { python313Packages = python313.pkgs; };
         gitlab-operator = callPackage ./gitlab-operator { };
         gitlab-operator-v2 =
@@ -88,29 +87,41 @@
           };
         });
       };
+
+      # Unfree, prebuilt vendor binaries. Held out of `packages` because `make
+      # build` builds every attr of packages.<system> and CI pushes the results
+      # to the public caches, which would redistribute the vendor's binary.
+      # Reachable as legacyPackages.<system>.<name> and through overlays.default.
+      unfreePackages = {
+        claude-desktop = callPackage ./claude-desktop { };
+        coderabbit = callPackage ./coderabbit { };
+      };
     in
     {
       packages = lib.filterAttrs (_: pkg: pkg.meta.available or true) packages;
 
-      legacyPackages = {
-        packagesTable = import ../lib/packages.nix packages;
+      legacyPackages = (lib.filterAttrs (_: pkg: pkg.meta.available or true) unfreePackages) // {
+        packagesTable = import ../lib/packages.nix (packages // unfreePackages);
       };
 
-      overlayAttrs = packages // {
-        # A drop-in skopeo that also understands nix2container's `nix:`
-        # transport, so overlay consumers get it without opting in per-call.
-        skopeo = packages.skopeo-nix2container;
+      overlayAttrs =
+        packages
+        // unfreePackages
+        // {
+          # A drop-in skopeo that also understands nix2container's `nix:`
+          # transport, so overlay consumers get it without opting in per-call.
+          skopeo = packages.skopeo-nix2container;
 
-        pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [ pythonOverrides ];
+          pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [ pythonOverrides ];
 
-        pulumiPackages = pulumiPackages // {
-          inherit (packages)
-            pulumi-bun
-            pulumi-dotnet
-            pulumi-java
-            pulumi-yaml
-            ;
+          pulumiPackages = pulumiPackages // {
+            inherit (packages)
+              pulumi-bun
+              pulumi-dotnet
+              pulumi-java
+              pulumi-yaml
+              ;
+          };
         };
-      };
     };
 }

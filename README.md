@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-37-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-38-blue)](#packages)
 
 <p align="center">
 
@@ -23,6 +23,7 @@ Mini-nixpkgs of dubious quality.
 | `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                                     |
 | `awxkit`                             | Official command line interface for Ansible AWX                                                                             |
 | `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                                           |
+| `claude-desktop`                     | Desktop application for Claude.ai                                                                                           |
 | `coderabbit`                         | CodeRabbit AI code review, in the terminal                                                                                  |
 | `cumulusci`                          | Build and release tools for Salesforce developers                                                                           |
 | `github-runner`                      | Self-hosted runner for GitHub Actions                                                                                       |
