@@ -60,6 +60,15 @@ buildNpmPackage (
         exit 1
       fi
 
+      # The prune below walks .packages, which only exists from lockfileVersion
+      # 2 on. npm has written 2 or 3 since npm 7, so a version 1 lockfile is
+      # rejected rather than given a second pruning path.
+      lockfileVersion=$(${lib.getExe jq} '.lockfileVersion // 0' "$lockfile")
+      if [ "$lockfileVersion" -lt 2 ]; then
+        echo "mkSfPlugin: ${npmName} ships $lockfile at lockfileVersion $lockfileVersion, which has no .packages tree" >&2
+        exit 1
+      fi
+
       ${lib.getExe jq} 'del(.devDependencies)' package.json >patched.json
       mv patched.json package.json
 
