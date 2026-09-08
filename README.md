@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-42-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-44-blue)](#packages)
 
 <p align="center">
 
@@ -57,6 +57,8 @@ Mini-nixpkgs of dubious quality.
 | `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                                      |
 | `rust-analyzer-mcp`                  | Model Context Protocol (MCP) server that provides integration with rust-analyzer                                            |
 | `salesforce-cli`                     | CLI for developing against the Salesforce Platform                                                                          |
+| `sf-plugin-code-analyzer`            | Salesforce Code Analyzer, a Salesforce CLI plugin for static analysis                                                       |
+| `sfdx-git-delta`                     | Salesforce CLI plugin that generates a delta package from a git diff                                                        |
 | `skopeo-nix2container`               | Command line utility for various operations on container images and image repositories, with nix2container's nix: transport |
 | `slackdump`                          | Save or export your private and public Slack messages, threads, files, and users locally without admin privileges           |
 | `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                                  |
@@ -80,6 +82,19 @@ Mini-nixpkgs of dubious quality.
 ```bash
 nix run github:unmango/pkgs#kubectl-slice
 nix shell github:unmango/pkgs#kube-vip
+```
+
+### Salesforce CLI plugins
+
+`salesforce-cli.withPlugins` links plugins in as core plugins, so they come from
+the store instead of `sf plugins install`'s mutable copy under
+`$XDG_DATA_HOME/sf`.
+
+```nix
+pkgs.salesforce-cli.withPlugins [
+  pkgs.sfdx-git-delta
+  pkgs.sf-plugin-code-analyzer
+]
 ```
 
 ### Overlay
