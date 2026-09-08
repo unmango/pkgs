@@ -6,6 +6,7 @@
   makeWrapper,
   nix-update-script,
   runCommand,
+  sfWithPlugins,
   writeText,
 }:
 let
@@ -83,26 +84,9 @@ let
     ' $out/npm-shrinkwrap.json >shrinkwrap.json
     mv shrinkwrap.json $out/npm-shrinkwrap.json
   '';
-in
-buildNpmPackage {
-  pname = "salesforce-cli";
-  inherit version src;
 
-  npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-YiebUV18yxWX+mF02QMFVvpEi0pnLajzmGcYULvMHts=";
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  # dist/ ships prebuilt, and the preinstall script shells out to
-  # `sfdx --version` to detect a conflicting v1 install.
-  npmFlags = [
-    "--ignore-scripts"
-    "--legacy-peer-deps"
-  ];
-  dontNpmBuild = true;
-
-  # The environment below pins the CLI to this store path. Updating happens by
-  # bumping `version` and the hashes above.
+  # Pins the CLI to its store path. `withPlugins` builds its own wrappers, so
+  # this is passthru rather than inline in postInstall.
   #
   # SF_REDIRECTED short-circuits the launcher's first branch, which otherwise
   # hands execution to $XDG_DATA_HOME/sf/client/bin/sf whenever a self-updated
@@ -112,24 +96,57 @@ buildNpmPackage {
   # notice points at the environment instead of telling the user to run
   # `npm update --global`. The CLI accepts either spelling of the autoupdate
   # flag, so both are set.
-  postInstall = ''
-    for bin in sf sfdx; do
-      wrapProgram $out/bin/$bin \
-        --set SF_REDIRECTED 1 \
-        --set SF_INSTALLER true \
-        --set SF_AUTOUPDATE_DISABLE true \
-        --set SF_DISABLE_AUTOUPDATE true
-    done
-  '';
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
-    description = "CLI for developing against the Salesforce Platform";
-    homepage = "https://developer.salesforce.com/tools/salesforcecli";
-    downloadPage = "https://github.com/salesforcecli/cli/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ UnstoppableMango ];
-    mainProgram = "sf";
+  runtimeEnv = {
+    SF_REDIRECTED = "1";
+    SF_INSTALLER = "true";
+    SF_AUTOUPDATE_DISABLE = "true";
+    SF_DISABLE_AUTOUPDATE = "true";
   };
-}
+
+  setArgs = lib.mapAttrsToList (name: value: "--set ${name} ${lib.escapeShellArg value}") runtimeEnv;
+
+  package = buildNpmPackage {
+    pname = "salesforce-cli";
+    inherit version src;
+
+    npmDepsFetcherVersion = 2;
+    npmDepsHash = "sha256-YiebUV18yxWX+mF02QMFVvpEi0pnLajzmGcYULvMHts=";
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    # dist/ ships prebuilt, and the preinstall script shells out to
+    # `sfdx --version` to detect a conflicting v1 install.
+    npmFlags = [
+      "--ignore-scripts"
+      "--legacy-peer-deps"
+    ];
+    dontNpmBuild = true;
+
+    postInstall = ''
+      for bin in sf sfdx; do
+        wrapProgram $out/bin/$bin ${lib.concatStringsSep " " setArgs}
+      done
+    '';
+
+    passthru = {
+      inherit runtimeEnv;
+      updateScript = nix-update-script { };
+      withPlugins =
+        plugins:
+        sfWithPlugins {
+          inherit plugins;
+          salesforce-cli = package;
+        };
+    };
+
+    meta = with lib; {
+      description = "CLI for developing against the Salesforce Platform";
+      homepage = "https://developer.salesforce.com/tools/salesforcecli";
+      downloadPage = "https://github.com/salesforcecli/cli/releases";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ UnstoppableMango ];
+      mainProgram = "sf";
+    };
+  };
+in
+package

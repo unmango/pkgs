@@ -13,6 +13,7 @@
         inherit (inputs'.nix2container.packages) nix2container;
         inherit (inputs'.gomod2nix.legacyPackages) buildGoApplication;
         inherit (pkgs.callPackage ../lib/go { }) mkUpdateDeps;
+        inherit (pkgs.callPackage ../lib/salesforce { }) mkSfPlugin sfWithPlugins;
       };
 
       callPackage = lib.callPackageWith (tools // pkgs);
@@ -68,6 +69,8 @@
         pulumi-yaml = callPackage ./pulumi-yaml { };
         rust-analyzer-mcp = callPackage ./rust-analyzer-mcp { };
         salesforce-cli = callPackage ./salesforce-cli { };
+        sf-plugin-code-analyzer = callPackage ./sf-plugin-code-analyzer { };
+        sfdx-git-delta = callPackage ./sfdx-git-delta { };
         skopeo-nix2container = callPackage ./skopeo-nix2container {
           inherit (inputs'.nix2container.packages) skopeo-nix2container;
         };

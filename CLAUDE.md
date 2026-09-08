@@ -27,6 +27,8 @@ Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unf
 
 **`pkgs/images/`** — container images built with `nix2container.buildImage`. Images are not standalone packages; they attach to an existing nixpkgs package via `overrideAttrs` + `passthru.image` (see `hercules-ci-agent` and `github-runner` in `pkgs/default.nix`).
 
+**`lib/salesforce/`** — `mkSfPlugin` builds an oclif plugin from its registry tarball into `$out/lib/node_modules/<npmName>`; `sfWithPlugins` backs `salesforce-cli.withPlugins`, which relinks the CLI with those plugins as core plugins. oclif loads a core plugin only when it appears in both `oclif.plugins` and `dependencies` of the CLI's `package.json`, and node resolves a module's dependencies from its realpath, so the CLI's own files are copied while its `node_modules` stay symlinks. A plugin that shells out to another program declares it in `runtimeInputs`; `withPlugins` puts those on the CLI wrapper's PATH.
+
 **`lib/maintainers.nix`** — extends `pkgs.lib.maintainers` with the local `UnstoppableMango` entry. Referenced in every `meta.maintainers` block.
 
 **`lib/packages.nix`** — pure Nix function that generates the README table from `config.packages`. Called via `legacyPackages.packagesTable`; the actual README markers are updated by `scripts/gen-packages-table.sh`.
@@ -41,6 +43,7 @@ Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unf
 | Rust            | `rustPlatform.buildRustPackage`          | `cargoHash` in derivation              |
 | OCaml           | `ocamlPackages.buildDunePackage`         | —                                      |
 | Container image | `nix2container.buildImage`               | `manifest.json` for pulled base images |
+| oclif plugin    | `mkSfPlugin` (`lib/salesforce`)          | —                                      |
 
 ## Adding a package
 
