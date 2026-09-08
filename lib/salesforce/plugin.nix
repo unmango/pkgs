@@ -51,14 +51,23 @@ buildNpmPackage (
     # it. jq is called by store path because buildNpmPackage replays postPatch
     # inside fetchNpmDeps, whose build environment it does not control.
     postPatch = ''
+      if [ -f npm-shrinkwrap.json ]; then
+        lockfile=npm-shrinkwrap.json
+      elif [ -f package-lock.json ]; then
+        lockfile=package-lock.json
+      else
+        echo "mkSfPlugin: ${npmName} ships no npm-shrinkwrap.json or package-lock.json" >&2
+        exit 1
+      fi
+
       ${lib.getExe jq} 'del(.devDependencies)' package.json >patched.json
       mv patched.json package.json
 
       ${lib.getExe jq} '
         (.packages |= with_entries(select(.value.dev != true)))
         | del(.packages[""].devDependencies)
-      ' npm-shrinkwrap.json >patched.json
-      mv patched.json npm-shrinkwrap.json
+      ' "$lockfile" >patched.json
+      mv patched.json "$lockfile"
     '';
 
     # dist/ ships prebuilt, and the install scripts are husky and telemetry.
