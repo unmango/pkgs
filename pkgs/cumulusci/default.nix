@@ -1,11 +1,31 @@
 {
   lib,
   fetchFromGitHub,
+  fetchPypi,
   nix-update-script,
   python313Packages,
 }:
 let
   version = "4.10.1";
+
+  # rst2ansi (last released 2018) imports docutils.utils.error_reporting,
+  # which was removed in docutils 0.21. Pin a standalone docutils to the last
+  # release that still carries it, scoped to just this package's closure
+  # (rather than overriding the whole python313Packages set, which forces a
+  # rebuild-from-source of everything that transitively depends on docutils,
+  # e.g. sphinx, and its flaky sandboxed test suite).
+  docutilsOld = python313Packages.docutils.overridePythonAttrs (_old: rec {
+    version = "0.20.1";
+    src = fetchPypi {
+      pname = "docutils";
+      inherit version;
+      hash = "sha256-8IpOJ2w6FYOobc4+NKuj/gTQK7ot1R7RYQYkToqSPjs=";
+    };
+    # 0.20.1 predates the flit-core packaging used since 0.21.
+    build-system = [ python313Packages.setuptools ];
+  });
+
+  rst2ansiOld = python313Packages.rst2ansi.override { docutils = docutilsOld; };
 in
 # CumulusCI declares requires-python >=3.11,<3.14, so it can't use the default
 # interpreter. pkgs/default.nix passes a 3.13 set extended with the libraries
@@ -39,12 +59,15 @@ python313Packages.buildPythonApplication {
   # Includes the `select` extra (annoy, numpy, pandas, scikit-learn), which
   # keeps cumulusci.tasks.bulkdata.select_utils on its optimized path; without
   # it the task warns and falls back to a slow one.
+  #
+  # docutils and rst2ansi come from docutilsOld/rst2ansiOld above, not
+  # python313Packages, so only one docutils version ends up in the closure.
   dependencies = with python313Packages; [
     annoy
     click
     cryptography
     defusedxml
-    docutils
+    docutilsOld
     faker
     github3-py
     jinja2
@@ -67,7 +90,7 @@ python313Packages.buildPythonApplication {
     robotframework-pabot
     robotframework-requests
     robotframework-seleniumlibrary
-    rst2ansi
+    rst2ansiOld
     salesforce-bulk
     sarge
     scikit-learn
