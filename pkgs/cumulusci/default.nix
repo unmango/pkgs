@@ -14,7 +14,7 @@ let
   # (rather than overriding the whole python313Packages set, which forces a
   # rebuild-from-source of everything that transitively depends on docutils,
   # e.g. sphinx, and its flaky sandboxed test suite).
-  docutilsOld = python313Packages.docutils.overridePythonAttrs (old: rec {
+  docutilsOld = python313Packages.docutils.overridePythonAttrs (_old: rec {
     version = "0.20.1";
     src = fetchPypi {
       pname = "docutils";
