@@ -519,8 +519,8 @@ schema = 3
     hash = 'sha256-JlWckeGaWG+bXK8l8WEdZqmSiTwCA8b1qbmBKa/Fj3E='
 
   [mod.'github.com/mattn/go-runewidth']
-    version = 'v0.0.28'
-    hash = 'sha256-8Bwg2XAEB7MJs5bxEtWMtkycx80i2S/yI8fj77/YfmM='
+    version = 'v0.0.29'
+    hash = 'sha256-AZ+wSUPj0+ZukidTuqnNogxkBKpfZ+I2LOdQ2P0ajaI='
 
   [mod.'github.com/mgutz/ansi']
     version = 'v0.0.0-20170206155736-9520e82c474b'
@@ -623,12 +623,12 @@ schema = 3
     hash = 'sha256-gyJDpOeoAB4h04C4gz0prLIJkph7qK2WHcWLWJCYXr8='
 
   [mod.'github.com/pulumi/pulumi/pkg/v3']
-    version = 'v3.260.0'
-    hash = 'sha256-wXUlfPQR1EIx0JHFIb6yESCykerw/UFUG0fPueFy5sM='
+    version = 'v3.261.0'
+    hash = 'sha256-cZlHGRsLOaLQ6wMaeHDYP66gpIX1qqjus7yacSYRsDg='
 
   [mod.'github.com/pulumi/pulumi/sdk/v3']
-    version = 'v3.260.0'
-    hash = 'sha256-FpvJ43n2PbDSBPIeBM9iCj6ALyNBxwG5oHyGM056UH0='
+    version = 'v3.261.0'
+    hash = 'sha256-ZvV8nSsBXTxZRFr7vlNMKlTNFCnPG7fZrkjriYcUwgE='
 
   [mod.'github.com/rivo/uniseg']
     version = 'v0.4.7'
@@ -735,12 +735,12 @@ schema = 3
     hash = 'sha256-73bFYhnxNf4SfeQ52ebnwOWywdQbqc9lWawCcSgofvE='
 
   [mod.'go.opentelemetry.io/collector/featuregate']
-    version = 'v1.65.0'
-    hash = 'sha256-2N4nCucHX3zb09YR6z2G7gOPyd7T4494/01Gt8EJVzE='
+    version = 'v1.66.0'
+    hash = 'sha256-nNaRzczbLWZ7lwRIa3LRsih2Gv0f/kTsvkaJOll6YGc='
 
   [mod.'go.opentelemetry.io/collector/pdata']
-    version = 'v1.65.0'
-    hash = 'sha256-58OGvARo590PNGVZxP0zSqMKzA1lOo5sAvRMqKFyGYs='
+    version = 'v1.66.0'
+    hash = 'sha256-ADFYn6oUtsjKVTyx9uoUt+roOctiu7aT2kY4w4ZFc+c='
 
   [mod.'go.opentelemetry.io/contrib/bridges/otelslog']
     version = 'v0.20.1'
@@ -875,11 +875,11 @@ schema = 3
     hash = 'sha256-WSuY4RSdq8QpyooxYjqany3KmsWuoXulRxCF5fpJqqc='
 
   [mod.'google.golang.org/genproto/googleapis/api']
-    version = 'v0.0.0-20260825221802-da73d73af1c5'
-    hash = 'sha256-mjfRw214kbDuWXXwM8tziSXsFoThznP1IdNk5X/GSG8='
+    version = 'v0.0.0-20260831171406-18b4a7587f8a'
+    hash = 'sha256-HsiQRzrEh75fqhA8zb+eKHj6HH9du/qgGOMAZpdVTkM='
 
   [mod.'google.golang.org/genproto/googleapis/rpc']
-    version = 'v0.0.0-20260825221802-da73d73af1c5'
+    version = 'v0.0.0-20260831171406-18b4a7587f8a'
     hash = 'sha256-CQdjYGIrgAnEDfWW3DIJF9Orf7oJdhx3G9rGg6fow88='
 
   [mod.'google.golang.org/grpc']
