@@ -1,0 +1,8 @@
+/result*
+.envrc
+.direnv/
+bin/
+.claude/*
+!.claude/skills
+.vscode/*
+!.vscode/extensions.json

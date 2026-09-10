@@ -1,0 +1,123 @@
+# pkgs
+
+[![CI](https://github.com/unmango/pkgs/actions/workflows/ci.yml/badge.svg)](https://github.com/unmango/pkgs/actions/workflows/ci.yml)
+[![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
+[![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![packages](https://img.shields.io/badge/packages-44-blue)](#packages)
+
+<p align="center">
+
+[![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
+
+</p>
+
+Mini-nixpkgs of dubious quality.
+
+## Packages
+
+<!-- PACKAGES:START -->
+
+| Name                                 | Description                                                                                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                                     |
+| `awxkit`                             | Official command line interface for Ansible AWX                                                                             |
+| `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                                           |
+| `claude-desktop`                     | Desktop application for Claude.ai                                                                                           |
+| `claude-desktop-fhs`                 | Desktop application for Claude.ai, in an FHS environment for MCP servers and Cowork                                         |
+| `coderabbit`                         | CodeRabbit AI code review, in the terminal                                                                                  |
+| `cumulusci`                          | Build and release tools for Salesforce developers                                                                           |
+| `github-runner`                      | Self-hosted runner for GitHub Actions                                                                                       |
+| `gitlab-operator`                    | Kubernetes Operator for managing the lifecycle of GitLab instances                                                          |
+| `gitlab-operator-v2`                 | Kubernetes Operator for managing the lifecycle of GitLab instances (experimental V2 rewrite)                                |
+| `gossamer`                           | The Gossamer programming language compiler                                                                                  |
+| `hercules-ci-agent`                  | Runs Continuous Integration tasks on your machines                                                                          |
+| `java-jdtls-mcp-server`              | Model Context Protocol (MCP) server for Java using Eclipse JDT.LS                                                           |
+| `jdtls-mcp`                          | Model Context Protocol (MCP) server embedding Eclipse JDT Language Server via OSGi                                          |
+| `kube-vip`                           | Kube-VIP: Virtual IP for Kubernetes clusters                                                                                |
+| `kubectl-get-all`                    | Like `kubectl get all`, but get really all resources                                                                        |
+| `kubectl-get-resources`              | Get Kubernetes resources (cluster or namespace scope) in CSV or YAML with support for multiple filtering flags.             |
+| `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.                 |
+| `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                            |
+| `likec4`                             | Toolchain for your architecture diagrams                                                                                    |
+| `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                                   |
+| `lsp4j-mcp`                          | Model Context Protocol (MCP) server exposing Java IDE features via JDTLS                                                    |
+| `mmake`                              | Modern Make                                                                                                                 |
+| `nix2container-bin`                  | Build container images with Nix, without a Docker daemon or a tarball                                                       |
+| `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                          |
+| `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                                        |
+| `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                                |
+| `opencommit`                         | Auto-generate impressive commits in 1 second, killing lame commits with AI                                                  |
+| `openshift-installer`                | Install an OpenShift Cluster                                                                                                |
+| `pbrt`                               | Runtime library for Protobuf tooling                                                                                        |
+| `podman-mcp-server`                  | Model Context Protocol (MCP) server for container runtimes (Podman and Docker)                                              |
+| `pulumi-bun`                         | Pulumi language host for Bun programs                                                                                       |
+| `pulumi-dotnet`                      | Pulumi language host for .NET programs                                                                                      |
+| `pulumi-java`                        | Pulumi language host for Java programs                                                                                      |
+| `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                                      |
+| `rust-analyzer-mcp`                  | Model Context Protocol (MCP) server that provides integration with rust-analyzer                                            |
+| `salesforce-cli`                     | CLI for developing against the Salesforce Platform                                                                          |
+| `sf-plugin-code-analyzer`            | Salesforce Code Analyzer, a Salesforce CLI plugin for static analysis                                                       |
+| `sfdx-git-delta`                     | Salesforce CLI plugin that generates a delta package from a git diff                                                        |
+| `skopeo-nix2container`               | Command line utility for various operations on container images and image repositories, with nix2container's nix: transport |
+| `slackdump`                          | Save or export your private and public Slack messages, threads, files, and users locally without admin privileges           |
+| `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                                  |
+| `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                                 |
+| `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                            |
+
+<!-- PACKAGES:END -->
+
+## Usage
+
+### Flake input
+
+```nix
+{
+  inputs.mangopkgs.url = "github:unmango/pkgs";
+}
+```
+
+### Install a package
+
+```bash
+nix run github:unmango/pkgs#kubectl-slice
+nix shell github:unmango/pkgs#kube-vip
+```
+
+### Salesforce CLI plugins
+
+`salesforce-cli.withPlugins` links plugins in as core plugins, so they come from
+the store instead of `sf plugins install`'s mutable copy under
+`$XDG_DATA_HOME/sf`.
+
+```nix
+pkgs.salesforce-cli.withPlugins [
+  pkgs.sfdx-git-delta
+  pkgs.sf-plugin-code-analyzer
+]
+```
+
+### Overlay
+
+```nix
+{
+  nixpkgs.overlays = [ inputs.mangopkgs.overlays.default ];
+}
+```
+
+### Binary cache
+
+```bash
+cachix use unstoppablemango
+```
+
+## Development
+
+```bash
+nix develop     # enter dev shell
+make            # build all packages
+make check      # lint + build check
+make fmt        # format
+```
+
+Requires [gomod2nix](https://github.com/nix-community/gomod2nix) for Go packages. Run `gomod2nix` after changing `go.mod`.
