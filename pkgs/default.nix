@@ -7,7 +7,7 @@
       ...
     }:
     let
-      inherit (pkgs) ocamlPackages pulumiPackages;
+      inherit (pkgs) ocamlPackages;
 
       tools = {
         inherit (inputs'.nix2container.packages) nix2container;
@@ -63,10 +63,6 @@
         ocaml-protoc-plugin = callPackage ./ocaml-protoc-plugin { };
         openshift-installer = callPackage ./openshift-installer { };
         podman-mcp-server = callPackage ./podman-mcp-server { };
-        pulumi-bun = callPackage ./pulumi-bun { };
-        pulumi-dotnet = callPackage ./pulumi-dotnet { };
-        pulumi-java = callPackage ./pulumi-java { };
-        pulumi-yaml = callPackage ./pulumi-yaml { };
         rust-analyzer-mcp = callPackage ./rust-analyzer-mcp { };
         salesforce-cli = callPackage ./salesforce-cli { };
         sf-plugin-code-analyzer = callPackage ./sf-plugin-code-analyzer { };
@@ -123,15 +119,6 @@
           skopeo = packages.skopeo-nix2container;
 
           pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [ pythonOverrides ];
-
-          pulumiPackages = pulumiPackages // {
-            inherit (packages)
-              pulumi-bun
-              pulumi-dotnet
-              pulumi-java
-              pulumi-yaml
-              ;
-          };
         };
     };
 }
