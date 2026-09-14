@@ -24,7 +24,6 @@ Applies to `pkgs/<name>/default.nix`.
 
 - A new package is registered alphabetically in the `packages` attrset.
   `overlayAttrs` is `packages // unfreePackages // { ... }`, so it picks the package up automatically. There is no second wiring step.
-- A new `pulumi-*` package is the exception: it also needs an entry in the `inherit (packages)` list under `overlayAttrs.pulumiPackages`, or overlay consumers won't find it there.
 - An unfree vendor binary belongs in the `unfreePackages` attrset instead, which already flows into `overlayAttrs` and `legacyPackages.<system>`. Putting it in `packages` makes CI build it and push it to the public cachix caches, redistributing the vendor's binary.
 - Every unfree package name must also appear in `allowUnfreePredicate` in `flake.nix`.
   Without it, `meta.available` is false and the package is filtered out of the flake outputs with no error at all.

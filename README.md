@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-44-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-40-blue)](#packages)
 
 <p align="center">
 
@@ -51,10 +51,6 @@ Mini-nixpkgs of dubious quality.
 | `openshift-installer`                | Install an OpenShift Cluster                                                                                                |
 | `pbrt`                               | Runtime library for Protobuf tooling                                                                                        |
 | `podman-mcp-server`                  | Model Context Protocol (MCP) server for container runtimes (Podman and Docker)                                              |
-| `pulumi-bun`                         | Pulumi language host for Bun programs                                                                                       |
-| `pulumi-dotnet`                      | Pulumi language host for .NET programs                                                                                      |
-| `pulumi-java`                        | Pulumi language host for Java programs                                                                                      |
-| `pulumi-yaml`                        | Pulumi language host for YAML programs                                                                                      |
 | `rust-analyzer-mcp`                  | Model Context Protocol (MCP) server that provides integration with rust-analyzer                                            |
 | `salesforce-cli`                     | CLI for developing against the Salesforce Platform                                                                          |
 | `sf-plugin-code-analyzer`            | Salesforce Code Analyzer, a Salesforce CLI plugin for static analysis                                                       |
