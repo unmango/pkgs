@@ -2,6 +2,7 @@
   description = "Mini-nixpkgs of dubious quality";
 
   nixConfig = {
+    allow-import-from-derivation = false;
     extra-substituters = [
       "https://mangopkgs.cachix.org"
     ];
@@ -20,7 +21,8 @@
     };
 
     gomod2nix = {
-      url = "github:nix-community/gomod2nix";
+      # url = "github:nix-community/gomod2nix";
+      url = "github:UnstoppableMango/gomod2nix?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.inputs.systems.follows = "systems";
     };
