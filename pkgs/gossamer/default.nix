@@ -8,7 +8,7 @@
   rustPlatform,
 }:
 let
-  version = "0.61.2";
+  version = "0.61.5";
 in
 rustPlatform.buildRustPackage {
   pname = "gossamer";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "danpozmanter";
     repo = "gossamer";
     rev = "v${version}";
-    hash = "sha256-vCTjYQNJCvgywviGUkokViOCqXgAn09GXwhjbOnvw8c=";
+    hash = "sha256-PHXq2amR86YWbQQNnNyCIfB9OAkHci0PTruG2D7Dbig=";
   };
 
-  cargoHash = "sha256-TlP3rot8tRtInRpkpyHJ+tYy2vEMvpgEqjJA9aoUryY=";
+  cargoHash = "sha256-CJGQUUuaaZ/0WaYilevlHRzXGTHOzBlh3CRzJ2pCT+o=";
 
   # build.rs for gossamer-cli spawns a nested `cargo build -p gossamer-runtime`
   # to produce the staticlib. In Nix's sandbox the nested invocation succeeds
