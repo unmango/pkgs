@@ -5,13 +5,13 @@
   nix-update-script,
 }:
 let
-  version = "3.3.2";
+  version = "3.4.0";
   src = fetchFromGitLab {
     group = "gitlab-org";
     owner = "cloud-native";
     repo = "gitlab-operator";
     rev = version;
-    hash = "sha256-bDCt88IbMsmSMnGx6x9skFTJ0K4tVaPf7ipOm9Gsels=";
+    hash = "sha256-5ZBijtY9sXm+q/gTcb9uD2HlEafu1hOgYpXekYNbBaY=";
   };
 in
 # buildGoModule rather than buildGoApplication: helm v4 resolves the Kubernetes
@@ -22,7 +22,7 @@ buildGoModule {
   pname = "gitlab-operator";
   inherit version src;
 
-  vendorHash = "sha256-7tHv9+7GRWnhDwSR+yl3bRihfwBOUqWyrzc5IHWbUYw=";
+  vendorHash = "sha256-QKhMChtNL9DsAngsXQDMQmhulgBoE9BpXgghdbWCK70=";
   subPackages = [ "cmd/manager" ];
 
   # Upstream builds the manager statically for the ubi-micro runtime image.
