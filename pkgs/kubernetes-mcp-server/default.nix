@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 let
-  version = "0.0.66";
+  version = "0.0.67";
   src = fetchFromGitHub {
     owner = "containers";
     repo = "kubernetes-mcp-server";
     rev = "v${version}";
-    hash = "sha256-vnJxSCfnpvOZJXQpKrCAW4QKt5R2PJDYQevA7O1uXZg=";
+    hash = "sha256-rejF9JsszB3ZirZhoK1VDbCH/P0Xzmh4TJw5j+okj+M=";
   };
 in
 buildGoApplication {
