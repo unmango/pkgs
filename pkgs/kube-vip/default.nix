@@ -27,8 +27,8 @@ buildGoApplication {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/kube-vip/kube-vip/main.Version=${version}"
-    "-X github.com/kube-vip/kube-vip/main.Build=${src.rev}"
+    "-X main.Version=${version}"
+    "-X main.Build=${src.rev}"
   ];
 
   passthru.update-deps = mkUpdateDeps src;
