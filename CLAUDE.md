@@ -14,6 +14,7 @@ nix build .#<name>   # build a single package
 ```
 
 After changing `go.mod` in any Go package, run `make deps` (or `nix run .#<name>.update-deps pkgs/<name>/gomod2nix.toml` for a single package) to regenerate `gomod2nix.toml`.
+`make deps` iterates the Makefile's hardcoded `GO_PKGS` list, so a new gomod2nix package must be added there too, or it is silently skipped.
 
 ## Architecture
 
@@ -29,6 +30,11 @@ Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unf
 
 **`lib/salesforce/`** — `mkSfPlugin` builds an oclif plugin from its registry tarball into `$out/lib/node_modules/<npmName>`; `sfWithPlugins` backs `salesforce-cli.withPlugins`, which relinks the CLI with those plugins as core plugins. oclif loads a core plugin only when it appears in both `oclif.plugins` and `dependencies` of the CLI's `package.json`, and node resolves a module's dependencies from its realpath, so the CLI's own files are copied while its `node_modules` stay symlinks. A plugin that shells out to another program declares it in `runtimeInputs`; `withPlugins` puts those on the CLI wrapper's PATH.
 
+**`pkgs/python-packages/`** — a python package-set extension (`final: prev:`) of libraries CumulusCI needs that nixpkgs lacks.
+`pkgs/default.nix` applies it twice: to a pinned `python313` (CumulusCI requires <3.14) and to `overlayAttrs.pythonPackagesExtensions`, so overlay consumers get them on every interpreter.
+
+**`lib/go/`** — `mkUpdateDeps src` builds the `update-deps` script that `passthru` exposes as `.#<name>.update-deps`.
+
 **`lib/maintainers.nix`** — extends `pkgs.lib.maintainers` with the local `UnstoppableMango` entry. Referenced in every `meta.maintainers` block.
 
 **`lib/packages.nix`** — pure Nix function that generates the README table from `config.packages`. Called via `legacyPackages.packagesTable`; the actual README markers are updated by `scripts/gen-packages-table.sh`.
@@ -38,6 +44,7 @@ Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unf
 | Language        | Builder                                  | Extra files                            |
 | --------------- | ---------------------------------------- | -------------------------------------- |
 | Go              | `buildGoApplication` (gomod2nix)         | `gomod2nix.toml` per package           |
+| Node            | `buildNpmPackage`                        | `package-lock.json` when vendored      |
 | .NET            | `buildDotnetModule`                      | `deps.json` per package                |
 | Python          | `python3Packages.buildPythonApplication` | —                                      |
 | Rust            | `rustPlatform.buildRustPackage`          | `cargoHash` in derivation              |
@@ -45,12 +52,16 @@ Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unf
 | Container image | `nix2container.buildImage`               | `manifest.json` for pulled base images |
 | oclif plugin    | `mkSfPlugin` (`lib/salesforce`)          | —                                      |
 
+`gitlab-operator` uses `buildGoModule` with a `vendorHash` instead of gomod2nix; see the comment in its derivation.
+
 ## Adding a package
+
+The `add-package` skill in `.claude/skills/` walks this end to end; `code-review` covers reviewing one.
 
 1. Create `pkgs/<name>/default.nix` following an existing derivation of the same language.
 2. Add the package to `pkgs/default.nix` — both the `packages` attrset and `overlayAttrs`. An unfree vendor binary goes in `unfreePackages` instead, which reaches `overlayAttrs` and `legacyPackages` on its own.
 3. Run `make generate` to update the README table and badge.
-4. For Go packages: run `make deps` to produce `gomod2nix.toml`.
+4. For gomod2nix Go packages: add the name to `GO_PKGS` in the Makefile, then run `make deps` to produce `gomod2nix.toml`.
 
 ## Update automation
 
@@ -73,4 +84,6 @@ Each package is independent — a failure is recorded and the run continues, and
 
 - CI runs `make check build`: `nix flake check` does lint + eval, and `make build` derives its target list from `nix flake show`, so it builds every attr of `packages.<system>` rather than a list kept in the Makefile. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`'s `packages`/`overlayAttrs` until real hashes exist.
 - `packages` and the unfree entries of `legacyPackages` both filter on `meta.available`, which is false for an unfree package unless `flake.nix`'s `config.allowUnfreePredicate` names it. An unfree package missing from that list disappears from the flake outputs with no error.
+- `overlayAttrs` maps `skopeo` to `skopeo-nix2container`, so overlay consumers get the `nix:` transport without asking for it.
+- `nix fmt` also runs `actionlint`, and `.claude/skills/**` is excluded from treefmt.
 - A `pkgs/<name>/default.nix` existing doesn't mean it's wired up — packages blocked on an upstream fix are deliberately left out of `pkgs/default.nix`'s `packages` attrset (see the `smarter-device-manager` comment there).
