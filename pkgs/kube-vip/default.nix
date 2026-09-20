@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 let
-  version = "1.1.2";
+  version = "1.2.4";
   src = fetchFromGitHub {
     owner = "kube-vip";
     repo = "kube-vip";
     rev = "v${version}";
-    hash = "sha256-vH9fiFInTu2NnC2jLrZUpjaxUxcQuwgvCyl9jlU+UqU=";
+    hash = "sha256-8jrf2U/TiO9vVUv+55IadzxcrO+Kzj3RKSngfaCaWbc=";
   };
 in
 buildGoApplication {
@@ -21,12 +21,14 @@ buildGoApplication {
   modules = ./gomod2nix.toml;
   subPackages = [ "." ];
 
+  # No cgo is required, and linking it statically fails for lack of a static libc.
+  CGO_ENABLED = 0;
+
   ldflags = [
     "-w"
     "-s"
     "-X github.com/kube-vip/kube-vip/main.Version=${version}"
     "-X github.com/kube-vip/kube-vip/main.Build=${src.rev}"
-    "-extldflags -static"
   ];
 
   passthru.update-deps = mkUpdateDeps src;
