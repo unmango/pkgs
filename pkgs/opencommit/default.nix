@@ -20,6 +20,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # axios calls the bundled proxy-from-env 1.x on every request, which parses
+  # the URL with the deprecated url.parse() and prints a DEP0169 warning into
+  # the interactive prompt. It reads only protocol, host, and port, which a
+  # WHATWG URL provides; an unparseable URL still resolves to no proxy.
+  postPatch = ''
+    substituteInPlace out/cli.cjs --replace-fail \
+      'var parsedUrl = typeof url2 === "string" ? parseUrl(url2) : url2 || {};' \
+      'var parsedUrl = typeof url2 === "string" ? (URL.canParse(url2) ? new URL(url2) : {}) : url2 || {};'
+  '';
+
   installPhase = ''
     runHook preInstall
 
