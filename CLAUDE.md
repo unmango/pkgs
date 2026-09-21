@@ -20,7 +20,7 @@ After changing `go.mod` in any Go package, run `make deps` (or `nix run .#<name>
 
 `flake-parts`-based flake. All packages are `perSystem` outputs, exposed via `packages.<system>.<name>` and re-exported in `overlayAttrs` for `overlays.default`.
 
-Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unfreePackages` attrset, which feeds `legacyPackages.<system>.<name>` and `overlayAttrs` but not `packages`. `make build` builds every attr of `packages.<system>`, so a package there is built by CI and pushed to the public cachix caches, which would redistribute the vendor's binary. See `claude-desktop` and `coderabbit`.
+Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unfreePackages` attrset, which feeds `legacyPackages.<system>.<name>` and `overlayAttrs` but not `packages`. `make build` builds `packages.<system>.default`, which links every package, so a package there is built by CI and pushed to the public cachix caches, which would redistribute the vendor's binary. See `claude-desktop` and `coderabbit`.
 
 **`pkgs/default.nix`** — central wiring: builds a custom `callPackage` that injects `buildGoApplication` (from gomod2nix) and `nix2container`, then calls each package derivation. This is the file to edit when adding a new package.
 
@@ -82,7 +82,7 @@ Each package is independent — a failure is recorded and the run continues, and
 
 ## Gotchas
 
-- CI runs `make check build`: `nix flake check` does lint + eval, and `make build` derives its target list from `nix flake show`, so it builds every attr of `packages.<system>` rather than a list kept in the Makefile. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`'s `packages`/`overlayAttrs` until real hashes exist.
+- CI runs `make check build`: `nix flake check` does lint + eval, and `make build` runs `nix build .#`, where `packages.<system>.default` is a `linkFarm` of every other package. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`'s `packages`/`overlayAttrs` until real hashes exist.
 - `packages` and the unfree entries of `legacyPackages` both filter on `meta.available`, which is false for an unfree package unless `flake.nix`'s `config.allowUnfreePredicate` names it. An unfree package missing from that list disappears from the flake outputs with no error.
 - `overlayAttrs` maps `skopeo` to `skopeo-nix2container`, so overlay consumers get the `nix:` transport without asking for it.
 - `nix fmt` also runs `actionlint`, and `.claude/skills/**` is excluded from treefmt.
