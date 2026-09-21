@@ -1,7 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>UnstoppableMango/renovate-config", "schedule:weekly"],
-  "nix": {
-    "enabled": true
-  }
+  "extends": ["github>UnstoppableMango/renovate-config"]
 }
