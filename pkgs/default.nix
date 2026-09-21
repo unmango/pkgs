@@ -90,8 +90,8 @@
         });
       };
 
-      # Unfree, prebuilt vendor binaries. Held out of `packages` because `make
-      # build` builds every attr of packages.<system> and CI pushes the results
+      # Unfree, prebuilt vendor binaries. Held out of `packages` because
+      # packages.default links every package, `make build` builds it, and CI pushes the results
       # to the public caches, which would redistribute the vendor's binary.
       # Reachable as legacyPackages.<system>.<name> and through overlays.default.
       unfreePackages = {
@@ -104,7 +104,11 @@
       };
     in
     {
-      packages = lib.filterAttrs (_: pkg: pkg.meta.available or true) packages;
+      packages =
+        let
+          available = lib.filterAttrs (_: pkg: pkg.meta.available or true) packages;
+        in
+        available // { default = pkgs.linkFarm "mangopkgs" available; };
 
       legacyPackages = (lib.filterAttrs (_: pkg: pkg.meta.available or true) unfreePackages) // {
         packagesTable = import ../lib/packages.nix (packages // unfreePackages);

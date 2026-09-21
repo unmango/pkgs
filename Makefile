@@ -1,10 +1,7 @@
 GO_PKGS := chart-releaser gitlab-operator-v2 kube-vip kubectl-get-all kubectl-get-resources kubectl-slice kubernetes-mcp-server mmake oc-mirror openshift-installer podman-mcp-server slackdump terraform-plugin-codegen-framework terraform-plugin-codegen-openapi terraform-provider-pfsense
-SYSTEM ?= $(shell nix run github:nix-systems/current-system)
 
 build:
-	nix flake show --json \
-	| jq  '.packages."${SYSTEM}" | keys[]' \
-	| xargs -I {} nix build .#{}
+	nix build .#
 
 update:
 	nix flake update

@@ -18,7 +18,7 @@ Applies to `pkgs/<name>/default.nix`.
 - `passthru.updateScript = nix-update-script { };` is present, unless the package is listed in the `manual_only` map in `scripts/update.sh`.
 - `meta` has `description`, `homepage`, `license`, `maintainers = with maintainers; [ UnstoppableMango ]`, and `mainProgram` for anything that ships an executable.
 - `UnstoppableMango` comes from `lib/maintainers.nix`. A new maintainer entry is a mistake.
-- No placeholder, zeroed, or otherwise unfetchable hash. CI runs `make build`, which builds every attr of `packages.<system>`, so a fake hash fails the required check.
+- No placeholder, zeroed, or otherwise unfetchable hash. CI runs `make build`, which builds `packages.<system>.default`, a link farm of every package, so a fake hash fails the required check.
 
 ## 2. Wiring in `pkgs/default.nix`
 
