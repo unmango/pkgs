@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "1.59.3";
+  version = "1.59.4";
 
   # Injected into the minified bundle, so it can't use imports or any of the
   # bundle's minified identifiers. TMPDIR is the last resort, for sandboxed
@@ -26,7 +26,7 @@ buildNpmPackage {
   # regenerate package-lock.json from the unpacked source.
   src = fetchzip {
     url = "https://registry.npmjs.org/likec4/-/likec4-${version}.tgz";
-    hash = "sha256-1K6CBH0whoxtFj8+n2TUvb6ILeawmkg0CHytZHx4aRs=";
+    hash = "sha256-qAyjYts6nDgrnJFooqcnfgFToDV2BLHRgRGZ3uJTeYg=";
     nativeBuildInputs = [ jq ];
     postFetch = ''
       jq 'del(.devDependencies)' "$out/package.json" > "$out/package.json.tmp"
@@ -62,7 +62,7 @@ buildNpmPackage {
     fi
   '';
 
-  npmDepsHash = "sha256-rVbzJwycyU98uMbIhPZsdCcaleT1rruwvMHkIhnETpM=";
+  npmDepsHash = "sha256-R4iQFR7FHRhomsmYEnuiobkOj76Yjh1MnfRQn0jleh8=";
 
   # playwright ships without an install script, so no browser download
   # happens here. Browsers for `likec4 export png` come from a separate
