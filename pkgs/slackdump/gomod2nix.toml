@@ -37,6 +37,10 @@ schema = 3
     version = 'v2.0.1'
     hash = 'sha256-6Bp0jBZ6npvsYcKZGHHIUSVSTAMEyieweAX2YAKDjjg='
 
+  [mod.'github.com/aymerick/douceur']
+    version = 'v0.2.0'
+    hash = 'sha256-NiBX8EfOvLXNiK3pJaZX4N73YgfzdrzRXdiBFe3X3sE='
+
   [mod.'github.com/caiguanhao/readqr']
     version = 'v1.0.0'
     hash = 'sha256-O8qxfxx2dE7+J00kpIl6kfglRLhjOzSqD4Qy3e8gfoY='
@@ -173,6 +177,10 @@ schema = 3
     version = 'v1.6.1'
     hash = 'sha256-6dEcshQv7qZ6mwkCeGRzV/uvech7YAzpSv6Vg944it8='
 
+  [mod.'github.com/gorilla/css']
+    version = 'v1.0.1'
+    hash = 'sha256-6JwNHqlY2NpZ0pSQTyYPSpiNqjXOdFHqrUT10sv3y8A='
+
   [mod.'github.com/gorilla/websocket']
     version = 'v1.5.3'
     hash = 'sha256-vTIGEFMEi+30ZdO6ffMNJ/kId6pZs5bbyqov8xe9BM0='
@@ -224,6 +232,10 @@ schema = 3
   [mod.'github.com/mfridman/interpolate']
     version = 'v0.0.2'
     hash = 'sha256-3u04CYOy7PLMctdkum5pltSTkYya8EfXJexbW7j0KB8='
+
+  [mod.'github.com/microcosm-cc/bluemonday']
+    version = 'v1.0.27'
+    hash = 'sha256-EZSya9FLPQ83CL7N2cZy21fdS35hViTkiMK5f3op8Es='
 
   [mod.'github.com/mitchellh/colorstring']
     version = 'v0.0.0-20190213212951-d06e56a500db'
