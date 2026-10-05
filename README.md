@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-40-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-41-blue)](#packages)
 [![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/pkgs/badge)](https://hercules-ci.com/github/unmango/pkgs)
 
 <p align="center">
@@ -61,6 +61,7 @@ Mini-nixpkgs of dubious quality.
 | `terraform-plugin-codegen-framework` | Terraform Plugin Framework Code Generation                                                                                  |
 | `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                                 |
 | `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                            |
+| `watchparty`                         | Watch videos together with friends anywhere                                                                                 |
 
 <!-- PACKAGES:END -->
 
