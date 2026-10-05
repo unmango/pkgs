@@ -75,6 +75,7 @@
         terraform-plugin-codegen-framework = callPackage ./terraform-plugin-codegen-framework { };
         terraform-plugin-codegen-openapi = callPackage ./terraform-plugin-codegen-openapi { };
         terraform-provider-pfsense = callPackage ./terraform-provider-pfsense { };
+        watchparty = callPackage ./watchparty { };
 
         hercules-ci-agent = pkgs.hercules-ci-agent.overrideAttrs (old: {
           passthru = (old.passthru or { }) // {
