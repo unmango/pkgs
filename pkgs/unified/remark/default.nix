@@ -47,18 +47,30 @@ packages
         tests = {
           version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-          # remark-gfm loads from its store path: without it remark leaves
-          # the bare URL as plain text.
+          # remark-gfm loads from its store path, with its options: without
+          # it remark leaves the bare URL as plain text. The project's own
+          # remarkConfig still applies on top.
           withPlugins =
             let
-              remark = finalAttrs.finalPackage.withPlugins (ps: [ ps.remark-gfm ]);
+              remark = finalAttrs.finalPackage.withPlugins (ps: [
+                [
+                  ps.remark-gfm
+                  { tablePipeAlign = false; }
+                ]
+              ]);
             in
             runCommand "remark-cli-with-plugins-test" { } ''
-              echo 'www.example.com' | ${lib.getExe remark} --no-color > out.md
-              grep -qF '[www.example.com](http://www.example.com)' out.md || {
-                cat out.md >&2
-                exit 1
-              }
+              echo '{ "remarkConfig": { "settings": { "bullet": "+" } } }' > package.json
+              printf '* a\n\nwww.example.com\n\n| aaa | b |\n| - | - |\n| 1 | 2 |\n' > in.md
+              ${lib.getExe remark} --no-color in.md > out.md
+
+              for want in '+ a' '[www.example.com](http://www.example.com)' '| 1 | 2 |'; do
+                grep -qF -- "$want" out.md || {
+                  echo "expected '$want', got:" >&2
+                  cat out.md >&2
+                  exit 1
+                }
+              done
               touch "$out"
             '';
         };

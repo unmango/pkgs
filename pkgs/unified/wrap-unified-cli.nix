@@ -1,16 +1,17 @@
 # Wraps a unified CLI so it always loads `plugins`, the way
 # python3.withPackages does. Backs `remark-cli.withPlugins`.
 #
-# The generated rc names each plugin by the absolute store path of its entry
-# file (`passthru.unifiedPlugin`), so nothing is resolved by package name and
+# Each plugin is passed as `--use <entry file>`, the absolute store path in
+# its `passthru.unifiedPlugin`, so nothing is resolved by package name and
 # each plugin finds its own dependencies from its own store path. ESM refuses
-# directory imports, which is why the entry file and not the package directory
-# is named. A list entry carries plugin options, as in an rc file:
+# directory imports, which is why the entry file and not the package
+# directory is named. Flags rather than `--rc-path` keep the CLI's discovery
+# of a project's own .remarkrc or package.json config, which `--rc-path`
+# turns off. A list entry carries plugin options, as in an rc file:
 #
 #   [ remark-gfm [ remark-toc { heading = "Contents"; } ] ]
 {
   lib,
-  formats,
   makeWrapper,
   runCommand,
 }:
@@ -23,20 +24,35 @@ let
   exe = cli.meta.mainProgram;
 
   entry = plugin: plugin.unifiedPlugin or (toString plugin);
-  toRc =
-    plugin:
-    if lib.isList plugin then [ (entry (lib.head plugin)) ] ++ lib.tail plugin else entry plugin;
 
-  rc = (formats.json { }).generate "${cli.pname}-rc.json" (
-    { plugins = map toRc plugins; } // lib.optionalAttrs (settings != { }) { inherit settings; }
-  );
+  # unified-args parses option values as JSON5 wrapped in braces, so the
+  # object's own braces come off.
+  fields = value: lib.removePrefix "{" (lib.removeSuffix "}" (builtins.toJSON value));
+
+  use =
+    plugin:
+    let
+      file = entry (if lib.isList plugin then lib.head plugin else plugin);
+      options = if lib.isList plugin then lib.elemAt plugin 1 else { };
+    in
+    [
+      "--use"
+      (if options == { } then file else "${file}=${fields options}")
+    ];
+
+  flags =
+    lib.concatMap use plugins
+    ++ lib.optionals (settings != { }) [
+      "--setting"
+      (fields settings)
+    ];
 in
 runCommand "${cli.pname}-with-plugins-${cli.version}"
   {
     nativeBuildInputs = [ makeWrapper ];
 
     passthru = {
-      inherit rc;
+      unifiedFlags = flags;
       unwrapped = cli;
     };
 
@@ -45,5 +61,7 @@ runCommand "${cli.pname}-with-plugins-${cli.version}"
     };
   }
   ''
-    makeWrapper ${lib.getExe cli} "$out/bin/${exe}" --add-flags "--rc-path ${rc}"
+    makeWrapper ${lib.getExe cli} "$out/bin/${exe}" ${
+      lib.concatMapStringsSep " " (flag: "--add-flag ${lib.escapeShellArg flag}") flags
+    }
   ''
