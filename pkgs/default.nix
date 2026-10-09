@@ -18,6 +18,11 @@
 
       callPackage = lib.callPackageWith (tools // pkgs);
 
+      # A lib.makeScope set, so consumers extend it with overrideScope. Its
+      # members are also flattened into `packages` below, so CI builds and
+      # caches them.
+      unifiedPackages = pkgs.callPackage ./unified { };
+
       # Libraries missing from nixpkgs that CumulusCI needs.
       pythonOverrides = import ./python-packages;
 
@@ -77,6 +82,14 @@
         terraform-provider-pfsense = callPackage ./terraform-provider-pfsense { };
         watchparty = callPackage ./watchparty { };
 
+        inherit (unifiedPackages)
+          remark
+          remark-cli
+          remark-gfm
+          remark-parse
+          remark-stringify
+          ;
+
         hercules-ci-agent = pkgs.hercules-ci-agent.overrideAttrs (old: {
           passthru = (old.passthru or { }) // {
             image = callPackage ./images/hercules-ci-agent { };
@@ -112,6 +125,7 @@
         available // { default = pkgs.linkFarm "mangopkgs" available; };
 
       legacyPackages = (lib.filterAttrs (_: pkg: pkg.meta.available or true) unfreePackages) // {
+        inherit unifiedPackages;
         packagesTable = import ../lib/packages.nix (packages // unfreePackages);
       };
 
@@ -122,6 +136,8 @@
           # A drop-in skopeo that also understands nix2container's `nix:`
           # transport, so overlay consumers get it without opting in per-call.
           skopeo = packages.skopeo-nix2container;
+
+          inherit unifiedPackages;
 
           pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [ pythonOverrides ];
         };
