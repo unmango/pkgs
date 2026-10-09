@@ -1,0 +1,30 @@
+{
+  "remark-parse": {
+    "path": "packages/remark-parse",
+    "version": "11.0.0",
+    "description": "remark plugin to add support for parsing markdown input",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "remark-stringify": {
+    "path": "packages/remark-stringify",
+    "version": "11.0.0",
+    "description": "remark plugin to add support for serializing markdown",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "remark": {
+    "path": "packages/remark",
+    "version": "15.0.1",
+    "description": "markdown processor powered by plugins part of the unified collective",
+    "entry": "index.js",
+    "dependencies": ["remark-parse", "remark-stringify"]
+  },
+  "remark-cli": {
+    "path": "packages/remark-cli",
+    "version": "12.0.1",
+    "description": "CLI to process markdown with remark",
+    "entry": null,
+    "dependencies": ["remark"]
+  }
+}

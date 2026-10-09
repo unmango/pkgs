@@ -17,6 +17,7 @@ declare -A manual_only=(
   ["coderabbit"]="four per-platform zip hashes that move together, and no git host to read a version from"
   ["jdtls-mcp"]="three per-platform tarball hashes that move together"
   ["salesforce-cli"]="npm tarball src rewritten by a runCommand nix-update cannot see through"
+  ["unified"]="a package set, not a package: each upstream repo carries a vendored lockfile and, for monorepos, a workspaces.json from workspaces.sh"
 )
 
 # createCommitOnBranch needs the repository's name-with-owner in its input.
