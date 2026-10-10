@@ -47,6 +47,7 @@
               image = callPackage ./images/gitlab-operator-v2 { gitlab-operator-v2 = pkg; };
             };
           });
+        graphify = callPackage ./graphify { };
         java-jdtls-mcp-server = callPackage ./java-jdtls-mcp-server { };
         jdtls-mcp = callPackage ./jdtls-mcp { };
         kube-vip = callPackage ./kube-vip { };
