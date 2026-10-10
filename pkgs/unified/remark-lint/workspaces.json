@@ -1,0 +1,671 @@
+{
+  "remark-lint": {
+    "path": "packages/remark-lint",
+    "version": "10.0.1",
+    "description": "remark plugin to lint Markdown code style",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "remark-lint-blockquote-indentation": {
+    "path": "packages/remark-lint-blockquote-indentation",
+    "version": "4.0.1",
+    "description": "remark-lint rule to check whitespace after block quote markers",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-checkbox-character-style": {
+    "path": "packages/remark-lint-checkbox-character-style",
+    "version": "5.0.1",
+    "description": "remark-lint rule to check list item checkbox characters",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-checkbox-content-indent": {
+    "path": "packages/remark-lint-checkbox-content-indent",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when too much whitespace follows list item checkboxes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-code-block-style": {
+    "path": "packages/remark-lint-code-block-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when code blocks do not adhere to a given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-correct-media-syntax": {
+    "path": "packages/remark-lint-correct-media-syntax",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check for accidental bracket and paren mixup for images and links",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-definition-case": {
+    "path": "packages/remark-lint-definition-case",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when definition labels are not lowercase",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-definition-sort": {
+    "path": "packages/remark-lint-definition-sort",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check definition order",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-definition-spacing": {
+    "path": "packages/remark-lint-definition-spacing",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when consecutive whitespace is used in a definition",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-directive-attribute-sort": {
+    "path": "packages/remark-lint-directive-attribute-sort",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check directive attribute order",
+    "entry": "index.js",
+    "dependencies": ["remark-lint-directive-quote-style", "unified-lint-rule"]
+  },
+  "remark-lint-directive-collapsed-attribute": {
+    "path": "packages/remark-lint-directive-collapsed-attribute",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check that collapsed attributes are used in directives",
+    "entry": "index.js",
+    "dependencies": ["remark-lint-directive-quote-style", "unified-lint-rule"]
+  },
+  "remark-lint-directive-quote-style": {
+    "path": "packages/remark-lint-directive-quote-style",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check quotes of directive attributes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-directive-shortcut-attribute": {
+    "path": "packages/remark-lint-directive-shortcut-attribute",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check that shortcut attributes are used in directives",
+    "entry": "index.js",
+    "dependencies": ["remark-lint-directive-quote-style", "unified-lint-rule"]
+  },
+  "remark-lint-directive-unique-attribute-name": {
+    "path": "packages/remark-lint-directive-unique-attribute-name",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check that attribute names are unique",
+    "entry": "index.js",
+    "dependencies": ["remark-lint-directive-quote-style", "unified-lint-rule"]
+  },
+  "remark-lint-emphasis-marker": {
+    "path": "packages/remark-lint-emphasis-marker",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when emphasis markers violate the given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-fenced-code-flag": {
+    "path": "packages/remark-lint-fenced-code-flag",
+    "version": "4.2.0",
+    "description": "remark-lint rule to warn when fenced code blocks occur without language flag",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-fenced-code-marker": {
+    "path": "packages/remark-lint-fenced-code-marker",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when fenced code markers violate the given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-file-extension": {
+    "path": "packages/remark-lint-file-extension",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when the file’s extension violates the given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-final-definition": {
+    "path": "packages/remark-lint-final-definition",
+    "version": "4.0.2",
+    "description": "remark-lint rule to warn when definitions are not placed at the end of the file",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-final-newline": {
+    "path": "packages/remark-lint-final-newline",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when a newline at the end of a file is missing",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-first-heading-level": {
+    "path": "packages/remark-lint-first-heading-level",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when the first heading has a level other than a specified value",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-hard-break-spaces": {
+    "path": "packages/remark-lint-hard-break-spaces",
+    "version": "4.1.1",
+    "description": "remark-lint rule to warn when too many spaces are used to create a hard break",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-heading-increment": {
+    "path": "packages/remark-lint-heading-increment",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when headings increment with more than 1 level at a time",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-heading-style": {
+    "path": "packages/remark-lint-heading-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when heading style violates the given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-linebreak-style": {
+    "path": "packages/remark-lint-linebreak-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when linebreaks violate a given or detected style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-link-title-style": {
+    "path": "packages/remark-lint-link-title-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when link and definition titles occur with incorrect quotes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-list-item-bullet-indent": {
+    "path": "packages/remark-lint-list-item-bullet-indent",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when list item bullets are indented",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-list-item-content-indent": {
+    "path": "packages/remark-lint-list-item-content-indent",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when the content of a list item has mixed indentation",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-list-item-indent": {
+    "path": "packages/remark-lint-list-item-indent",
+    "version": "4.0.1",
+    "description": "remark-lint rule to check the spacing between list item bullets and content",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-list-item-spacing": {
+    "path": "packages/remark-lint-list-item-spacing",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when list looseness is incorrect",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-maximum-heading-length": {
+    "path": "packages/remark-lint-maximum-heading-length",
+    "version": "4.1.1",
+    "description": "remark-lint rule to warn when headings are too long",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-maximum-line-length": {
+    "path": "packages/remark-lint-maximum-line-length",
+    "version": "4.1.1",
+    "description": "remark-lint rule to warn when lines are too long",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-mdx-jsx-attribute-sort": {
+    "path": "packages/remark-lint-mdx-jsx-attribute-sort",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check mdx jsx attribute order",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-mdx-jsx-no-void-children": {
+    "path": "packages/remark-lint-mdx-jsx-no-void-children",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check mdx jsx quotes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-mdx-jsx-quote-style": {
+    "path": "packages/remark-lint-mdx-jsx-quote-style",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check mdx jsx quotes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-mdx-jsx-self-close": {
+    "path": "packages/remark-lint-mdx-jsx-self-close",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check that self-closing tags are used when possible",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-mdx-jsx-unique-attribute-name": {
+    "path": "packages/remark-lint-mdx-jsx-unique-attribute-name",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check that mdx jsx attributes are unique",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-mdx-jsx-shorthand-attribute": {
+    "path": "packages/remark-lint-mdx-jsx-shorthand-attribute",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check that shorthand attributes are used in MDX JSX",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-media-style": {
+    "path": "packages/remark-lint-media-style",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check whether references or resources are used",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-blockquote-without-marker": {
+    "path": "packages/remark-lint-no-blockquote-without-marker",
+    "version": "6.0.1",
+    "description": "remark-lint rule to warn when block quotes have blank lines without markers",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-consecutive-blank-lines": {
+    "path": "packages/remark-lint-no-consecutive-blank-lines",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn for too many consecutive blank lines",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-duplicate-defined-urls": {
+    "path": "packages/remark-lint-no-duplicate-defined-urls",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn on definitions that define the same urls",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-duplicate-definitions": {
+    "path": "packages/remark-lint-no-duplicate-definitions",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn on duplicate definitions",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-duplicate-headings": {
+    "path": "packages/remark-lint-no-duplicate-headings",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn on duplicate headings",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-duplicate-headings-in-section": {
+    "path": "packages/remark-lint-no-duplicate-headings-in-section",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn on duplicate headings in a section",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-emphasis-as-heading": {
+    "path": "packages/remark-lint-no-emphasis-as-heading",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when emphasis or importance is used instead of a heading",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-empty-url": {
+    "path": "packages/remark-lint-no-empty-url",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn on empty URLs in links and images",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-file-name-articles": {
+    "path": "packages/remark-lint-no-file-name-articles",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when file name start with an article",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-file-name-consecutive-dashes": {
+    "path": "packages/remark-lint-no-file-name-consecutive-dashes",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when file names contain consecutive dashes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-file-name-irregular-characters": {
+    "path": "packages/remark-lint-no-file-name-irregular-characters",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when file names contain irregular characters",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-file-name-mixed-case": {
+    "path": "packages/remark-lint-no-file-name-mixed-case",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when file names use mixed case",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-file-name-outer-dashes": {
+    "path": "packages/remark-lint-no-file-name-outer-dashes",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when file names contain initial or final dashes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-heading-content-indent": {
+    "path": "packages/remark-lint-no-heading-content-indent",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when heading content is indented",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-heading-indent": {
+    "path": "packages/remark-lint-no-heading-indent",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when headings are indented",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-heading-like-paragraph": {
+    "path": "packages/remark-lint-no-heading-like-paragraph",
+    "version": "4.0.1",
+    "description": "remark-lint rule to for too many hashes (h7+ “headings”)",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-heading-punctuation": {
+    "path": "packages/remark-lint-no-heading-punctuation",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when headings end in illegal characters",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-hidden-table-cell": {
+    "path": "packages/remark-lint-no-hidden-table-cell",
+    "version": "1.0.1",
+    "description": "remark-lint rule to check superfluous table cells",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-html": {
+    "path": "packages/remark-lint-no-html",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when HTML nodes are used",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-literal-urls": {
+    "path": "packages/remark-lint-no-literal-urls",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when URLs without angle brackets are used",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-missing-blank-lines": {
+    "path": "packages/remark-lint-no-missing-blank-lines",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when missing blank lines",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-multiple-toplevel-headings": {
+    "path": "packages/remark-lint-no-multiple-toplevel-headings",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when multiple top level headings are used",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-paragraph-content-indent": {
+    "path": "packages/remark-lint-no-paragraph-content-indent",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when the content in paragraphs are indented",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-reference-like-url": {
+    "path": "packages/remark-lint-no-reference-like-url",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when URLs are also defined identifiers",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-shell-dollars": {
+    "path": "packages/remark-lint-no-shell-dollars",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when shell code is prefixed by dollars",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-shortcut-reference-image": {
+    "path": "packages/remark-lint-no-shortcut-reference-image",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when shortcut reference images are used",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-shortcut-reference-link": {
+    "path": "packages/remark-lint-no-shortcut-reference-link",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when shortcut reference links are used",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-table-indentation": {
+    "path": "packages/remark-lint-no-table-indentation",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when tables are indented",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-tabs": {
+    "path": "packages/remark-lint-no-tabs",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when hard tabs are used instead of spaces",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-undefined-references": {
+    "path": "packages/remark-lint-no-undefined-references",
+    "version": "5.0.2",
+    "description": "remark-lint rule to warn when references to undefined definitions are found",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-unneeded-full-reference-image": {
+    "path": "packages/remark-lint-no-unneeded-full-reference-image",
+    "version": "4.0.1",
+    "description": "remark-lint rule to check that full reference images can be collapsed",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-unneeded-full-reference-link": {
+    "path": "packages/remark-lint-no-unneeded-full-reference-link",
+    "version": "4.0.1",
+    "description": "remark-lint rule to check that full reference links can be collapsed",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-no-unused-definitions": {
+    "path": "packages/remark-lint-no-unused-definitions",
+    "version": "4.0.2",
+    "description": "remark-lint rule to warn when unused definitions are found",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-ordered-list-marker-style": {
+    "path": "packages/remark-lint-ordered-list-marker-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when the markers of ordered lists violate a given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-ordered-list-marker-value": {
+    "path": "packages/remark-lint-ordered-list-marker-value",
+    "version": "4.0.1",
+    "description": "remark-lint rule to check the marker value of ordered lists",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-rule-style": {
+    "path": "packages/remark-lint-rule-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when horizontal rules violate a given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-strikethrough-marker": {
+    "path": "packages/remark-lint-strikethrough-marker",
+    "version": "3.0.1",
+    "description": "remark-lint rule to warn when strikethrough markers violate the given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-strong-marker": {
+    "path": "packages/remark-lint-strong-marker",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when importance (strong) markers violate the given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-table-cell-padding": {
+    "path": "packages/remark-lint-table-cell-padding",
+    "version": "5.1.1",
+    "description": "remark-lint rule to warn when table cells are incorrectly padded",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-table-pipe-alignment": {
+    "path": "packages/remark-lint-table-pipe-alignment",
+    "version": "4.1.1",
+    "description": "remark-lint rule to warn when table pipes are not aligned",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-table-pipes": {
+    "path": "packages/remark-lint-table-pipes",
+    "version": "5.0.1",
+    "description": "remark-lint rule to warn when table rows are not fenced with pipes",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-lint-unordered-list-marker-style": {
+    "path": "packages/remark-lint-unordered-list-marker-style",
+    "version": "4.0.1",
+    "description": "remark-lint rule to warn when markers of unordered lists violate a given style",
+    "entry": "index.js",
+    "dependencies": ["unified-lint-rule"]
+  },
+  "remark-preset-lint-consistent": {
+    "path": "packages/remark-preset-lint-consistent",
+    "version": "6.0.1",
+    "description": "remark preset to configure remark-lint with rules that enforce consistency",
+    "entry": "index.js",
+    "dependencies": [
+      "remark-lint",
+      "remark-lint-blockquote-indentation",
+      "remark-lint-checkbox-character-style",
+      "remark-lint-code-block-style",
+      "remark-lint-emphasis-marker",
+      "remark-lint-fenced-code-marker",
+      "remark-lint-heading-style",
+      "remark-lint-link-title-style",
+      "remark-lint-list-item-content-indent",
+      "remark-lint-ordered-list-marker-style",
+      "remark-lint-ordered-list-marker-value",
+      "remark-lint-rule-style",
+      "remark-lint-strong-marker",
+      "remark-lint-table-cell-padding"
+    ]
+  },
+  "remark-preset-lint-markdown-style-guide": {
+    "path": "packages/remark-preset-lint-markdown-style-guide",
+    "version": "6.0.1",
+    "description": "remark preset to configure remark-lint with rules that enforce the markdown style guide",
+    "entry": "index.js",
+    "dependencies": [
+      "remark-lint",
+      "remark-lint-blockquote-indentation",
+      "remark-lint-code-block-style",
+      "remark-lint-definition-case",
+      "remark-lint-definition-spacing",
+      "remark-lint-emphasis-marker",
+      "remark-lint-fenced-code-flag",
+      "remark-lint-fenced-code-marker",
+      "remark-lint-file-extension",
+      "remark-lint-final-definition",
+      "remark-lint-hard-break-spaces",
+      "remark-lint-heading-increment",
+      "remark-lint-heading-style",
+      "remark-lint-link-title-style",
+      "remark-lint-list-item-content-indent",
+      "remark-lint-list-item-indent",
+      "remark-lint-list-item-spacing",
+      "remark-lint-maximum-heading-length",
+      "remark-lint-maximum-line-length",
+      "remark-lint-no-blockquote-without-marker",
+      "remark-lint-no-consecutive-blank-lines",
+      "remark-lint-no-duplicate-headings",
+      "remark-lint-no-emphasis-as-heading",
+      "remark-lint-no-file-name-articles",
+      "remark-lint-no-file-name-consecutive-dashes",
+      "remark-lint-no-file-name-irregular-characters",
+      "remark-lint-no-file-name-mixed-case",
+      "remark-lint-no-file-name-outer-dashes",
+      "remark-lint-no-heading-punctuation",
+      "remark-lint-no-literal-urls",
+      "remark-lint-no-multiple-toplevel-headings",
+      "remark-lint-no-shell-dollars",
+      "remark-lint-no-shortcut-reference-image",
+      "remark-lint-no-shortcut-reference-link",
+      "remark-lint-no-table-indentation",
+      "remark-lint-ordered-list-marker-style",
+      "remark-lint-ordered-list-marker-value",
+      "remark-lint-rule-style",
+      "remark-lint-strong-marker",
+      "remark-lint-table-cell-padding",
+      "remark-lint-table-pipe-alignment",
+      "remark-lint-table-pipes",
+      "remark-lint-unordered-list-marker-style"
+    ]
+  },
+  "remark-preset-lint-recommended": {
+    "path": "packages/remark-preset-lint-recommended",
+    "version": "7.0.1",
+    "description": "remark preset to configure remark-lint with rules that prevent mistakes or stuff that fails across vendors.",
+    "entry": "index.js",
+    "dependencies": [
+      "remark-lint",
+      "remark-lint-final-newline",
+      "remark-lint-hard-break-spaces",
+      "remark-lint-list-item-bullet-indent",
+      "remark-lint-list-item-indent",
+      "remark-lint-no-blockquote-without-marker",
+      "remark-lint-no-duplicate-definitions",
+      "remark-lint-no-heading-content-indent",
+      "remark-lint-no-literal-urls",
+      "remark-lint-no-shortcut-reference-image",
+      "remark-lint-no-shortcut-reference-link",
+      "remark-lint-no-undefined-references",
+      "remark-lint-no-unused-definitions",
+      "remark-lint-ordered-list-marker-style"
+    ]
+  },
+  "unified-lint-rule": {
+    "path": "packages/unified-lint-rule",
+    "version": "3.0.1",
+    "description": "unified plugin to make it a bit easier to create linting rules",
+    "entry": "index.js",
+    "dependencies": []
+  }
+}

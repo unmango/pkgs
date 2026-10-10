@@ -18,9 +18,7 @@
 
       callPackage = lib.callPackageWith (tools // pkgs);
 
-      # A lib.makeScope set, so consumers extend it with overrideScope. Its
-      # members are also flattened into `packages` below, so CI builds and
-      # caches them.
+      # A lib.makeScope set, so consumers extend it with overrideScope.
       unifiedPackages = pkgs.callPackage ./unified { };
 
       # Libraries missing from nixpkgs that CumulusCI needs.
@@ -32,7 +30,9 @@
         packageOverrides = pythonOverrides;
       };
 
-      packages = {
+      # Every derivation in the unified scope is flattened in, so CI builds and
+      # caches the whole set without a hand-kept list.
+      packages = lib.filterAttrs (_: lib.isDerivation) unifiedPackages // {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
@@ -82,14 +82,6 @@
         terraform-plugin-codegen-openapi = callPackage ./terraform-plugin-codegen-openapi { };
         terraform-provider-pfsense = callPackage ./terraform-provider-pfsense { };
         watchparty = callPackage ./watchparty { };
-
-        inherit (unifiedPackages)
-          remark
-          remark-cli
-          remark-gfm
-          remark-parse
-          remark-stringify
-          ;
 
         hercules-ci-agent = pkgs.hercules-ci-agent.overrideAttrs (old: {
           passthru = (old.passthru or { }) // {
