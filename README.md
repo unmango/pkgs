@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-46-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-47-blue)](#packages)
 [![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/pkgs/badge)](https://hercules-ci.com/github/unmango/pkgs)
 
 <p align="center">
@@ -32,6 +32,7 @@ Mini-nixpkgs of dubious quality.
 | `gitlab-operator`                    | Kubernetes Operator for managing the lifecycle of GitLab instances                                                          |
 | `gitlab-operator-v2`                 | Kubernetes Operator for managing the lifecycle of GitLab instances (experimental V2 rewrite)                                |
 | `gossamer`                           | The Gossamer programming language compiler                                                                                  |
+| `graphify`                           | Turn a folder of code, docs, papers, or media into a queryable knowledge graph                                              |
 | `hercules-ci-agent`                  | Runs Continuous Integration tasks on your machines                                                                          |
 | `java-jdtls-mcp-server`              | Model Context Protocol (MCP) server for Java using Eclipse JDT.LS                                                           |
 | `jdtls-mcp`                          | Model Context Protocol (MCP) server embedding Eclipse JDT Language Server via OSGi                                          |
