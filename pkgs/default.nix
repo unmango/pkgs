@@ -32,7 +32,9 @@
 
       # Every derivation in the unified scope is flattened in, so CI builds and
       # caches the whole set without a hand-kept list.
-      packages = lib.filterAttrs (_: lib.isDerivation) unifiedPackages // {
+      unifiedDerivations = lib.filterAttrs (_: lib.isDerivation) unifiedPackages;
+
+      packages = unifiedDerivations // {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
@@ -119,7 +121,15 @@
 
       legacyPackages = (lib.filterAttrs (_: pkg: pkg.meta.available or true) unfreePackages) // {
         inherit unifiedPackages;
-        packagesTable = import ../lib/packages.nix (packages // unfreePackages);
+        # The unified set is one row: its members are mostly lint rules, which
+        # would swamp the table.
+        packagesTable = import ../lib/packages.nix (
+          removeAttrs packages (lib.attrNames unifiedDerivations)
+          // unfreePackages
+          // {
+            unifiedPackages.meta.description = "unified.js (remark, rehype) and its plugins, built from source";
+          }
+        );
       };
 
       overlayAttrs =
