@@ -110,6 +110,8 @@
           inherit (unfreePackages) claude-desktop;
         };
         coderabbit = callPackage ./coderabbit { };
+        # Its services are passthru attributes (unifi-os-server.core, .network, ...).
+        unifi-os-server = callPackage ./unifi-os-server { };
       };
     in
     {

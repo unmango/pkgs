@@ -17,6 +17,7 @@ declare -A manual_only=(
   ["coderabbit"]="four per-platform zip hashes that move together, and no git host to read a version from"
   ["jdtls-mcp"]="three per-platform tarball hashes that move together"
   ["salesforce-cli"]="npm tarball src rewritten by a runCommand nix-update cannot see through"
+  ["unifi-os-server"]="two per-arch installer URLs that each embed a build id, and no index to read a version from"
   ["unified"]="a package set, not a package: each upstream repo carries a vendored lockfile and, for monorepos, a workspaces.json from workspaces.sh"
 )
 
