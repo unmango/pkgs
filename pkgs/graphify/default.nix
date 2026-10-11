@@ -6,7 +6,7 @@
   runCommand,
 }:
 let
-  version = "0.9.84";
+  version = "0.9.85";
 
   graphify = python3.pkgs.buildPythonPackage {
     pname = "graphifyy";
@@ -16,7 +16,7 @@ let
     src = fetchPypi {
       pname = "graphifyy";
       inherit version;
-      hash = "sha256-HI73HXUfEaCKm2pFxh5djsdWFNjBec4b10grLZvF/E0=";
+      hash = "sha256-8xL1PQe56fMPnI8GMN+/cCAJ6pkM37gU/nT4HqP8OVU=";
     };
 
     build-system = with python3.pkgs; [ setuptools ];
