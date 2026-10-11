@@ -19,6 +19,7 @@ let
         "usr/sbin/${name}-app"
         "usr/lib/${name}"
       ];
+      units = [ "${name}.service" ];
     };
 
   javaArch =
@@ -45,6 +46,7 @@ in
       "usr/lib/os-release"
       "etc/os-release"
     ];
+    units = [ "unifi-core.service" ];
     # sd-notify's addon links libsystemd. The musl builds of sharp's libvips
     # sit beside the glibc ones and are never loaded.
     buildInputs = [ systemdLibs ];
@@ -70,6 +72,7 @@ in
       "sbin/uos-rabbitmq-gen-certs-wrapper"
       "etc/default/unifi"
     ];
+    units = [ "unifi.service" ];
     exclude = [
       # A link to the bundled mongod; MongoDB runs as its own service.
       "usr/lib/unifi/bin/mongod"
