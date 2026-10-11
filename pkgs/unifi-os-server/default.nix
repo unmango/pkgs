@@ -4,8 +4,8 @@
   callPackage,
   fetchurl,
   unzip,
-  skopeo,
-  umoci,
+  jq,
+  libarchive,
 }:
 let
   version = "5.1.42";
@@ -42,8 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     unzip
-    skopeo
-    umoci
+    jq
+    libarchive
   ];
 
   dontUnpack = true;
@@ -52,23 +52,39 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # unzip finds the archive behind the ELF stub and warns about the leading
-    # bytes, which it reports as exit status 1.
+    # bytes, which it reports as exit status 1. Its entries carry mode 0000.
     unzip -q "$src" image.tar -d installer || [ $? -eq 1 ]
+    chmod u+r installer/image.tar
 
     mkdir layout
     tar -xf installer/image.tar -C layout
     rm -r installer
 
-    # The layout's one manifest is Docker v2 schema 2, which umoci refuses.
-    export HOME=$TMPDIR
-    skopeo --insecure-policy copy --format oci oci:layout oci:image:uos
-    rm -r layout
+    # Apply the layers by hand rather than with umoci: it sets the setuid bits
+    # the image carries even when rootless, which the build sandbox refuses.
+    # bsdtar without -p drops them, and needs a UTF-8 locale for the paths.
+    export LC_ALL=C.UTF-8
+    blob() { echo "layout/blobs/''${1/://}"; }
+    manifest=$(blob "$(jq -r '.manifests[0].digest' layout/index.json)")
 
-    # Rootless: ownership is not representable in the store, and the image's
-    # device nodes are skipped. The components take files from here and set no
-    # owners, so neither is lost to anything downstream.
-    umoci raw unpack --rootless --image image:uos rootfs
-    rm -r image
+    mkdir rootfs
+    for digest in $(jq -r '.layers[].digest' "$manifest"); do
+      layer=$(blob "$digest")
+
+      # Whiteouts delete what lower layers put there.
+      bsdtar -tf "$layer" | { grep -E '(^|/)\.wh\.' || true; } | while IFS= read -r wh; do
+        dir=rootfs/$(dirname "$wh")
+        name=$(basename "$wh")
+        if [ "$name" = .wh..wh..opq ]; then
+          find "$dir" -mindepth 1 -delete
+        else
+          rm -rf "$dir/''${name#.wh.}"
+        fi
+      done
+
+      bsdtar -xf "$layer" -C rootfs --exclude '.wh.*'
+    done
+    rm -r layout
 
     runHook postBuild
   '';
