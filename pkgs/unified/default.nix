@@ -7,8 +7,14 @@ lib.makeScope newScope (
   let
     # One fetch and one lockfile for the whole remarkjs/remark monorepo.
     remarkPackages = self.callPackage ./remark { unifiedPackages = self; };
+    rehypePackages = self.callPackage ./rehype { unifiedPackages = self; };
+    # remark-lint, unified-lint-rule, every rule and the presets.
+    remarkLintPackages = self.callPackage ./remark-lint { unifiedPackages = self; };
   in
-  {
+  # The member names come from workspaces.json rather than from
+  # remarkLintPackages itself, which needs `self` to exist first.
+  lib.mapAttrs (name: _: remarkLintPackages.${name}) (lib.importJSON ./remark-lint/workspaces.json)
+  // {
     buildUnifiedWorkspace = self.callPackage ./build-unified-workspace.nix { };
     wrapUnifiedCli = self.callPackage ./wrap-unified-cli.nix { };
 
@@ -20,5 +26,12 @@ lib.makeScope newScope (
       ;
 
     remark-gfm = self.callPackage ./remark-gfm { };
+
+    inherit (rehypePackages)
+      rehype
+      rehype-cli
+      rehype-parse
+      rehype-stringify
+      ;
   }
 )

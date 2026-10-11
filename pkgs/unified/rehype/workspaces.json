@@ -1,0 +1,30 @@
+{
+  "rehype-parse": {
+    "path": "packages/rehype-parse",
+    "version": "9.0.1",
+    "description": "rehype plugin to parse HTML",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "rehype-stringify": {
+    "path": "packages/rehype-stringify",
+    "version": "10.0.1",
+    "description": "rehype plugin to serialize HTML",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "rehype": {
+    "path": "packages/rehype",
+    "version": "13.0.2",
+    "description": "HTML processor powered by plugins part of the unified collective",
+    "entry": "index.js",
+    "dependencies": ["rehype-parse", "rehype-stringify"]
+  },
+  "rehype-cli": {
+    "path": "packages/rehype-cli",
+    "version": "12.0.1",
+    "description": "CLI to process HTML with rehype",
+    "entry": null,
+    "dependencies": ["rehype"]
+  }
+}

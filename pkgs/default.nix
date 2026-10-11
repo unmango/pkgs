@@ -18,9 +18,7 @@
 
       callPackage = lib.callPackageWith (tools // pkgs);
 
-      # A lib.makeScope set, so consumers extend it with overrideScope. Its
-      # members are also flattened into `packages` below, so CI builds and
-      # caches them.
+      # A lib.makeScope set, so consumers extend it with overrideScope.
       unifiedPackages = pkgs.callPackage ./unified { };
 
       # Libraries missing from nixpkgs that CumulusCI needs.
@@ -32,7 +30,11 @@
         packageOverrides = pythonOverrides;
       };
 
-      packages = {
+      # Every derivation in the unified scope is flattened in, so CI builds and
+      # caches the whole set without a hand-kept list.
+      unifiedDerivations = lib.filterAttrs (_: lib.isDerivation) unifiedPackages;
+
+      packages = unifiedDerivations // {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
@@ -83,14 +85,6 @@
         terraform-provider-pfsense = callPackage ./terraform-provider-pfsense { };
         watchparty = callPackage ./watchparty { };
 
-        inherit (unifiedPackages)
-          remark
-          remark-cli
-          remark-gfm
-          remark-parse
-          remark-stringify
-          ;
-
         hercules-ci-agent = pkgs.hercules-ci-agent.overrideAttrs (old: {
           passthru = (old.passthru or { }) // {
             image = callPackage ./images/hercules-ci-agent { };
@@ -127,7 +121,15 @@
 
       legacyPackages = (lib.filterAttrs (_: pkg: pkg.meta.available or true) unfreePackages) // {
         inherit unifiedPackages;
-        packagesTable = import ../lib/packages.nix (packages // unfreePackages);
+        # The unified set is one row: its members are mostly lint rules, which
+        # would swamp the table.
+        packagesTable = import ../lib/packages.nix (
+          removeAttrs packages (lib.attrNames unifiedDerivations)
+          // unfreePackages
+          // {
+            unifiedPackages.meta.description = "unified.js (remark, rehype) and its plugins, built from source";
+          }
+        );
       };
 
       overlayAttrs =
