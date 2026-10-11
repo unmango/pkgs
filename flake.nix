@@ -66,6 +66,14 @@
                 builtins.elem (inputs.nixpkgs.lib.getName pkg) [
                   "claude-desktop"
                   "coderabbit"
+                  "unifi-os-server"
+                  "unifi-os-server-core"
+                  "unifi-os-server-network"
+                  "unifi-os-server-ucs-agent"
+                  "unifi-os-server-uid-agent"
+                  "unifi-os-server-ulp-go"
+                  "unifi-os-server-unifi-directory"
+                  "unifi-os-server-unifi-identity-update"
                 ];
             };
             overlays = [
