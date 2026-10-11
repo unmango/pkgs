@@ -58,28 +58,48 @@ stdenv.mkDerivation (
       done
 
       # Debian ships units in /lib or /usr/lib and local overrides in /etc.
-      # Gather each into one place, /etc drop-ins last so they win on a
-      # shared file name as they would under systemd. /lib is skipped when
-      # it is the merged-usr symlink, which would find everything twice.
+      # The unit file comes from the first of /etc, /lib, /usr/lib that has
+      # it, as systemd picks it; drop-ins are gathered from all three, /etc
+      # last so it wins on a shared file name. /lib is skipped when it is
+      # the merged-usr symlink, which would find everything twice.
+      # resolve follows a symlink inside the root filesystem, since an
+      # absolute target such as an Alias= link's names the image's /lib,
+      # not the build host's.
+      resolve() {
+        local path=$1 target
+        while [ -L "$path" ]; do
+          target=$(readlink "$path")
+          case "$target" in
+            /*) path=${rootfs}$target ;;
+            *) path=$(dirname "$path")/$target ;;
+          esac
+        done
+        echo "$path"
+      }
       units=$out/usr/lib/systemd/system
       for unit in ${lib.escapeShellArgs units}; do
         found=
-        for dir in usr/lib lib etc; do
+        for dir in etc lib usr/lib; do
           [ "$dir" = lib ] && [ -L "${rootfs}/lib" ] && continue
-          src=${rootfs}/$dir/systemd/system
-          if [ -e "$src/$unit" ] && [ -z "$found" ]; then
-            install -Dm644 "$src/$unit" "$units/$unit"
+          file=$(resolve "${rootfs}/$dir/systemd/system/$unit")
+          if [ -f "$file" ]; then
+            install -Dm644 "$file" "$units/$unit"
             found=1
-          fi
-          if [ -d "$src/$unit.d" ]; then
-            mkdir -p "$units/$unit.d"
-            cp --no-preserve=ownership,mode "$src/$unit.d"/*.conf "$units/$unit.d/"
+            break
           fi
         done
         if [ -z "$found" ]; then
           echo "unit $unit not found in the root filesystem" >&2
           exit 1
         fi
+        for dir in usr/lib lib etc; do
+          [ "$dir" = lib ] && [ -L "${rootfs}/lib" ] && continue
+          for conf in ${rootfs}/$dir/systemd/system/$unit.d/*.conf; do
+            [ -e "$conf" ] || continue
+            mkdir -p "$units/$unit.d"
+            cp --no-preserve=ownership,mode "$conf" "$units/$unit.d/"
+          done
+        done
       done
 
       runHook postInstall
