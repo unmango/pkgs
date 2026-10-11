@@ -10,15 +10,20 @@ let
   # The Go services each ship a binary in /usr/sbin and their scripts,
   # config.props and assets under /usr/lib/<name>. ulp-go and uid-agent are
   # linked against glibc; the rest are static.
+  #
+  # Each pre-start.sh runs an `init` wrapper, `wrapper`, which creates the
+  # service's Postgres role and database and its /data directories before
+  # start.sh drops to the service user.
   mkGoService =
-    name: description:
+    name: description: wrapper:
     mkComponent {
       pname = "unifi-os-server-${name}";
       inherit description;
       paths = [
         "usr/sbin/${name}-app"
         "usr/lib/${name}"
-      ];
+      ]
+      ++ wrapper;
       units = [ "${name}.service" ];
     };
 
@@ -45,6 +50,9 @@ in
       # unifi-core refuses to start unless VERSION_CODENAME is bullseye.
       "usr/lib/os-release"
       "etc/os-release"
+      # A shell stub standing in for the console hardware's identity tool:
+      # it reads the board name from files the container is given.
+      "sbin/ubnt-tools"
     ];
     units = [ "unifi-core.service" ];
     # sd-notify's addon links libsystemd. The musl builds of sharp's libvips
@@ -71,6 +79,10 @@ in
       "usr/share/unifi/gen-certs.sh"
       "sbin/uos-rabbitmq-gen-certs-wrapper"
       "etc/default/unifi"
+      # unifi-network-service-helper runs `ubnt-tools id` every time it loads.
+      "sbin/ubnt-tools"
+      # The data directory usr/lib/unifi/data links to.
+      "var/lib/unifi"
     ];
     units = [ "unifi.service" ];
     exclude = [
@@ -92,9 +104,19 @@ in
     passthru.jre = temurin-jre-bin-25;
   };
 
-  ulp-go = mkGoService "ulp-go" "UniFi OS login and identity service (ulp-go)";
-  uid-agent = mkGoService "uid-agent" "UniFi Identity agent (uid-agent)";
-  ucs-agent = mkGoService "ucs-agent" "UniFi Credential Server agent (ucs-agent)";
-  unifi-directory = mkGoService "unifi-directory" "UniFi Directory service";
-  unifi-identity-update = mkGoService "unifi-identity-update" "UniFi Identity update service";
+  # pre-start.sh runs `/usr/bin/ulp init`, and ulp links to ulp-go.
+  ulp-go = mkGoService "ulp-go" "UniFi OS login and identity service (ulp-go)" [
+    "usr/bin/ulp-go"
+    "usr/bin/ulp"
+  ];
+  uid-agent = mkGoService "uid-agent" "UniFi Identity agent (uid-agent)" [ "usr/bin/uid-agent" ];
+  ucs-agent = mkGoService "ucs-agent" "UniFi Credential Server agent (ucs-agent)" [
+    "usr/sbin/ucs-agent"
+  ];
+  unifi-directory = mkGoService "unifi-directory" "UniFi Directory service" [
+    "usr/sbin/unifi-directory"
+  ];
+  unifi-identity-update = mkGoService "unifi-identity-update" "UniFi Identity update service" [
+    "usr/sbin/unifi-identity-update"
+  ];
 }
