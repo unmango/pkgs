@@ -30,11 +30,10 @@
         packageOverrides = pythonOverrides;
       };
 
-      # Every derivation in the unified scope is flattened in, so CI builds and
-      # caches the whole set without a hand-kept list.
-      unifiedDerivations = lib.filterAttrs (_: lib.isDerivation) unifiedPackages;
-
-      packages = unifiedDerivations // {
+      # Its attribute names are fixed, which overlayAttrs needs: easyOverlay
+      # evaluates this module with the overlay's final pkgs, so names derived
+      # from `pkgs` (like unifiedDerivations) recurse infinitely there.
+      ownPackages = {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
         chart-releaser = callPackage ./chart-releaser { };
@@ -99,6 +98,12 @@
         });
       };
 
+      # Every derivation in the unified scope is flattened in, so CI builds and
+      # caches the whole set without a hand-kept list.
+      unifiedDerivations = lib.filterAttrs (_: lib.isDerivation) unifiedPackages;
+
+      packages = unifiedDerivations // ownPackages;
+
       # Unfree, prebuilt vendor binaries. Held out of `packages` because
       # packages.default links every package, `make build` builds it, and CI pushes the results
       # to the public caches, which would redistribute the vendor's binary.
@@ -126,7 +131,7 @@
         # The unified set is one row: its members are mostly lint rules, which
         # would swamp the table.
         packagesTable = import ../lib/packages.nix (
-          removeAttrs packages (lib.attrNames unifiedDerivations)
+          ownPackages
           // unfreePackages
           // {
             unifiedPackages.meta.description = "unified.js (remark, rehype) and its plugins, built from source";
@@ -135,12 +140,12 @@
       };
 
       overlayAttrs =
-        packages
+        ownPackages
         // unfreePackages
         // {
           # A drop-in skopeo that also understands nix2container's `nix:`
           # transport, so overlay consumers get it without opting in per-call.
-          skopeo = packages.skopeo-nix2container;
+          skopeo = ownPackages.skopeo-nix2container;
 
           inherit unifiedPackages;
 
