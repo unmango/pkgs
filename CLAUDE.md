@@ -61,7 +61,7 @@ Unfree vendor binaries are the exception: they live in `pkgs/default.nix`'s `unf
 The `add-package` skill in `.claude/skills/` walks this end to end; `code-review` covers reviewing one.
 
 1. Create `pkgs/<name>/default.nix` following an existing derivation of the same language.
-2. Add the package to `pkgs/default.nix` — both the `packages` attrset and `overlayAttrs`. An unfree vendor binary goes in `unfreePackages` instead, which reaches `overlayAttrs` and `legacyPackages` on its own.
+2. Add the package to `pkgs/default.nix` — the `basePackages` attrset, which feeds both `packages` and `overlayAttrs`. An unfree vendor binary goes in `unfreePackages` instead, which reaches `overlayAttrs` and `legacyPackages` on its own.
 3. Run `make generate` to update the README table and badge.
 4. For gomod2nix Go packages: add the name to `GO_PKGS` in the Makefile, then run `make deps` to produce `gomod2nix.toml`.
 
@@ -87,5 +87,6 @@ Each package is independent — a failure is recorded and the run continues, and
 - CI runs `make check build`: `nix flake check` does lint + eval, and `make build` runs `nix build .#`, where `packages.<system>.default` is a `linkFarm` of every other package. A placeholder/unfetchable hash will fail the build step. Keep in-progress packages out of `pkgs/default.nix`'s `packages`/`overlayAttrs` until real hashes exist.
 - `packages` and the unfree entries of `legacyPackages` both filter on `meta.available`, which is false for an unfree package unless `flake.nix`'s `config.allowUnfreePredicate` names it. An unfree package missing from that list disappears from the flake outputs with no error.
 - `overlayAttrs` maps `skopeo` to `skopeo-nix2container`, so overlay consumers get the `nix:` transport without asking for it.
+- `overlayAttrs`' attribute names must not depend on `pkgs`: easyOverlay evaluates `pkgs/default.nix` with the overlay's final package set, so a name computed from `pkgs` (such as `unifiedDerivations`) is infinite recursion for consumers. `overlayAttrs` takes `basePackages`, and `checks.overlay` guards this.
 - `nix fmt` also runs `actionlint`, and `.claude/skills/**` is excluded from treefmt.
 - A `pkgs/<name>/default.nix` existing doesn't mean it's wired up — packages blocked on an upstream fix are deliberately left out of `pkgs/default.nix`'s `packages` attrset (see the `smarter-device-manager` comment there).

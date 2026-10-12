@@ -88,6 +88,17 @@
             ];
           };
 
+          # Applies overlays.default to plain nixpkgs, the way a consumer does.
+          # Fails with infinite recursion if overlayAttrs' names depend on `pkgs`.
+          checks.overlay =
+            let
+              consumer = import inputs.nixpkgs {
+                inherit system;
+                overlays = [ inputs.self.overlays.default ];
+              };
+            in
+            pkgs.writeText "overlay-eval" consumer.mmake.name;
+
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               gh
