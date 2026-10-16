@@ -56,8 +56,5 @@ lib.makeScope newScope (
       mdx-js-mdx
       remark-mdx
       ;
-
-    # No upstream CLI; a local one around @mdx-js/mdx's compile.
-    mdx-cli = self.callPackage ./mdx-cli { };
   }
 )
