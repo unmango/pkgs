@@ -64,6 +64,7 @@
           inherit (inputs'.nix2container.packages) nix2container-bin;
         };
         oc-mirror = callPackage ./oc-mirror { };
+        openapi2go = callPackage ./openapi2go { };
         opencommit = callPackage ./opencommit { };
         pbrt = callPackage ./pbrt { };
         ocaml-protoc = ocamlPackages.callPackage ./ocaml-protoc { };
