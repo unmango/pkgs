@@ -63,7 +63,7 @@ Mini-nixpkgs of dubious quality.
 | `terraform-plugin-codegen-openapi`   | OpenAPI to Terraform Provider Code Generation Specification                                                                 |
 | `terraform-provider-pfsense`         | Used to configure pfSense firewall/router devices with Terraform                                                            |
 | `unifi-os-server`                    | UniFi OS Server root filesystem, unpacked from Ubiquiti's installer                                                         |
-| `unifiedPackages`                    | unified.js (remark, rehype) and its plugins, built from source                                                              |
+| `unifiedPackages`                    | unified.js (remark, rehype, retext, MDX) and its plugins, built from source                                                 |
 | `watchparty`                         | Watch videos together with friends anywhere                                                                                 |
 
 <!-- PACKAGES:END -->

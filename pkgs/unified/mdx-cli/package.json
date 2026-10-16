@@ -1,0 +1,11 @@
+{
+  "name": "mdx-cli",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "mdx": "cli.js"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "*"
+  }
+}

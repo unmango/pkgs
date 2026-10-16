@@ -134,7 +134,7 @@
           basePackages
           // unfreePackages
           // {
-            unifiedPackages.meta.description = "unified.js (remark, rehype) and its plugins, built from source";
+            unifiedPackages.meta.description = "unified.js (remark, rehype, retext, MDX) and its plugins, built from source";
           }
         );
       };

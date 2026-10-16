@@ -1,0 +1,12 @@
+{
+  "name": "retext-cli",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "retext": "cli.js"
+  },
+  "dependencies": {
+    "retext": "*",
+    "unified-args": "*"
+  }
+}

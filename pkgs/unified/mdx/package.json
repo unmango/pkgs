@@ -1,0 +1,9 @@
+{
+  "name": "monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/remark-mdx/",
+    "packages/mdx/"
+  ]
+}
