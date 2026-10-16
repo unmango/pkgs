@@ -1,4 +1,6 @@
 # Builds every member of an npm workspace from one fetch and one lockfile.
+# A scoped member is keyed without its `@` and slash, so `@mdx-js/mdx` is
+# `mdx-js-mdx`.
 #
 # buildNpmPackage's install hook assumes the root package.json names the
 # package and copies node_modules with its workspace symlinks dangling, so
@@ -16,6 +18,9 @@
   src,
   # Upstream unified repos set package-lock=false, so the lock is vendored.
   lockfile,
+  # A root package.json to use instead of upstream's, to build only some
+  # members against a smaller lockfile.
+  manifest ? null,
   # Written by workspaces.sh:
   # { <name> = { path, version, description, entry, dependencies }; }
   workspaces,
@@ -25,8 +30,13 @@
   meta ? { },
 }:
 let
+  attrName = name: lib.replaceStrings [ "@" "/" ] [ "" "-" ] name;
+
   postPatch = ''
     cp ${lockfile} package-lock.json
+  ''
+  + lib.optionalString (manifest != null) ''
+    cp ${manifest} package.json
   '';
 
   npmDeps = fetchNpmDeps {
@@ -47,7 +57,7 @@ let
       dependencies,
     }:
     buildNpmPackage (finalAttrs: {
-      pname = name;
+      pname = attrName name;
       inherit
         version
         src
@@ -88,10 +98,26 @@ let
 
         cp -r node_modules "$packageOut/node_modules"
 
+        # A dependency whose version clashes with the hoisted one is nested
+        # under the member instead, and wins.
+        pushd ${lib.escapeShellArg path}
+        for dep in node_modules/* node_modules/@*/*; do
+          case "$dep" in
+            node_modules/@*/*) ;;
+            node_modules/@*) continue ;;
+          esac
+          [ -e "$dep" ] || continue
+          rm -rf "$packageOut/$dep"
+          mkdir -p "$(dirname "$packageOut/$dep")"
+          cp -r "$dep" "$packageOut/$dep"
+        done
+        popd
+
         # Workspace links point at ../packages/*, which is not in $out.
         find "$packageOut/node_modules" -maxdepth 2 -type l -lname '../*' -delete
         ${lib.concatMapStrings (dep: ''
-          ln -s ${packages.${dep}}/lib/node_modules/${dep} "$packageOut/node_modules/${dep}"
+          mkdir -p "$(dirname "$packageOut/node_modules/${dep}")"
+          ln -s ${packages.${attrName dep}}/lib/node_modules/${dep} "$packageOut/node_modules/${dep}"
         '') dependencies}
 
         runHook postInstall
@@ -106,4 +132,6 @@ let
       };
     });
 in
-lib.mapAttrs member workspaces
+lib.mapAttrs' (
+  name: workspace: lib.nameValuePair (attrName name) (member name workspace)
+) workspaces

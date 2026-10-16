@@ -10,6 +10,8 @@ lib.makeScope newScope (
     rehypePackages = self.callPackage ./rehype { unifiedPackages = self; };
     # remark-lint, unified-lint-rule, every rule and the presets.
     remarkLintPackages = self.callPackage ./remark-lint { unifiedPackages = self; };
+    retextPackages = self.callPackage ./retext { unifiedPackages = self; };
+    mdxPackages = self.callPackage ./mdx { unifiedPackages = self; };
   in
   # The member names come from workspaces.json rather than from
   # remarkLintPackages itself, which needs `self` to exist first.
@@ -32,6 +34,25 @@ lib.makeScope newScope (
       rehype-cli
       rehype-parse
       rehype-stringify
+      ;
+
+    unified-args = self.callPackage ./unified-args { };
+
+    inherit (retextPackages)
+      retext
+      retext-dutch
+      retext-english
+      retext-latin
+      retext-stringify
+      ;
+
+    retext-readability = self.callPackage ./retext-readability { };
+    retext-repeated-words = self.callPackage ./retext-repeated-words { };
+
+    # @mdx-js/mdx, keyed without its scope.
+    inherit (mdxPackages)
+      mdx-js-mdx
+      remark-mdx
       ;
   }
 )

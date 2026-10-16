@@ -1,0 +1,37 @@
+{
+  "retext-latin": {
+    "path": "packages/retext-latin",
+    "version": "4.0.0",
+    "description": "retext plugin to parse Latin-script prose",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "retext-english": {
+    "path": "packages/retext-english",
+    "version": "5.0.0",
+    "description": "retext plugin to parse English prose",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "retext-dutch": {
+    "path": "packages/retext-dutch",
+    "version": "5.0.0",
+    "description": "retext plugin to parse Dutch prose",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "retext-stringify": {
+    "path": "packages/retext-stringify",
+    "version": "4.0.0",
+    "description": "retext plugin to serialize prose",
+    "entry": "index.js",
+    "dependencies": []
+  },
+  "retext": {
+    "path": "packages/retext",
+    "version": "9.0.0",
+    "description": "natural language processor powered by plugins part of the unified collective",
+    "entry": "index.js",
+    "dependencies": ["retext-latin", "retext-stringify"]
+  }
+}
