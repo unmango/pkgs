@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-44-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-45-blue)](#packages)
 [![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/pkgs/badge)](https://hercules-ci.com/github/unmango/pkgs)
 
 <p align="center">
@@ -49,6 +49,7 @@ Mini-nixpkgs of dubious quality.
 | `oc-mirror`                          | Lifecycle manager for internet-disconnected OpenShift environments                                                          |
 | `ocaml-protoc`                       | Pure OCaml compiler for .proto files                                                                                        |
 | `ocaml-protoc-plugin`                | Maps google protobuf compiler to Ocaml types                                                                                |
+| `openapi-typescript`                 | Generate TypeScript types from OpenAPI 3 schemas                                                                            |
 | `opencommit`                         | Auto-generate impressive commits in 1 second, killing lame commits with AI                                                  |
 | `openshift-installer`                | Install an OpenShift Cluster                                                                                                |
 | `pbrt`                               | Runtime library for Protobuf tooling                                                                                        |
