@@ -46,8 +46,6 @@ lib.makeScope newScope (
       retext-stringify
       ;
 
-    # No upstream CLI; a local one on unified-args.
-    retext-cli = self.callPackage ./retext-cli { unifiedPackages = self; };
     retext-readability = self.callPackage ./retext-readability { };
     retext-repeated-words = self.callPackage ./retext-repeated-words { };
 
