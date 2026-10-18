@@ -49,6 +49,7 @@
             };
           });
         graphify = callPackage ./graphify { };
+        gremlins = callPackage ./gremlins { };
         java-jdtls-mcp-server = callPackage ./java-jdtls-mcp-server { };
         jdtls-mcp = callPackage ./jdtls-mcp { };
         kube-vip = callPackage ./kube-vip { };
