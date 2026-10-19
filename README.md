@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-46-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-47-blue)](#packages)
 [![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/pkgs/badge)](https://hercules-ci.com/github/unmango/pkgs)
 
 <p align="center">
@@ -23,6 +23,7 @@ Mini-nixpkgs of dubious quality.
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
 | `aspire-cli`                         | A CLI tool for managing Aspire projects                                                                                     |
 | `awxkit`                             | Official command line interface for Ansible AWX                                                                             |
+| `bizhawk`                            | Multi-system emulator front-end with recording, playback, and debugging tools for tool-assisted speedruns                   |
 | `chart-releaser`                     | Hosting Helm Charts via GitHub Pages and Releases                                                                           |
 | `claude-desktop`                     | Desktop application for Claude.ai                                                                                           |
 | `claude-desktop-fhs`                 | Desktop application for Claude.ai, in an FHS environment for MCP servers and Cowork                                         |

@@ -36,6 +36,7 @@
       basePackages = {
         aspire-cli = callPackage ./aspire-cli { };
         awxkit = callPackage ./awxkit { };
+        bizhawk = callPackage ./bizhawk { };
         chart-releaser = callPackage ./chart-releaser { };
         cumulusci = callPackage ./cumulusci { python313Packages = python313.pkgs; };
         gitlab-operator = callPackage ./gitlab-operator { };
