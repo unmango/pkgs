@@ -101,10 +101,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cp -rT --no-preserve=mode "@out@/share/bizhawk" "$staging"
       mv -T "$staging" "$BIZHAWK_DATA_HOME"
     fi
-    cd "$BIZHAWK_DATA_HOME"
-    if [ ! -e config.json ]; then
-      '${lib.getExe jq}' --arg base "$PWD" '.PathEntries.Paths[0].Path = $base' '${initConfig}' >config.json.tmp
-      mv config.json.tmp config.json
+    # Absolute paths rather than a cd, so ROM paths given relative to the
+    # caller's directory still resolve.
+    config="$BIZHAWK_DATA_HOME/config.json"
+    if [ ! -e "$config" ]; then
+      '${lib.getExe jq}' --arg base "$BIZHAWK_DATA_HOME" '.PathEntries.Paths[0].Path = $base' '${initConfig}' >"$config.tmp"
+      mv "$config.tmp" "$config"
     fi
     export BIZHAWK_INT_SYSLIB_PATH="$BIZHAWK_HOME/dll"
     export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$BIZHAWK_INT_SYSLIB_PATH:${lib.makeLibraryPath runtimeLibs}"
@@ -112,7 +114,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     export MONO_CRASH_NOFILE=1
     # https://github.com/TASEmulators/BizHawk/issues/1595
     export MONO_WINFORMS_XIM_STYLE=disabled
-    exec '${lib.getExe' mono "mono"}' "$BIZHAWK_HOME/EmuHawk.exe" --config=config.json "$@"
+    exec '${lib.getExe' mono "mono"}' "$BIZHAWK_HOME/EmuHawk.exe" --config="$config" "$@"
     EOF
     substituteInPlace $out/bin/emuhawk --replace-fail @out@ $out
     chmod +x $out/bin/emuhawk
