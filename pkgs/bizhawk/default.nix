@@ -6,6 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  jq,
   runtimeShell,
   mono,
   gnome-themes-extra,
@@ -37,7 +38,7 @@ let
   ];
 
   # EmuHawk reads its paths from config.json; the base path is the per-user
-  # data directory, substituted by the launcher on first run.
+  # data directory, filled in by the launcher on first run.
   initConfig = writeText "emuhawk-config.json" (
     builtins.toJSON {
       LastWrittenFrom = version;
@@ -45,7 +46,7 @@ let
         {
           System = "Global_NULL";
           Type = "Base";
-          Path = "%%BIZHAWK_DATA_HOME%%";
+          Path = null;
         }
       ];
     }
@@ -93,12 +94,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     export BIZHAWK_HOME="@out@/lib/bizhawk"
     export BIZHAWK_DATA_HOME="''${XDG_DATA_HOME:-$HOME/.local/share}/emuhawk-monort-${finalAttrs.version}"
     if [ ! -e "$BIZHAWK_DATA_HOME" ]; then
-      mkdir -p "$BIZHAWK_DATA_HOME/Firmware" "$BIZHAWK_DATA_HOME/ExternalTools"
-      cp -rT --no-preserve=mode "@out@/share/bizhawk" "$BIZHAWK_DATA_HOME"
+      # Staged and moved into place, so a failed copy is retried next launch.
+      staging="$BIZHAWK_DATA_HOME.tmp.$$"
+      rm -rf "$staging"
+      mkdir -p "$staging/Firmware" "$staging/ExternalTools"
+      cp -rT --no-preserve=mode "@out@/share/bizhawk" "$staging"
+      mv -T "$staging" "$BIZHAWK_DATA_HOME"
     fi
     cd "$BIZHAWK_DATA_HOME"
     if [ ! -e config.json ]; then
-      sed "s@%%BIZHAWK_DATA_HOME%%@$PWD@g" '${initConfig}' >config.json
+      '${lib.getExe jq}' --arg base "$PWD" '.PathEntries.Paths[0].Path = $base' '${initConfig}' >config.json.tmp
+      mv config.json.tmp config.json
     fi
     export BIZHAWK_INT_SYSLIB_PATH="$BIZHAWK_HOME/dll"
     export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$BIZHAWK_INT_SYSLIB_PATH:${lib.makeLibraryPath runtimeLibs}"
