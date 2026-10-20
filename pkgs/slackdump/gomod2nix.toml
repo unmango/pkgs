@@ -441,6 +441,10 @@ schema = 3
     version = 'v0.0.0-20240903120638-7835f813f4da'
     hash = 'sha256-bE7CcrnAvryNvM26ieJGXqbAtuLwHaGcmtVMsVnksqo='
 
+  [mod.'google.golang.org/protobuf']
+    version = 'v1.36.11'
+    hash = 'sha256-7W+6jntfI/awWL3JP6yQedxqP5S9o3XvPgJ2XxxsIeE='
+
   [mod.'gopkg.in/yaml.v3']
     version = 'v3.0.1'
     hash = 'sha256-FqL9TKYJ0XkNwJFnq9j0VvJ5ZUU1RvH/52h/f5bkYAU='
