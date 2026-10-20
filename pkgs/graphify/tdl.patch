@@ -1,0 +1,634 @@
+diff --git a/graphify/detect.py b/graphify/detect.py
+index e5b83d3..e1a65c0 100644
+--- a/graphify/detect.py
++++ b/graphify/detect.py
+@@ -45,7 +45,7 @@ _MANIFEST_PATH = str(out_path("manifest.json"))
+ _MTIME_COARSE_S = 2.0
+ _MTIME_SUBSECOND_S = 0.05
+ 
+-CODE_EXTENSIONS = {'.py', '.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs', '.ejs', '.ets', '.go', '.rs', '.vb', '.cbl', '.cob', '.cobol', '.cpy', '.java', '.groovy', '.gradle', '.cpp', '.cc', '.cxx', '.c', '.h', '.hpp', '.cu', '.cuh', '.metal', '.rb', '.rake', '.swift', '.kt', '.kts', '.cs', '.scala', '.php', '.lua', '.luau', '.toc', '.zig', '.ps1', '.psm1', '.psd1', '.ex', '.exs', '.m', '.mm', '.ml', '.mli', '.jl', '.vue', '.svelte', '.astro', '.dart', '.v', '.sv', '.svh', '.vh', '.sql', '.r', '.f', '.F', '.f90', '.F90', '.f95', '.F95', '.f03', '.F03', '.f08', '.F08', '.pas', '.pp', '.dpr', '.dpk', '.lpr', '.inc', '.dfm', '.lfm', '.lpk', '.sh', '.bash', '.json', '.tf', '.tfvars', '.hcl', '.dm', '.dme', '.dmi', '.dmm', '.dmf', '.sln', '.slnx', '.csproj', '.fsproj', '.vbproj', '.xaml', '.razor', '.cshtml', '.cls', '.trigger', '.lisp', '.cl', '.lsp', '.asd', '.robot', '.resource', '.sol', '.erl', '.hrl', '.escript'}
++CODE_EXTENSIONS = {'.py', '.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs', '.ejs', '.ets', '.go', '.rs', '.vb', '.cbl', '.cob', '.cobol', '.cpy', '.java', '.groovy', '.gradle', '.cpp', '.cc', '.cxx', '.c', '.h', '.hpp', '.cu', '.cuh', '.metal', '.rb', '.rake', '.swift', '.kt', '.kts', '.cs', '.scala', '.php', '.lua', '.luau', '.toc', '.zig', '.ps1', '.psm1', '.psd1', '.ex', '.exs', '.m', '.mm', '.ml', '.mli', '.jl', '.vue', '.svelte', '.astro', '.dart', '.v', '.sv', '.svh', '.vh', '.sql', '.r', '.f', '.F', '.f90', '.F90', '.f95', '.F95', '.f03', '.F03', '.f08', '.F08', '.pas', '.pp', '.dpr', '.dpk', '.lpr', '.inc', '.dfm', '.lfm', '.lpk', '.sh', '.bash', '.json', '.tf', '.tfvars', '.hcl', '.dm', '.dme', '.dmi', '.dmm', '.dmf', '.sln', '.slnx', '.csproj', '.fsproj', '.vbproj', '.xaml', '.razor', '.cshtml', '.cls', '.trigger', '.lisp', '.cl', '.lsp', '.asd', '.robot', '.resource', '.sol', '.erl', '.hrl', '.escript', '.tdl'}
+ DOC_EXTENSIONS = {'.md', '.mdx', '.qmd', '.skill', '.txt', '.rst', '.html', '.yaml', '.yml', '.j2', '.jinja', '.jinja2'}
+ PAPER_EXTENSIONS = {'.pdf'}
+ IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'}
+diff --git a/graphify/extract.py b/graphify/extract.py
+index a6c4fda..f2f76dc 100644
+--- a/graphify/extract.py
++++ b/graphify/extract.py
+@@ -85,6 +85,7 @@ from graphify.extractors.terraform import extract_terraform, prepare_terraform,
+ from graphify.extractors.verilog import extract_verilog  # noqa: F401
+ from graphify.extractors.vbnet import extract_vbnet, resolve_vbnet_partial_calls  # noqa: F401
+ from graphify.extractors.zig import extract_zig  # noqa: F401
++from graphify.extractors.tdl import extract_tdl  # noqa: F401
+ from graphify.security import sanitize_metadata
+ from graphify.paths import disambiguate_ambiguous_candidates
+ 
+@@ -3800,6 +3801,7 @@ _LANG_FAMILY_BY_EXT: dict[str, str] = {
+     ".cs": "dotnet", ".vb": "dotnet", ".razor": "dotnet", ".cshtml": "dotnet", ".xaml": "dotnet",
+     ".lua": "lua", ".luau": "lua",
+     ".zig": "zig",
++    ".tdl": "tdl",
+     ".ex": "elixir", ".exs": "elixir",
+     ".jl": "julia",
+     ".dart": "dart",
+@@ -8579,6 +8581,7 @@ _DISPATCH: dict[str, Any] = {
+     ".luau": extract_lua,
+     ".toc": extract_lua,
+     ".zig": extract_zig,
++    ".tdl": extract_tdl,
+     ".ps1": extract_powershell,
+     ".psm1": extract_powershell,
+     ".psd1": extract_powershell_manifest,
+@@ -8680,6 +8683,7 @@ _EXTRA_FOR_EXTENSION = {
+     ".asd": "commonlisp",
+     ".robot": "robot",
+     ".resource": "robot",
++    ".tdl": "tdl",
+ }
+ 
+ # Substrings an extractor's error carries to classify why a dependency-backed
+diff --git a/graphify/extractors/__init__.py b/graphify/extractors/__init__.py
+index e2c8afc..336c073 100644
+--- a/graphify/extractors/__init__.py
++++ b/graphify/extractors/__init__.py
+@@ -34,6 +34,7 @@ from graphify.extractors.rust import extract_rust
+ from graphify.extractors.sln import extract_sln
+ from graphify.extractors.solidity import extract_solidity
+ from graphify.extractors.sql import extract_sql
++from graphify.extractors.tdl import extract_tdl
+ from graphify.extractors.terraform import extract_terraform
+ from graphify.extractors.verilog import extract_verilog
+ from graphify.extractors.vbnet import extract_vbnet
+@@ -69,6 +70,7 @@ LANGUAGE_EXTRACTORS: dict[str, Callable[[Path], dict]] = {
+     "sln": extract_sln,
+     "solidity": extract_solidity,
+     "sql": extract_sql,
++    "tdl": extract_tdl,
+     "terraform": extract_terraform,
+     "verilog": extract_verilog,
+     "vbnet": extract_vbnet,
+diff --git a/graphify/extractors/tdl.py b/graphify/extractors/tdl.py
+new file mode 100644
+index 0000000..dc9c794
+--- /dev/null
++++ b/graphify/extractors/tdl.py
+@@ -0,0 +1,278 @@
++"""TDL extractor (tree-sitter).
++
++TDL (https://github.com/UnstoppableMango/tdl) describes domain models: types,
++enums, aliases, classes, mixins, primitives and units, with no functions or
++calls. A file contributes its own node, its package's node, and one node per
++named declaration; fields and enum variants are not nodes. Declarations link
++with the existing relations: `references` for a type reference or a `requires`
++constraint, `mixes_in` for `include`, and `implements` for conformance to a
++class or an `instance`. Target blocks configure code generators and add no
++edges.
++
++Names resolve the way the TDL compiler scopes them, closely enough for a graph:
++a bare name to a declaration in the same file and then to one in the prelude
++(`prelude/std.tdl` in a directory above the file), and `alias.Name` through the
++import aliased `alias`. A name neither places is left to a sourceless stub for
++the corpus-level rewire, which binds it only to a unique same-named definition.
++"""
++from __future__ import annotations
++
++from pathlib import Path
++
++from graphify.extractors.base import (
++    _file_stem,
++    _make_id,
++    _read_source_bytes,
++    _read_text,
++    active_scan_root,
++)
++
++_DECLARATIONS = {
++    "type_decl", "enum_decl", "alias_decl", "class_decl",
++    "mixin_decl", "primitive_decl", "unit_decl",
++}
++
++# Subtrees that hold no type reference: values, constraints, doc text, and the
++# declaration's own parameters.
++_SKIP = {
++    "constraint_block", "deprecated", "directive", "type_params", "kind",
++    "string_lit", "int_lit", "float_lit", "bool_lit", "regex_lit", "list_literal",
++    "dotted_ident", "identifier", "name", "fun_deps", "assoc_type_req",
++}
++
++_PRELUDE = Path("prelude") / "std.tdl"
++
++
++def _language():
++    import tree_sitter_tdl as tstdl
++    from tree_sitter import Language
++    return Language(tstdl.language())
++
++
++def _first(node, kind: str):
++    return next((c for c in node.children if c.type == kind), None)
++
++
++def _declared_names(root, source: bytes) -> dict[str, int]:
++    """Each top-level declaration's name, with the line it is declared on."""
++    names: dict[str, int] = {}
++    for child in root.children:
++        if child.type in _DECLARATIONS:
++            ident = _first(child, "identifier")
++            if ident is not None:
++                names.setdefault(_read_text(ident, source), child.start_point[0] + 1)
++    return names
++
++
++def _find_prelude(path: Path) -> Path | None:
++    """The nearest `prelude/std.tdl` above ``path``, not above the scan root.
++
++    The parents are walked in the form graphify passed the path in, so the
++    prelude's ids match the ones its own extraction mints."""
++    root = active_scan_root()
++    try:
++        root = root.resolve() if root is not None else None
++    except OSError:
++        root = None
++    for directory in (path.parent, *path.parent.parents):
++        candidate = directory / _PRELUDE
++        if candidate.is_file():
++            return candidate
++        try:
++            if root is not None and directory.resolve() == root:
++                break
++        except OSError:
++            break
++    return None
++
++
++_prelude_cache: dict[Path, frozenset[str]] = {}
++
++
++def _prelude_names(prelude: Path) -> frozenset[str]:
++    key = prelude.resolve()
++    names = _prelude_cache.get(key)
++    if names is None:
++        from tree_sitter import Parser
++        source = _read_source_bytes(prelude, warn=False)
++        tree = Parser(_language()).parse(source)
++        names = frozenset(_declared_names(tree.root_node, source))
++        _prelude_cache[key] = names
++    return names
++
++
++def extract_tdl(path: Path) -> dict:
++    """Extract declarations, imports, and type references from a .tdl file."""
++    try:
++        from tree_sitter import Parser
++        language = _language()
++    except ImportError:
++        return {"nodes": [], "edges": [], "error": "tree_sitter_tdl not installed"}
++    except Exception as exc:
++        return {"nodes": [], "edges": [], "error": f"TDL grammar failed to load: {exc}"}
++
++    try:
++        source = _read_source_bytes(path)
++        root = Parser(language).parse(source).root_node
++    except Exception as e:
++        return {"nodes": [], "edges": [], "error": str(e)}
++
++    stem = _file_stem(path)
++    str_path = str(path)
++    nodes: list[dict] = []
++    edges: list[dict] = []
++    seen_ids: set[str] = set()
++    seen_edges: set[tuple[str, str, str]] = set()
++
++    def add_node(nid: str, label: str, line: int, **extra) -> None:
++        if nid not in seen_ids:
++            seen_ids.add(nid)
++            nodes.append({"id": nid, "label": label, "file_type": "code",
++                          "source_file": str_path, "source_location": f"L{line}",
++                          **extra})
++
++    def add_edge(src: str, tgt: str, relation: str, line: int,
++                 confidence: str = "EXTRACTED", target_file: Path | None = None) -> None:
++        if src == tgt or (src, tgt, relation) in seen_edges:
++            return
++        seen_edges.add((src, tgt, relation))
++        edge = {"source": src, "target": tgt, "relation": relation,
++                "confidence": confidence, "source_file": str_path,
++                "source_location": f"L{line}", "weight": 1.0}
++        if target_file is not None:
++            edge["target_file"] = str(target_file)
++        edges.append(edge)
++
++    file_nid = _make_id(str(path))
++    add_node(file_nid, path.name, 1)
++
++    local = _declared_names(root, source)
++    prelude = _find_prelude(path)
++    is_prelude = prelude is not None and prelude.resolve() == path.resolve()
++    prelude_names = _prelude_names(prelude) if prelude is not None and not is_prelude else frozenset()
++
++    imports: dict[str, Path] = {}
++    package_nid: str | None = None
++    for child in root.children:
++        line = child.start_point[0] + 1
++        if child.type == "package_decl":
++            package = ".".join(_read_text(n, source) for n in child.children if n.type == "name")
++            if package:
++                package_nid = _make_id("tdl_package", package)
++                add_node(package_nid, package, line, type="namespace")
++        elif child.type == "import_decl":
++            spec = _first(child, "string_lit")
++            if spec is None:
++                continue
++            target = path.parent / _read_text(spec, source).strip('"')
++            add_edge(file_nid, _make_id(str(target)), "imports", line, target_file=target)
++            alias = _first(child, "identifier")
++            if alias is not None and _read_text(alias, source) != "_":
++                imports[_read_text(alias, source)] = target
++
++    def resolve(parts: list[str]) -> tuple[str, str, Path | None]:
++        """A referenced name's node id, confidence, and the file declaring it."""
++        name = parts[-1]
++        if len(parts) == 1:
++            if name in local:
++                return _make_id(stem, name), "EXTRACTED", None
++            if name in prelude_names:
++                return _make_id(_file_stem(prelude), name), "EXTRACTED", prelude
++        elif len(parts) == 2 and parts[0] in imports:
++            target = imports[parts[0]]
++            return _make_id(_file_stem(target), name), "EXTRACTED", target
++        stub = _make_id(name)
++        if stub not in seen_ids:
++            seen_ids.add(stub)
++            nodes.append({"id": stub, "label": name, "file_type": "code",
++                          "source_file": "", "source_location": "",
++                          "origin_file": str_path})
++        return stub, "INFERRED", None
++
++    def dotted(ident) -> list[str]:
++        return [_read_text(c, source) for c in ident.children if c.type == "identifier"]
++
++    def link(src: str, parts: list[str], relation: str, line: int, scope: set[str]) -> None:
++        if not parts or (len(parts) == 1 and parts[0] in scope):
++            return
++        tgt, confidence, target_file = resolve(parts)
++        add_edge(src, tgt, relation, line, confidence, target_file)
++
++    def refs(src: str, node, relation: str, scope: set[str]) -> None:
++        t = node.type
++        if t in _SKIP:
++            return
++        if t == "conforms":
++            relation = "implements"
++        elif t == "include":
++            relation = "mixes_in"
++        elif t == "requires_clause":
++            relation = "references"
++        if t in ("named_type", "class_ref"):
++            ident = _first(node, "dotted_ident")
++            if ident is not None:
++                link(src, dotted(ident), relation, ident.start_point[0] + 1, scope)
++            # Type arguments are references whatever holds them.
++            relation = "references"
++        elif t == "unit_term":
++            # A bare name in `<...>` parses as a unit term, though it may name
++            # a type; the compiler resolves it by kind.
++            for c in node.children:
++                if c.type == "identifier":
++                    link(src, [_read_text(c, source)], "references",
++                         c.start_point[0] + 1, scope)
++        for c in node.children:
++            refs(src, c, relation, scope)
++
++    def params(node) -> set[str]:
++        scope: set[str] = set()
++        tp = _first(node, "type_params")
++        if tp is not None:
++            for p in tp.children:
++                if p.type == "type_param":
++                    ident = _first(p, "identifier")
++                    if ident is not None:
++                        scope.add(_read_text(ident, source))
++        for req in node.children:
++            if req.type == "assoc_type_req":
++                ident = _first(req, "identifier")
++                if ident is not None:
++                    scope.add(_read_text(ident, source))
++        return scope
++
++    for child in root.children:
++        line = child.start_point[0] + 1
++        if child.type in _DECLARATIONS:
++            ident = _first(child, "identifier")
++            if ident is None:
++                continue
++            name = _read_text(ident, source)
++            nid = _make_id(stem, name)
++            add_node(nid, name, line)
++            add_edge(file_nid, nid, "contains", line)
++            if package_nid is not None:
++                add_edge(package_nid, nid, "contains", line)
++            scope = params(child)
++            for c in child.children:
++                refs(nid, c, "references", scope)
++        elif child.type == "instance_decl":
++            # `instance C for T`, or `instance C<T>`: T implements C. The
++            # instance is not a node, so its requires clause and associated
++            # types are T's references.
++            instance_type = _first(child, "named_type")
++            if instance_type is None:
++                args = _first(child, "type_args")
++                ref = _first(args, "type_ref") if args is not None else None
++                instance_type = _first(ref, "named_type") if ref is not None else None
++            cls = _first(child, "dotted_ident")
++            ident = _first(instance_type, "dotted_ident") if instance_type is not None else None
++            if cls is None or ident is None:
++                continue
++            src, _, _ = resolve(dotted(ident))
++            scope = params(child)
++            link(src, dotted(cls), "implements", line, scope)
++            for c in child.children:
++                if c.type in ("requires_clause", "assoc_type_bind"):
++                    refs(src, c, "references", scope)
++
++    return {"nodes": nodes, "edges": edges}
+diff --git a/graphify/rcfile.py b/graphify/rcfile.py
+index 110c0ec..422e29a 100644
+--- a/graphify/rcfile.py
++++ b/graphify/rcfile.py
+@@ -57,6 +57,7 @@ LANGUAGE_ALIASES: dict[str, str] = {
+     "swift": ".swift",
+     "lua": ".lua",
+     "zig": ".zig",
++    "tdl": ".tdl",
+     "elixir": ".ex",
+     "julia": ".jl",
+     "dart": ".dart",
+diff --git a/pyproject.toml b/pyproject.toml
+index 5beee56..ed1ee7d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -123,6 +123,7 @@ vbnet = ["tree-sitter-vb-dotnet==0.3.0"]
+ r = ["tree-sitter-language-pack==0.11.0"]
+ erlang = ["tree-sitter-language-pack==0.11.0"]
+ solidity = ["tree-sitter-solidity==1.2.13"]
++tdl = ["tree-sitter-tdl"]
+ all = ["mcp>=1,<3", "starlette>=1.3.1,<2", "neo4j", "falkordb", "pypdf>=6.16.1", "markdownify", "watchdog", "graspologic; python_version < '3.13'", "graspologic-native>=1.3.1,<2; python_version >= '3.13'", "python-docx", "openpyxl", "psycopg[binary]", "faster-whisper; python_version >= '3.11'", "yt-dlp>=2026.7.4", "matplotlib", "pillow>=12.3.0", "numpy>=2.0; python_version >= '3.13'", "openai", "tiktoken", "boto3", "anthropic", "tree-sitter-sql", "jieba; python_version < '3.12'", "jieba-py>=0.46.12,<1; python_version >= '3.12'", "tree-sitter-dm>=0.25,<0.26", "tree-sitter-hcl", "tree-sitter-pascal", "tree-sitter-ocaml", "tree-sitter-commonlisp", "robotframework>=4.0", "tree-sitter-vb-dotnet==0.3.0", "tree-sitter-language-pack==0.11.0", "tree-sitter-solidity==1.2.13"]
+ 
+ [project.scripts]
+diff --git a/tests/fixtures/tdl/common.tdl b/tests/fixtures/tdl/common.tdl
+new file mode 100644
+index 0000000..84b2d70
+--- /dev/null
++++ b/tests/fixtures/tdl/common.tdl
+@@ -0,0 +1,6 @@
++package shop.common
++
++type Address {
++  street: string
++  city: string
++}
+diff --git a/tests/fixtures/tdl/prelude/std.tdl b/tests/fixtures/tdl/prelude/std.tdl
+new file mode 100644
+index 0000000..b75ee90
+--- /dev/null
++++ b/tests/fixtures/tdl/prelude/std.tdl
+@@ -0,0 +1,10 @@
++package std
++
++primitive string
++primitive int
++primitive instant
++primitive decimal
++primitive List: type -> type
++
++/// Identity: a type conforming to Entity is an entity.
++class Entity { }
+diff --git a/tests/fixtures/tdl/sample.tdl b/tests/fixtures/tdl/sample.tdl
+new file mode 100644
+index 0000000..f1b701f
+--- /dev/null
++++ b/tests/fixtures/tdl/sample.tdl
+@@ -0,0 +1,68 @@
++package shop.orders
++
++import "common.tdl" as common
++
++unit kg
++
++primitive Sku
++
++alias OrderId = string
++
++class Auditable {
++  createdAt: instant
++}
++
++class Paged {
++  type Cursor
++  pageSize: int
++}
++
++mixin Timestamps {
++  createdAt: instant
++}
++
++type Order: Entity, Auditable {
++  id: OrderId
++  shipping: common.Address?
++  items: [LineItem] owned
++  status: Status = Draft
++  weight: decimal<kg>
++  include Timestamps
++}
++
++type LineItem: Entity {
++  sku: Sku
++  quantity: int where { min(1) }
++}
++
++enum Status {
++  Draft
++  Placed { at: instant }
++}
++
++type Page<T> requires Paged<T> {
++  items: [T]
++}
++
++type Cursor {
++  token: string
++}
++
++type Pages {
++  pageSize: int
++}
++
++instance Paged for Pages {
++  type Cursor = Cursor
++}
++
++instance Auditable<common.Address>
++
++type Legacy {
++  note: Unknown
++}
++
++target go for shop.orders {
++  package("orders")
++  Order => key(id)
++}
+diff --git a/tests/test_languages.py b/tests/test_languages.py
+index 1960405..0cc542d 100644
+--- a/tests/test_languages.py
++++ b/tests/test_languages.py
+@@ -5799,3 +5799,150 @@ def test_julia_qualified_functor_uses_type_not_variable(tmp_path):
+     call_nodes = [n for n in r["nodes"] if n["id"].endswith("_call")]
+     # Module-qualified receiver types resolve to the bare type, never the variable.
+     assert [n["label"] for n in call_nodes] == ["(Box)()"]
++
++
++# ── TDL ───────────────────────────────────────────────────────────────────────
++from graphify.extract import extract, extract_tdl
++
++_needs_tdl = pytest.mark.skipif(
++    _ilu.find_spec("tree_sitter_tdl") is None,
++    reason="tree-sitter-tdl not installed (optional [tdl] extra)",
++)
++
++TDL = FIXTURES / "tdl"
++
++
++def _tdl_edges(r, relation):
++    labels = {n["id"]: n["label"] for n in r["nodes"]}
++    return {
++        (labels.get(e["source"], e["source"]), labels.get(e["target"], e["target"]),
++         e["confidence"])
++        for e in r["edges"] if e["relation"] == relation
++    }
++
++
++@_needs_tdl
++def test_tdl_declarations_are_nodes():
++    r = extract_tdl(TDL / "sample.tdl")
++    assert "error" not in r
++    sourced = {n["label"] for n in r["nodes"] if n["source_file"]}
++    assert sourced == {
++        "sample.tdl", "shop.orders", "kg", "Sku", "OrderId", "Auditable", "Paged",
++        "Timestamps", "Order", "LineItem", "Status", "Page", "Cursor", "Pages",
++        "Legacy",
++    }
++    # Fields, variants, and type parameters are not nodes.
++    assert not {"id", "Draft", "Placed", "T"} & {n["label"] for n in r["nodes"]}
++
++
++@_needs_tdl
++def test_tdl_package_and_file_contain_declarations():
++    r = extract_tdl(TDL / "sample.tdl")
++    contains = _tdl_edges(r, "contains")
++    assert ("shop.orders", "Order", "EXTRACTED") in contains
++    assert ("sample.tdl", "Order", "EXTRACTED") in contains
++    package = _node_by_label(r, "shop.orders")
++    assert package["type"] == "namespace"
++
++
++@_needs_tdl
++def test_tdl_same_file_references():
++    r = extract_tdl(TDL / "sample.tdl")
++    refs = _tdl_edges(r, "references")
++    assert ("Order", "OrderId", "EXTRACTED") in refs
++    assert ("Order", "LineItem", "EXTRACTED") in refs
++    assert ("Order", "Status", "EXTRACTED") in refs
++    assert ("Order", "kg", "EXTRACTED") in refs
++    # A requires constraint is a reference; a type parameter is not.
++    assert ("Page", "Paged", "EXTRACTED") in refs
++    assert not {e for e in refs if e[0] == "Page" and e[1] == "T"}
++
++
++@_needs_tdl
++def test_tdl_prelude_names_resolve_to_the_prelude():
++    r = extract_tdl(TDL / "sample.tdl")
++    prelude = TDL / "prelude" / "std.tdl"
++    target = {e["target"]: e for e in r["edges"] if e["relation"] == "implements"}
++    entity = extract_tdl(prelude)
++    entity_id = _node_by_label(entity, "Entity")["id"]
++    assert entity_id in target
++    assert target[entity_id]["confidence"] == "EXTRACTED"
++    assert target[entity_id]["target_file"] == str(prelude)
++
++
++@_needs_tdl
++def test_tdl_qualified_names_resolve_through_the_import():
++    r = extract_tdl(TDL / "sample.tdl")
++    common = TDL / "common.tdl"
++    address = _node_by_label(extract_tdl(common), "Address")["id"]
++    refs = [e for e in r["edges"] if e["relation"] == "references" and e["target"] == address]
++    assert [e["confidence"] for e in refs] == ["EXTRACTED"]
++    imports = [e for e in r["edges"] if e["relation"] == "imports"]
++    assert [e["target_file"] for e in imports] == [str(common)]
++
++
++@_needs_tdl
++def test_tdl_include_conformance_and_instances():
++    r = extract_tdl(TDL / "sample.tdl")
++    assert ("Order", "Timestamps", "EXTRACTED") in _tdl_edges(r, "mixes_in")
++    implements = _tdl_edges(r, "implements")
++    assert ("Order", "Auditable", "EXTRACTED") in implements
++    # `instance Paged for Pages`, and its associated type is Pages' reference.
++    assert ("Pages", "Paged", "EXTRACTED") in implements
++    assert ("Pages", "Cursor", "EXTRACTED") in _tdl_edges(r, "references")
++    # `instance Auditable<common.Address>`: the imported Address implements it.
++    address = _node_by_label(extract_tdl(TDL / "common.tdl"), "Address")["id"]
++    assert (address, "Auditable", "EXTRACTED") in implements
++
++
++@_needs_tdl
++def test_tdl_unplaced_names_are_inferred_stubs():
++    r = extract_tdl(TDL / "sample.tdl")
++    assert ("Legacy", "Unknown", "INFERRED") in _tdl_edges(r, "references")
++    stub = _node_by_label(r, "Unknown")
++    assert stub["source_file"] == ""
++
++
++@_needs_tdl
++def test_tdl_target_blocks_add_no_edges():
++    r = extract_tdl(TDL / "sample.tdl")
++    labels = {n["label"] for n in r["nodes"]}
++    assert not {"go", "orders", "key"} & labels
++    assert len(r["edges"]) == len({(e["source"], e["target"], e["relation"]) for e in r["edges"]})
++
++
++@_needs_tdl
++def test_tdl_cross_file_edges_land_on_declarations(tmp_path):
++    import shutil
++    shutil.copytree(TDL, tmp_path / "tdl")
++    (tmp_path / "tdl" / "other.tdl").write_text(
++        "package shop.legacy\n\ntype Unknown {\n  note: string\n}\n"
++    )
++    files = sorted((tmp_path / "tdl").rglob("*.tdl"))
++    r = extract(files, root=tmp_path, cache_root=tmp_path, parallel=False)
++    nodes = {n["id"]: n for n in r["nodes"]}
++    def where(nid):
++        n = nodes[nid]
++        return n["label"], Path(n["source_file"]).name
++    edges = {
++        (where(e["source"]), e["relation"], where(e["target"]))
++        for e in r["edges"] if e["source"] in nodes and e["target"] in nodes
++    }
++    assert (("Order", "sample.tdl"), "implements", ("Entity", "std.tdl")) in edges
++    assert (("Order", "sample.tdl"), "references", ("Address", "common.tdl")) in edges
++    assert (("Address", "common.tdl"), "implements", ("Auditable", "sample.tdl")) in edges
++    # The unplaced name binds to its unique definition elsewhere in the corpus.
++    assert (("Legacy", "sample.tdl"), "references", ("Unknown", "other.tdl")) in edges
++    assert all(n["source_file"] for n in r["nodes"])
++
++
++def test_tdl_without_the_grammar(monkeypatch):
++    import builtins
++    real_import = builtins.__import__
++    def no_tdl(name, *args, **kwargs):
++        if name == "tree_sitter_tdl":
++            raise ImportError(name)
++        return real_import(name, *args, **kwargs)
++    monkeypatch.setattr(builtins, "__import__", no_tdl)
++    r = extract_tdl(TDL / "sample.tdl")
++    assert r == {"nodes": [], "edges": [], "error": "tree_sitter_tdl not installed"}
