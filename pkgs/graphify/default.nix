@@ -8,93 +8,121 @@
 let
   version = "0.9.92";
 
-  graphify = python3.pkgs.buildPythonPackage {
-    pname = "graphifyy";
-    inherit version;
-    pyproject = true;
+  # grammars: extra tree-sitter grammar packages, built against python3, for
+  # the extractors that import one only when it is installed.
+  mkGraphify =
+    grammars:
+    let
+      graphify = python3.pkgs.buildPythonPackage {
+        pname = "graphifyy";
+        inherit version;
+        pyproject = true;
 
-    src = fetchPypi {
-      pname = "graphifyy";
-      inherit version;
-      hash = "sha256-PX6jygc9LIFdkyRT57QS2+TXp74QnOauCz/wDhIx9UE=";
-    };
+        src = fetchPypi {
+          pname = "graphifyy";
+          inherit version;
+          hash = "sha256-PX6jygc9LIFdkyRT57QS2+TXp74QnOauCz/wDhIx9UE=";
+        };
 
-    build-system = with python3.pkgs; [ setuptools ];
+        build-system = with python3.pkgs; [ setuptools ];
 
-    # The bindings in python3Packages.tree-sitter-grammars track the grammar
-    # repos, whose versions drift from the pins upstream declares.
-    pythonRelaxDeps = true;
+        # The bindings in python3Packages.tree-sitter-grammars track the grammar
+        # repos, whose versions drift from the pins upstream declares.
+        pythonRelaxDeps = true;
 
-    dependencies =
-      with python3.pkgs;
-      [
-        networkx
-        numpy
-        rapidfuzz
-        tree-sitter
-        # The mcp extra, which graphify-mcp needs.
-        mcp
-        starlette
-      ]
-      ++ (with tree-sitter-grammars; [
-        tree-sitter-bash
-        tree-sitter-c
-        tree-sitter-c-sharp
-        tree-sitter-cpp
-        tree-sitter-elixir
-        tree-sitter-fortran
-        tree-sitter-go
-        tree-sitter-groovy
-        tree-sitter-java
-        tree-sitter-javascript
-        tree-sitter-json
-        tree-sitter-julia
-        tree-sitter-kotlin
-        tree-sitter-lua
-        tree-sitter-objc
-        tree-sitter-php
-        tree-sitter-powershell
-        tree-sitter-python
-        tree-sitter-ruby
-        tree-sitter-rust
-        tree-sitter-scala
-        tree-sitter-swift
-        tree-sitter-typescript
-        tree-sitter-verilog
-        tree-sitter-zig
-      ]);
+        dependencies =
+          with python3.pkgs;
+          [
+            networkx
+            numpy
+            rapidfuzz
+            tree-sitter
+            # The mcp extra, which graphify-mcp needs.
+            mcp
+            starlette
+          ]
+          ++ (with tree-sitter-grammars; [
+            tree-sitter-bash
+            tree-sitter-c
+            tree-sitter-c-sharp
+            tree-sitter-cpp
+            tree-sitter-elixir
+            tree-sitter-fortran
+            tree-sitter-go
+            tree-sitter-groovy
+            tree-sitter-java
+            tree-sitter-javascript
+            tree-sitter-json
+            tree-sitter-julia
+            tree-sitter-kotlin
+            tree-sitter-lua
+            tree-sitter-objc
+            tree-sitter-php
+            tree-sitter-powershell
+            tree-sitter-python
+            tree-sitter-ruby
+            tree-sitter-rust
+            tree-sitter-scala
+            tree-sitter-swift
+            tree-sitter-typescript
+            tree-sitter-verilog
+            tree-sitter-zig
+          ]);
 
-    pythonImportsCheck = [ "graphify" ];
-  };
+        # Reads TDL (https://github.com/UnstoppableMango/tdl) when its grammar,
+        # tree_sitter_tdl, is installed. Not upstream; written as the upstream
+        # pull request would be. Remove it, with withGrammars, if it fails to
+        # apply to two releases in a row.
+        patches = [ ./tdl.patch ];
 
-  # graphify runs sys.executable as `python -m graphify`: `update`, `extract`,
-  # `cluster-only`, and `label` re-exec themselves to pin PYTHONHASHSEED
-  # (Graphify-Labs/graphify#3641, #3779), and `graphify hook install` writes
-  # sys.executable into the git hooks. buildPythonApplication's wrapper adds
-  # the dependencies to sys.path inside the script, so its sys.executable is
-  # a bare interpreter that cannot import graphify. Running the commands from
-  # an environment makes sys.executable the environment's interpreter.
-  env = python3.withPackages (_: [ graphify ]);
+        # The PyPI sdist leaves out tests/fixtures, so only the cases whose
+        # fixture the patch adds can run. They skip without the grammar, which
+        # nothing here provides: this repository never pins tdl, and a
+        # withGrammars build runs them with the grammar it is given.
+        nativeCheckInputs = [ python3.pkgs.pytestCheckHook ] ++ grammars;
+        enabledTestPaths = [ "tests/test_languages.py" ];
+        enabledTests = [ "test_tdl" ];
+
+        pythonImportsCheck = [ "graphify" ];
+      };
+
+      # graphify runs sys.executable as `python -m graphify`: `update`, `extract`,
+      # `cluster-only`, and `label` re-exec themselves to pin PYTHONHASHSEED
+      # (Graphify-Labs/graphify#3641, #3779), and `graphify hook install` writes
+      # sys.executable into the git hooks. buildPythonApplication's wrapper adds
+      # the dependencies to sys.path inside the script, so its sys.executable is
+      # a bare interpreter that cannot import graphify. Running the commands from
+      # an environment makes sys.executable the environment's interpreter.
+      env = python3.withPackages (_: [ graphify ] ++ grammars);
+    in
+    runCommand "graphify-${version}"
+      {
+        inherit version;
+
+        passthru = {
+          inherit (graphify) src;
+          unwrapped = graphify;
+          updateScript = nix-update-script { };
+
+          # Rebuilds graphify with more grammar packages, a list or a function
+          # of python3.pkgs as python3.withPackages takes, so graphify reads a
+          # language whose grammar nixpkgs does not carry:
+          # `graphify.withGrammars (ps: [ (ps.callPackage ./tree-sitter-tdl.nix { }) ])`.
+          withGrammars =
+            more: mkGraphify (grammars ++ (if builtins.isFunction more then more python3.pkgs else more));
+        };
+
+        meta = with lib; {
+          description = "Turn a folder of code, docs, papers, or media into a queryable knowledge graph";
+          homepage = "https://github.com/Graphify-Labs/graphify";
+          license = licenses.asl20;
+          maintainers = with maintainers; [ UnstoppableMango ];
+          mainProgram = "graphify";
+        };
+      }
+      ''
+        mkdir -p $out/bin
+        ln -s ${env}/bin/graphify ${env}/bin/graphify-mcp $out/bin/
+      '';
 in
-runCommand "graphify-${version}"
-  {
-    inherit version;
-
-    passthru = {
-      inherit (graphify) src;
-      unwrapped = graphify;
-      updateScript = nix-update-script { };
-    };
-
-    meta = with lib; {
-      description = "Turn a folder of code, docs, papers, or media into a queryable knowledge graph";
-      homepage = "https://github.com/Graphify-Labs/graphify";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ UnstoppableMango ];
-      mainProgram = "graphify";
-    };
-  }
-  ''
-    mkdir -p $out/bin
-    ln -s ${env}/bin/graphify ${env}/bin/graphify-mcp $out/bin/
-  ''
+mkGraphify [ ]
