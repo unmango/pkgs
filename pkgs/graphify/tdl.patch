@@ -69,10 +69,10 @@ index e2c8afc..336c073 100644
      "vbnet": extract_vbnet,
 diff --git a/graphify/extractors/tdl.py b/graphify/extractors/tdl.py
 new file mode 100644
-index 0000000..dc9c794
+index 0000000..db7c914
 --- /dev/null
 +++ b/graphify/extractors/tdl.py
-@@ -0,0 +1,278 @@
+@@ -0,0 +1,280 @@
 +"""TDL extractor (tree-sitter).
 +
 +TDL (https://github.com/UnstoppableMango/tdl) describes domain models: types,
@@ -92,6 +92,7 @@ index 0000000..dc9c794
 +"""
 +from __future__ import annotations
 +
++import os
 +from pathlib import Path
 +
 +from graphify.extractors.base import (
@@ -239,7 +240,8 @@ index 0000000..dc9c794
 +            spec = _first(child, "string_lit")
 +            if spec is None:
 +                continue
-+            target = path.parent / _read_text(spec, source).strip('"')
++            # Normalized, so `../x.tdl` mints the ids x.tdl's own extraction does.
++            target = Path(os.path.normpath(path.parent / _read_text(spec, source).strip('"')))
 +            add_edge(file_nid, _make_id(str(target)), "imports", line, target_file=target)
 +            alias = _first(child, "identifier")
 +            if alias is not None and _read_text(alias, source) != "_":
@@ -478,10 +480,10 @@ index 0000000..f1b701f
 +  Order => key(id)
 +}
 diff --git a/tests/test_languages.py b/tests/test_languages.py
-index 1960405..0cc542d 100644
+index 1960405..97e681c 100644
 --- a/tests/test_languages.py
 +++ b/tests/test_languages.py
-@@ -5799,3 +5799,150 @@ def test_julia_qualified_functor_uses_type_not_variable(tmp_path):
+@@ -5799,3 +5799,166 @@ def test_julia_qualified_functor_uses_type_not_variable(tmp_path):
      call_nodes = [n for n in r["nodes"] if n["id"].endswith("_call")]
      # Module-qualified receiver types resolve to the bare type, never the variable.
      assert [n["label"] for n in call_nodes] == ["(Box)()"]
@@ -620,6 +622,22 @@ index 1960405..0cc542d 100644
 +    # The unplaced name binds to its unique definition elsewhere in the corpus.
 +    assert (("Legacy", "sample.tdl"), "references", ("Unknown", "other.tdl")) in edges
 +    assert all(n["source_file"] for n in r["nodes"])
++
++
++@_needs_tdl
++def test_tdl_parent_directory_imports_resolve(tmp_path):
++    (tmp_path / "shared").mkdir()
++    (tmp_path / "shop").mkdir()
++    (tmp_path / "shared" / "money.tdl").write_text("package shared\n\ntype Money {\n  cents: int\n}\n")
++    (tmp_path / "shop" / "order.tdl").write_text(
++        'package shop\n\nimport "../shared/money.tdl" as shared\n\ntype Order {\n  total: shared.Money\n}\n'
++    )
++    files = sorted(tmp_path.rglob("*.tdl"))
++    r = extract(files, root=tmp_path, cache_root=tmp_path, parallel=False)
++    labels = {n["id"]: n["label"] for n in r["nodes"] if n["source_file"]}
++    refs = {(labels.get(e["source"]), labels.get(e["target"]))
++            for e in r["edges"] if e["relation"] == "references"}
++    assert ("Order", "Money") in refs
 +
 +
 +def test_tdl_without_the_grammar(monkeypatch):
