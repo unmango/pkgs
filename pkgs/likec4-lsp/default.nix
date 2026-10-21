@@ -44,8 +44,10 @@ buildNpmPackage {
 
   # A server that loads but can't speak the protocol would pass a --help check,
   # so this sends a real initialize request over stdio and expects capabilities
-  # back. The sleep holds stdin open so the server never sees EOF before it
-  # replies; timeout ends both once the reply has been read or the wait is up.
+  # back. A coproc holds the server's stdin open so it never sees EOF before it
+  # replies, and the whole reply is parsed on every poll, since a grep for one
+  # key could match while the server is still writing. exec makes the coproc
+  # timeout itself, so killing it forwards the signal to the server.
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -54,23 +56,33 @@ buildNpmPackage {
 
     body='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":null,"capabilities":{}}}'
 
-    { printf 'Content-Length: %d\r\n\r\n%s' "''${#body}" "$body"; sleep 30; } \
-      | timeout 30 "$out/bin/likec4-lsp" --stdio >"$TMPDIR/reply" 2>"$TMPDIR/stderr" &
+    coproc lsp { exec timeout 60 "$out/bin/likec4-lsp" --stdio >"$TMPDIR/reply" 2>"$TMPDIR/stderr"; }
+    server=$lsp_PID
+    printf 'Content-Length: %d\r\n\r\n%s' "''${#body}" "$body" >&"''${lsp[1]}"
 
+    # The reply's body follows the header's blank line.
+    initialized() {
+      sed -n 's/^.*\r$//; /^{/p' "$TMPDIR/reply" | head -n1 \
+        | jq -e '.id == 1 and (.result.capabilities | has("completionProvider"))' >/dev/null 2>&1
+    }
+
+    ok=
     for _ in $(seq 1 30); do
-      grep -q '"capabilities"' "$TMPDIR/reply" 2>/dev/null && break
+      if initialized; then
+        ok=1
+        break
+      fi
       sleep 1
     done
 
-    if ! grep -q '"capabilities"' "$TMPDIR/reply"; then
-      echo "likec4-lsp: no initialize reply" >&2
-      cat "$TMPDIR/stderr" >&2
+    kill "$server" 2>/dev/null || true
+    wait "$server" 2>/dev/null || true
+
+    if [ -z "$ok" ]; then
+      echo "likec4-lsp: no valid initialize reply" >&2
+      cat "$TMPDIR/reply" "$TMPDIR/stderr" >&2
       exit 1
     fi
-
-    # The reply's body follows the header's blank line.
-    sed -n 's/^.*\r$//; /^{/p' "$TMPDIR/reply" | head -n1 \
-      | jq -e '.id == 1 and (.result.capabilities | has("completionProvider"))' >/dev/null
 
     runHook postInstallCheck
   '';
