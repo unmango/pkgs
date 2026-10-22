@@ -59,6 +59,7 @@
         kubectl-slice = callPackage ./kubectl-slice { };
         kubernetes-mcp-server = callPackage ./kubernetes-mcp-server { };
         likec4 = callPackage ./likec4 { };
+        likec4-lsp = callPackage ./likec4-lsp { };
         lsmcp = callPackage ./lsmcp { };
         lsp4j-mcp = callPackage ./lsp4j-mcp { };
         mmake = callPackage ./mmake { };

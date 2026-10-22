@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-47-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-48-blue)](#packages)
 [![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/pkgs/badge)](https://hercules-ci.com/github/unmango/pkgs)
 
 <p align="center">
@@ -44,6 +44,7 @@ Mini-nixpkgs of dubious quality.
 | `kubectl-slice`                      | Split multiple Kubernetes files into smaller files with ease. Split multi-YAML files into individual files.                 |
 | `kubernetes-mcp-server`              | Model Context Protocol (MCP) server for Kubernetes and OpenShift                                                            |
 | `likec4`                             | Toolchain for your architecture diagrams                                                                                    |
+| `likec4-lsp`                         | Standalone LikeC4 language server for editor integrations                                                                   |
 | `lsmcp`                              | Unified MCP server for language-service/LSP-based code analysis across multiple languages                                   |
 | `lsp4j-mcp`                          | Model Context Protocol (MCP) server exposing Java IDE features via JDTLS                                                    |
 | `mmake`                              | Modern Make                                                                                                                 |
