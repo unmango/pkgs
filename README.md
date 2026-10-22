@@ -4,7 +4,7 @@
 [![Cachix](https://img.shields.io/badge/cachix-unstoppablemango-blue)](https://unstoppablemango.cachix.org)
 [![Last Commit](https://img.shields.io/github/last-commit/unmango/pkgs)](https://github.com/unmango/pkgs/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![packages](https://img.shields.io/badge/packages-48-blue)](#packages)
+[![packages](https://img.shields.io/badge/packages-49-blue)](#packages)
 [![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/pkgs/badge)](https://hercules-ci.com/github/unmango/pkgs)
 
 <p align="center">
@@ -28,6 +28,7 @@ Mini-nixpkgs of dubious quality.
 | `claude-desktop`                     | Desktop application for Claude.ai                                                                                           |
 | `claude-desktop-fhs`                 | Desktop application for Claude.ai, in an FHS environment for MCP servers and Cowork                                         |
 | `coderabbit`                         | CodeRabbit AI code review, in the terminal                                                                                  |
+| `context-mapper-cli`                 | Command line interface to validate Context Mapper (CML) files and run its generators                                        |
 | `cumulusci`                          | Build and release tools for Salesforce developers                                                                           |
 | `github-runner`                      | Self-hosted runner for GitHub Actions                                                                                       |
 | `gitlab-operator`                    | Kubernetes Operator for managing the lifecycle of GitLab instances                                                          |

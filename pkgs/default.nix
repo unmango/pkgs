@@ -38,6 +38,7 @@
         awxkit = callPackage ./awxkit { };
         bizhawk = callPackage ./bizhawk { };
         chart-releaser = callPackage ./chart-releaser { };
+        context-mapper-cli = callPackage ./context-mapper-cli { };
         cumulusci = callPackage ./cumulusci { python313Packages = python313.pkgs; };
         gitlab-operator = callPackage ./gitlab-operator { };
         gitlab-operator-v2 =
