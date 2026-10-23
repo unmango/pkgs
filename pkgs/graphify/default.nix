@@ -6,7 +6,7 @@
   runCommand,
 }:
 let
-  version = "0.9.93";
+  version = "0.9.94";
 
   # grammars: extra tree-sitter grammar packages, built against python3, for
   # the extractors that import one only when it is installed.
@@ -21,7 +21,7 @@ let
         src = fetchPypi {
           pname = "graphifyy";
           inherit version;
-          hash = "sha256-ZmyOWfWdH/gyxzV/raJqlyK2swhLcT85d32lUPkbmd0=";
+          hash = "sha256-CHCKm4/pUW6E4fsjpRA9oiah5mEH4+Qccuop+iYUp6Y=";
         };
 
         build-system = with python3.pkgs; [ setuptools ];
