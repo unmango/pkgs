@@ -80,6 +80,11 @@ let
           ./nix.patch
         ];
 
+        # The Nix extractor itself, which nix.patch registers.
+        postPatch = ''
+          cp ${./nix.py} graphify/extractors/nix.py
+        '';
+
         # The PyPI sdist leaves out tests/fixtures, so only the cases whose
         # fixture a patch adds can run. They skip without the grammar, which
         # nothing here provides: this repository never pins tdl, and a
