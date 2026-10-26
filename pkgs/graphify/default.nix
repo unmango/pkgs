@@ -80,17 +80,25 @@ let
           ./nix.patch
         ];
 
-        # The Nix extractor itself, which nix.patch registers.
+        # The Nix extractor, its fixtures, and its tests, which nix.patch
+        # registers. Kept as plain files rather than in the patch, so they are
+        # edited directly.
         postPatch = ''
           cp ${./nix.py} graphify/extractors/nix.py
+          cp ${./tests/test_nix.py} tests/test_nix.py
+          mkdir -p tests/fixtures
+          cp -r --no-preserve=mode ${./tests/fixtures/nix} tests/fixtures/nix
         '';
 
         # The PyPI sdist leaves out tests/fixtures, so only the cases whose
-        # fixture a patch adds can run. They skip without the grammar, which
+        # fixture this package adds can run. They skip without the grammar, which
         # nothing here provides: this repository never pins tdl, and a
         # withGrammars build runs them with the grammar it is given.
         nativeCheckInputs = [ python3.pkgs.pytestCheckHook ] ++ grammars;
-        enabledTestPaths = [ "tests/test_languages.py" ];
+        enabledTestPaths = [
+          "tests/test_languages.py"
+          "tests/test_nix.py"
+        ];
         enabledTests = [
           "test_tdl"
           "test_nix"
