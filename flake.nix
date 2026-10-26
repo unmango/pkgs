@@ -119,7 +119,12 @@
             statix.enable = true;
           };
 
-          treefmt.settings.global.excludes = [ ".claude/skills/**" ];
+          # graphify's Nix test fixtures are inputs to its extractor, so deadnix and
+          # statix must not rewrite them.
+          treefmt.settings.global.excludes = [
+            ".claude/skills/**"
+            "pkgs/graphify/tests/fixtures/**"
+          ];
         };
     };
 }

@@ -1,0 +1,93 @@
+diff --git a/graphify/detect.py b/graphify/detect.py
+index 6295e06..8ada408 100644
+--- a/graphify/detect.py
++++ b/graphify/detect.py
+@@ -45,7 +45,7 @@ _MANIFEST_PATH = str(out_path("manifest.json"))
+ _MTIME_COARSE_S = 2.0
+ _MTIME_SUBSECOND_S = 0.05
+ 
+-CODE_EXTENSIONS = {'.py', '.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs', '.ejs', '.ets', '.go', '.rs', '.vb', '.cbl', '.cob', '.cobol', '.cpy', '.java', '.groovy', '.gradle', '.cpp', '.cc', '.cxx', '.c', '.h', '.hpp', '.cu', '.cuh', '.metal', '.rb', '.rake', '.swift', '.kt', '.kts', '.cs', '.scala', '.php', '.lua', '.luau', '.toc', '.zig', '.ps1', '.psm1', '.psd1', '.ex', '.exs', '.m', '.mm', '.ml', '.mli', '.jl', '.vue', '.svelte', '.astro', '.dart', '.v', '.sv', '.svh', '.vh', '.sql', '.r', '.f', '.F', '.f90', '.F90', '.f95', '.F95', '.f03', '.F03', '.f08', '.F08', '.pas', '.pp', '.dpr', '.dpk', '.lpr', '.inc', '.dfm', '.lfm', '.lpk', '.sh', '.bash', '.json', '.tf', '.tfvars', '.hcl', '.dm', '.dme', '.dmi', '.dmm', '.dmf', '.sln', '.slnx', '.csproj', '.fsproj', '.vbproj', '.xaml', '.razor', '.cshtml', '.cls', '.trigger', '.lisp', '.cl', '.lsp', '.asd', '.robot', '.resource', '.sol', '.erl', '.hrl', '.escript', '.tdl'}
++CODE_EXTENSIONS = {'.py', '.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs', '.ejs', '.ets', '.go', '.rs', '.vb', '.cbl', '.cob', '.cobol', '.cpy', '.java', '.groovy', '.gradle', '.cpp', '.cc', '.cxx', '.c', '.h', '.hpp', '.cu', '.cuh', '.metal', '.rb', '.rake', '.swift', '.kt', '.kts', '.cs', '.scala', '.php', '.lua', '.luau', '.toc', '.zig', '.ps1', '.psm1', '.psd1', '.ex', '.exs', '.m', '.mm', '.ml', '.mli', '.jl', '.vue', '.svelte', '.astro', '.dart', '.v', '.sv', '.svh', '.vh', '.sql', '.r', '.f', '.F', '.f90', '.F90', '.f95', '.F95', '.f03', '.F03', '.f08', '.F08', '.pas', '.pp', '.dpr', '.dpk', '.lpr', '.inc', '.dfm', '.lfm', '.lpk', '.sh', '.bash', '.json', '.tf', '.tfvars', '.hcl', '.dm', '.dme', '.dmi', '.dmm', '.dmf', '.sln', '.slnx', '.csproj', '.fsproj', '.vbproj', '.xaml', '.razor', '.cshtml', '.cls', '.trigger', '.lisp', '.cl', '.lsp', '.asd', '.robot', '.resource', '.sol', '.erl', '.hrl', '.escript', '.tdl', '.nix'}
+ DOC_EXTENSIONS = {'.md', '.mdx', '.qmd', '.skill', '.txt', '.rst', '.html', '.yaml', '.yml', '.j2', '.jinja', '.jinja2'}
+ PAPER_EXTENSIONS = {'.pdf'}
+ IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'}
+diff --git a/graphify/extract.py b/graphify/extract.py
+index cbc8957..6861f3a 100644
+--- a/graphify/extract.py
++++ b/graphify/extract.py
+@@ -87,6 +87,7 @@ from graphify.extractors.verilog import extract_verilog  # noqa: F401
+ from graphify.extractors.vbnet import extract_vbnet, resolve_vbnet_partial_calls  # noqa: F401
+ from graphify.extractors.zig import extract_zig  # noqa: F401
+ from graphify.extractors.tdl import extract_tdl  # noqa: F401
++from graphify.extractors.nix import extract_nix  # noqa: F401
+ from graphify.security import sanitize_metadata
+ from graphify.paths import disambiguate_ambiguous_candidates
+ 
+@@ -3826,6 +3827,7 @@ _LANG_FAMILY_BY_EXT: dict[str, str] = {
+     ".lua": "lua", ".luau": "lua",
+     ".zig": "zig",
+     ".tdl": "tdl",
++    ".nix": "nix",
+     ".ex": "elixir", ".exs": "elixir",
+     ".jl": "julia",
+     ".dart": "dart",
+@@ -8663,6 +8665,7 @@ _DISPATCH: dict[str, Any] = {
+     ".toc": extract_lua,
+     ".zig": extract_zig,
+     ".tdl": extract_tdl,
++    ".nix": extract_nix,
+     ".ps1": extract_powershell,
+     ".psm1": extract_powershell,
+     ".psd1": extract_powershell_manifest,
+@@ -8765,6 +8768,7 @@ _EXTRA_FOR_EXTENSION = {
+     ".robot": "robot",
+     ".resource": "robot",
+     ".tdl": "tdl",
++    ".nix": "nix",
+ }
+ 
+ # Substrings an extractor's error carries to classify why a dependency-backed
+diff --git a/graphify/extractors/__init__.py b/graphify/extractors/__init__.py
+index 336c073..8648840 100644
+--- a/graphify/extractors/__init__.py
++++ b/graphify/extractors/__init__.py
+@@ -24,6 +24,7 @@ from graphify.extractors.go import extract_go
+ from graphify.extractors.json_config import extract_json
+ from graphify.extractors.julia import extract_julia
+ from graphify.extractors.markdown import extract_markdown
++from graphify.extractors.nix import extract_nix
+ from graphify.extractors.objc import extract_objc
+ from graphify.extractors.pascal import extract_pascal
+ from graphify.extractors.pascal_forms import extract_delphi_form, extract_lazarus_form
+@@ -60,6 +61,7 @@ LANGUAGE_EXTRACTORS: dict[str, Callable[[Path], dict]] = {
+     "julia": extract_julia,
+     "lazarus_form": extract_lazarus_form,
+     "markdown": extract_markdown,
++    "nix": extract_nix,
+     "objc": extract_objc,
+     "pascal": extract_pascal,
+     "powershell": extract_powershell,
+diff --git a/graphify/rcfile.py b/graphify/rcfile.py
+index de275ab..9e58306 100644
+--- a/graphify/rcfile.py
++++ b/graphify/rcfile.py
+@@ -58,6 +58,7 @@ LANGUAGE_ALIASES: dict[str, str] = {
+     "lua": ".lua",
+     "zig": ".zig",
+     "tdl": ".tdl",
++    "nix": ".nix",
+     "elixir": ".ex",
+     "julia": ".jl",
+     "dart": ".dart",
+diff --git a/pyproject.toml b/pyproject.toml
+index d14ffb6..9ee224e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -124,6 +124,7 @@ r = ["tree-sitter-language-pack==0.11.0"]
+ erlang = ["tree-sitter-language-pack==0.11.0"]
+ solidity = ["tree-sitter-solidity==1.2.13"]
+ tdl = ["tree-sitter-tdl"]
++nix = ["tree-sitter-nix"]
+ all = ["mcp>=1,<3", "starlette>=1.3.1,<2", "neo4j", "falkordb", "pypdf>=6.16.1", "markdownify", "watchdog", "graspologic; python_version < '3.13'", "graspologic-native>=1.3.1,<2; python_version >= '3.13'", "python-docx", "openpyxl", "psycopg[binary]", "faster-whisper; python_version >= '3.11'", "yt-dlp>=2026.7.4", "matplotlib", "pillow>=12.3.0", "numpy>=2.0; python_version >= '3.13'", "openai", "tiktoken", "boto3", "anthropic", "tree-sitter-sql", "jieba; python_version < '3.12'", "jieba-py>=0.46.12,<1; python_version >= '3.12'", "tree-sitter-dm>=0.25,<0.26", "tree-sitter-hcl", "tree-sitter-pascal", "tree-sitter-ocaml", "tree-sitter-commonlisp", "robotframework>=4.0", "tree-sitter-vb-dotnet==0.3.0", "tree-sitter-language-pack==0.11.0", "tree-sitter-solidity==1.2.13"]
+ 
+ [project.scripts]

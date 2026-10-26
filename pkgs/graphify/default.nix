@@ -70,18 +70,39 @@ let
           ]);
 
         # Reads TDL (https://github.com/UnstoppableMango/tdl) when its grammar,
-        # tree_sitter_tdl, is installed. Not upstream; written as the upstream
-        # pull request would be. Remove it, with withGrammars, if it fails to
-        # apply to two releases in a row.
-        patches = [ ./tdl.patch ];
+        # tree_sitter_tdl, is installed, and Nix when tree_sitter_nix is. Not
+        # upstream; each is written as the upstream pull request would be. The
+        # Nix patch applies on top of the TDL one, since both extend the same
+        # extension tables. Remove a patch if it fails to apply to two releases
+        # in a row, and withGrammars with the last of them.
+        patches = [
+          ./tdl.patch
+          ./nix.patch
+        ];
+
+        # The Nix extractor, its fixtures, and its tests, which nix.patch
+        # registers. Kept as plain files rather than in the patch, so they are
+        # edited directly.
+        postPatch = ''
+          cp ${./nix.py} graphify/extractors/nix.py
+          cp ${./tests/test_nix.py} tests/test_nix.py
+          mkdir -p tests/fixtures
+          cp -r --no-preserve=mode ${./tests/fixtures/nix} tests/fixtures/nix
+        '';
 
         # The PyPI sdist leaves out tests/fixtures, so only the cases whose
-        # fixture the patch adds can run. They skip without the grammar, which
+        # fixture this package adds can run. They skip without the grammar, which
         # nothing here provides: this repository never pins tdl, and a
         # withGrammars build runs them with the grammar it is given.
         nativeCheckInputs = [ python3.pkgs.pytestCheckHook ] ++ grammars;
-        enabledTestPaths = [ "tests/test_languages.py" ];
-        enabledTests = [ "test_tdl" ];
+        enabledTestPaths = [
+          "tests/test_languages.py"
+          "tests/test_nix.py"
+        ];
+        enabledTests = [
+          "test_tdl"
+          "test_nix"
+        ];
 
         pythonImportsCheck = [ "graphify" ];
       };
@@ -107,7 +128,9 @@ let
           # Rebuilds graphify with more grammar packages, a list or a function
           # of python3.pkgs as python3.withPackages takes, so graphify reads a
           # language whose grammar nixpkgs does not carry:
-          # `graphify.withGrammars (ps: [ (ps.callPackage ./tree-sitter-tdl.nix { }) ])`.
+          # `graphify.withGrammars (ps: [ (ps.callPackage ./tree-sitter-tdl.nix { }) ])`,
+          # or one it carries but graphify does not install by default:
+          # `graphify.withGrammars (ps: [ ps.tree-sitter-grammars.tree-sitter-nix ])`.
           withGrammars =
             more: mkGraphify (grammars ++ (if builtins.isFunction more then more python3.pkgs else more));
         };
