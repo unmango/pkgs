@@ -51,7 +51,12 @@
       ];
 
       perSystem =
-        { pkgs, system, ... }:
+        {
+          config,
+          pkgs,
+          system,
+          ...
+        }:
         {
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
@@ -87,6 +92,10 @@
               })
             ];
           };
+
+          # A passthru, so packages.default (and with it `make build`) never
+          # reaches it; this is what builds it in CI.
+          checks.likec4-env = config.packages.likec4.env;
 
           # Applies overlays.default to plain nixpkgs, the way a consumer does.
           # Fails with infinite recursion if overlayAttrs' names depend on `pkgs`.
