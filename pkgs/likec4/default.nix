@@ -1,6 +1,7 @@
 {
   lib,
   buildNpmPackage,
+  callPackage,
   curl,
   fetchzip,
   jq,
@@ -14,7 +15,7 @@ let
   # builds where HOME is unset or not writable.
   cacheDir = ''(process.env.LIKEC4_VITE_CACHE_DIR||((process.env.XDG_CACHE_HOME||(process.env.HOME?process.env.HOME+"/.cache":(process.env.TMPDIR||"/tmp")))+"/likec4/${version}/vite"))'';
 in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "likec4";
   inherit version;
 
@@ -139,8 +140,13 @@ buildNpmPackage {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--generate-lockfile" ];
+  passthru = {
+    # Follows overrideAttrs, since it is built from the final package.
+    env = callPackage ./env.nix { likec4 = finalAttrs.finalPackage; };
+
+    updateScript = nix-update-script {
+      extraArgs = [ "--generate-lockfile" ];
+    };
   };
 
   meta = with lib; {
@@ -150,4 +156,4 @@ buildNpmPackage {
     maintainers = with maintainers; [ UnstoppableMango ];
     mainProgram = "likec4";
   };
-}
+})
