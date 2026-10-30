@@ -5,13 +5,13 @@
   nix-update-script,
 }:
 let
-  version = "3.5.2";
+  version = "3.5.3";
   src = fetchFromGitLab {
     group = "gitlab-org";
     owner = "cloud-native";
     repo = "gitlab-operator";
     rev = version;
-    hash = "sha256-5ktqRP4pXShoQv1TOhbuWpxJc2l15ISImn6aBKx/1j8=";
+    hash = "sha256-O61beXyxkN+9PXDQZowwXY04ARS/XsxlAc84apI8hWI=";
   };
 in
 # buildGoModule rather than buildGoApplication: helm v4 resolves the Kubernetes
