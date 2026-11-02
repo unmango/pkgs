@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 let
-  version = "4.5.3";
+  version = "4.5.4";
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
     rev = "v${version}";
-    hash = "sha256-Hi0C0/g9fha0yJMf1gcYWh5/TcJoXBGCHvWWYgeNu8M=";
+    hash = "sha256-JvwTUkz0ly2sa1ScmJfbmeMWxwLPvBzIb/7NRZfvM74=";
   };
 in
 buildGoApplication {
