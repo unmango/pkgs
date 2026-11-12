@@ -8,14 +8,14 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencommit";
-  version = "3.3.10";
+  version = "3.3.11";
 
   # The published out/cli.cjs is an esbuild bundle that requires only Node
   # builtins, so the tarball's dependencies are never loaded. Wrapping the
   # bundle directly avoids installing ~115M of unreferenced node_modules.
   src = fetchzip {
     url = "https://registry.npmjs.org/opencommit/-/opencommit-${finalAttrs.version}.tgz";
-    hash = "sha256-RRLsakHJ7tOs0fwOHt/j4Vu7U+2wWiQjC0HIxa+Xk84=";
+    hash = "sha256-W5dhkchUUlM+oFAs7qgRzbhNb1dHveHbHpzVYpcg1bw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # WHATWG URL provides; an unparseable URL still resolves to no proxy.
   postPatch = ''
     substituteInPlace out/cli.cjs --replace-fail \
-      'var parsedUrl = typeof url2 === "string" ? parseUrl(url2) : url2 || {};' \
-      'var parsedUrl = typeof url2 === "string" ? (URL.canParse(url2) ? new URL(url2) : {}) : url2 || {};'
+      'var parsedUrl = (typeof url2 === "string" ? parseUrl(url2) : url2) || {};' \
+      'var parsedUrl = (typeof url2 === "string" ? (URL.canParse(url2) ? new URL(url2) : {}) : url2) || {};'
   '';
 
   installPhase = ''
