@@ -22,11 +22,19 @@
 let
   version = "2.11.1";
 
+  # nixpkgs marks gtk2 broken ahead of its removal (NixOS/nixpkgs#410814), which
+  # refuses evaluation; Mono's WinForms has no gtk3 backend to migrate to.
+  gtk2 = gtk2-x11.overrideAttrs (old: {
+    meta = old.meta // {
+      problems = removeAttrs (old.meta.problems or { }) [ "broken" ];
+    };
+  });
+
   # What upstream's own Nix expression (Dist/packages.nix) puts on
   # LD_LIBRARY_PATH for a NixOS build: libGL stands in for the nixGL wrapper it
   # uses everywhere else.
   runtimeLibs = [
-    (lib.getLib gtk2-x11)
+    (lib.getLib gtk2)
     (lib.getLib libgdiplus)
     lua5_4
     mono
