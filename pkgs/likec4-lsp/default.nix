@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "1.60.0";
+  version = "1.61.0";
 in
 buildNpmPackage {
   pname = "likec4-lsp";
@@ -19,7 +19,7 @@ buildNpmPackage {
   # package-lock.json from the unpacked source.
   src = fetchzip {
     url = "https://registry.npmjs.org/@likec4/lsp/-/lsp-${version}.tgz";
-    hash = "sha256-LzM912o5Ppsywbm6/Sc2eZcfASmw1LlI8Rde6A2UsH8=";
+    hash = "sha256-tqGQOzZ74lL32GKHkgMvUfy2S0S7ocOGrh6eMGFHL30=";
     nativeBuildInputs = [ jq ];
     postFetch = ''
       jq 'del(.devDependencies)' "$out/package.json" > "$out/package.json.tmp"
@@ -31,7 +31,7 @@ buildNpmPackage {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-LYXqrdMP9uWiBiBemfhFJWccu7ef49zlaA7eAqejdSA=";
+  npmDepsHash = "sha256-hKQrWQ7onml5wVmwhzdFYDZT9XFzOy75xUmn1fgNkj0=";
 
   dontNpmBuild = true;
 
