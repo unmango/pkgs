@@ -5,7 +5,9 @@
   llvmPackages_18,
   makeWrapper,
   nix-update-script,
+  pkg-config,
   rustPlatform,
+  zstd,
 }:
 let
   version = "0.78.6";
@@ -34,7 +36,12 @@ rustPlatform.buildRustPackage {
       --offline
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   # Tests invoke `gos build` which requires LLVM opt at runtime.
   doCheck = false;
