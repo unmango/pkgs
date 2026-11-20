@@ -24,10 +24,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # the URL with the deprecated url.parse() and prints a DEP0169 warning into
   # the interactive prompt. It reads only protocol, host, and port, which a
   # WHATWG URL provides; an unparseable URL still resolves to no proxy.
+  #
+  # node-fetch 2.x, which the Anthropic SDK sends every request through, does
+  # the same in parseURL. Its callers spread the result into http.request
+  # options and url.format it, so it needs the legacy field shape that
+  # urlToHttpOptions builds. Relative URLs keep url.parse, which node-fetch
+  # then rejects as it always has.
   postPatch = ''
     substituteInPlace out/cli.cjs --replace-fail \
       'var parsedUrl = (typeof url2 === "string" ? parseUrl(url2) : url2) || {};' \
       'var parsedUrl = (typeof url2 === "string" ? (URL.canParse(url2) ? new URL(url2) : {}) : url2) || {};'
+
+    substituteInPlace out/cli.cjs --replace-fail \
+      '      return parse_url(urlStr);' \
+      '      return URL3.canParse(urlStr) ? Url.urlToHttpOptions(new URL3(urlStr)) : parse_url(urlStr);'
   '';
 
   installPhase = ''
