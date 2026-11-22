@@ -8,14 +8,14 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencommit";
-  version = "3.3.11";
+  version = "3.3.12";
 
   # The published out/cli.cjs is an esbuild bundle that requires only Node
   # builtins, so the tarball's dependencies are never loaded. Wrapping the
   # bundle directly avoids installing ~115M of unreferenced node_modules.
   src = fetchzip {
     url = "https://registry.npmjs.org/opencommit/-/opencommit-${finalAttrs.version}.tgz";
-    hash = "sha256-W5dhkchUUlM+oFAs7qgRzbhNb1dHveHbHpzVYpcg1bw=";
+    hash = "sha256-8kqWw9AtevaR/05pYOS7bhwxgaSqFdwPa1NwF2MEjdY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
